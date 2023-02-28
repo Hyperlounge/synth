@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Synth</title>
+    <link rel="stylesheet" href="styles/synth.css"/>
+    <script type="module" src="js/main.mjs"></script>
+</head>
+<body>
+<div class="synth">
+    <div class="header">
+        <button id="start">Start using</button>
+    </div>
+    <div class="controls">
+        <div class="panel">
+            <h2>Oscillator 1</h2>
+            <div id="oscillator-1"></div>
+        </div>
+        <div class="panel">
+            <h2>Oscillator 2</h2>
+            <div id="oscillator-2"></div>
+        </div>
+        <div id="loudness-envelope" class="panel">
+            <h2>Loudness envelope</h2>
+            <p>
+                <label><span>Attack</span><input class="attack" type="range" min="0" max="100" value="0"/></label>
+            </p>
+            <p>
+                <label><span>Decay</span><input class="attack" type="range" min="0" max="100" value="0"/></label>
+            </p>
+            <p>
+                <label><span>Sustain</span><input class="attack" type="range" min="0" max="100" value="100"/></label>
+            </p>
+            <p>
+                <label><span>Release</span><input class="attack" type="range" min="0" max="100" value="0"/></label>
+            </p>
+        </div>
+    </div>
+</div>
+</body>
+</html>
