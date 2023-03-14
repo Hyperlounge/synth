@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<button onclick="start()">Start</button>
+
+</body>
+<script>
+  function logParams(audioNode) {
+    Object.getOwnPropertyNames(Object.getPrototypeOf(audioNode)).forEach(key => {
+      const prop = audioNode[key];
+      if (prop instanceof AudioParam) {
+        console.log(`  ${key}: min: ${prop.minValue}; max: ${prop.maxValue}; default: ${prop.defaultValue}`);
+      } else if (key !== 'constructor') {
+        console.log(`   ${key}: ${typeof audioNode[key]}`);
+      }
+    });
+  }
+
+
+  function start() {
+    const context = new AudioContext();
+    function createAndLog(name) {
+      console.log(name);
+      logParams(context[`create${name}`]());
+    }
+
+    createAndLog('Oscillator');
+    createAndLog('BiquadFilter');
+    createAndLog('Convolver');
+    createAndLog('Delay');
+    createAndLog('DynamicsCompressor');
+    createAndLog('Gain');
+    createAndLog('WaveShaper');
+    createAndLog('Analyser');
+    createAndLog('ChannelSplitter');
+    createAndLog('ChannelMerger');
+    createAndLog('Panner');
+    createAndLog('StereoPanner');
+    createAndLog('ConstantSource');
+
+  }
+
+</script>
+</html>

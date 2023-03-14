@@ -1,3 +1,4 @@
+import './components/RangeControl.js'
 
 export default class OscillatorView {
     constructor(id, model) {

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            overflow: hidden;
+        }
+
+        * {
+            user-select: none;
+        }
+
+        .output {
+            display: flex;
+            flex-direction: row;
+        }
+
+        .keyboard {
+            display: flex;
+            flex-direction: row;
+            height: 300px;
+            width: 100%;
+            position: absolute;
+            bottom: 0;
+        }
+
+        .key {
+            height: 100%;
+            flex-grow: 1;
+            border: 1px solid gray;
+        }
+    </style>
+</head>
+<body>
+
+</body>
+<script>
+    function mapRange(a, b, func) {
+        return Array.from(Array(b - a + 1)).map((item, index) => func(index + a));
+    }
+
+    document.body.innerHTML = `
+<div class="output">
+
+</div>
+
+<div class="keyboard">
+    ${mapRange(1, 20, i => `<div class="key" data-note="${i}">${i}</div>`).join('')}
+</div>
+  `;
+
+    document.querySelectorAll('.key').forEach(key => {
+        key.addEventListener('touchstart', onTouchStart);
+    });
+
+    const output = document.querySelector('.output');
+
+    function showTouches(evt) {
+        output.innerHTML = Array.from(evt.touches).map(touch => `
+<table>
+    <tr><td>identifier:</td><td>${touch.identifier}</td></tr>
+    <tr><td>target:</td><td>${touch.target.getAttribute('data-note')}</td></tr>
+    <tr><td>x:</td><td>${touch.pageX}</td></tr>
+    <tr><td>y:</td><td>${touch.pageY}</td></tr>
+    <tr><td>over:</td><td>${document.elementFromPoint(touch.pageX, touch.pageY).getAttribute('data-note')}</td></tr>
+</table>
+      `).join('');
+    }
+
+    function onTouchStart(evt) {
+        evt.preventDefault();
+        showTouches(evt);
+        evt.target.addEventListener('touchmove', onTouchMove);
+        evt.target.addEventListener('touchcancel', onTouchCancel);
+        evt.target.addEventListener('touchend', onTouchEnd);
+    }
+
+    function onTouchMove(evt) {
+        evt.preventDefault();
+        showTouches(evt);
+    }
+
+    function onTouchEnd(evt) {
+        evt.preventDefault();
+        showTouches(evt);
+    }
+
+    function onTouchCancel(evt) {
+        evt.preventDefault();
+        showTouches(evt);
+    }
+</script>
+</html>
