@@ -172,7 +172,7 @@ export default class MonoSynth extends ModularSynth {
         this._filterEnvelope = this.createEnvelopeModule('filterEnvelope');
 
         this.loadPatch();
-        window.addEventListener('beforeunload', () => {
+        window.addEventListener('unload', () => {
             this.savePatch();
         });
 
@@ -263,11 +263,19 @@ export default class MonoSynth extends ModularSynth {
                         <div id="filter-envelope">${ADSRTemplate('filter-envelope')}</div>
                     </div>
                     <div class="panel keyboard">
-                        <div class="keys">
+                        <div class="ivory keys">
                             ${mapRange(36, 84, note => {
-                                const isBlack = [1, 3, 6, 8, 10].includes((note - 36) % 12);
-                                return `<div class="key ${isBlack ? 'black' : ''}" data-note="${note}"> </div>`;
+                                const isEbony = [1, 3, 6, 8, 10].includes((note - 36) % 12);
+                                return isEbony ? '' : `<div class="key" data-note="${note}"> </div>`;
                             }).join('')}
+                        </div>
+                        <div class="ebony keys">
+                            <div class="first spacer"> </div>
+                            ${mapRange(36, 84, note => {
+                                const isEbony = [1, 3, 6, 8, 10].includes((note - 36) % 12);
+                                return `${isEbony ? `<div class="key" data-note="${note}"> </div>` : '<div class="spacer"> </div>'}`;
+                            }).join('')}
+                            <div class="last spacer"> </div>
                         </div>
                     </div>
                 </div>

@@ -18,11 +18,13 @@ export default class ControllerModule extends AudioModule {
                 (navigator.maxTouchPoints > 0) ||
                 (navigator.msMaxTouchPoints > 0));
 
-        const keys = document.querySelectorAll('.key');
-        const downEvent = this._isTouchDevice ? 'touchstart' : 'mousedown'
-        keys.forEach(key => {
-            key.addEventListener(downEvent, evt => this._onKeyMouseDown(evt));
-        });
+        this._keyboard = document.querySelector('.keyboard');
+        if (this._isTouchDevice) {
+            this._notesTouched = [];
+            this._keyboard.addEventListener('touchstart', evt => this._onKeyTouchStart(evt))
+        } else {
+            this._keyboard.addEventListener('mousedown', evt => this._onKeyMouseDown(evt))
+        }
 
         navigator.requestMIDIAccess && this._connectToMIDI();
 
@@ -78,30 +80,92 @@ export default class ControllerModule extends AudioModule {
     }
 
     _onKeyMouseDown(evt) {
+        evt.preventDefault();
         const key = evt.target;
-        const upEvent = this._isTouchDevice ? 'touchend' : 'mouseup';
         if (key.classList.contains('key')) {
             const note = Number(key.getAttribute('data-note'));
-            this._onKeyDown(note, 60);
-            key.classList.toggle('down', true);
-            key.addEventListener(upEvent, this._onKeyMouseUp);
-            key.addEventListener('mouseout', this._onKeyMouseUp);
+            this._onKeyDown(note, 70);
+            document.body.addEventListener('mousemove', this._onKeyMouseMove);
+            document.body.addEventListener('mouseup', this._onKeyMouseUp);
         }
+    }
+
+    _onKeyMouseMove = evt => {
         evt.preventDefault();
+        const key = document.elementFromPoint(evt.pageX, evt.pageY);
+        if (key.classList.contains('key')) {
+            const note = Number(key.getAttribute('data-note'));
+            if (note !== this._currentNote) {
+                const prevNote = this._currentNote;
+                this._onKeyDown(note, 70);
+                this._onKeyUp(prevNote, 70);
+            }
+        } else {
+            this._onKeyUp(this._currentNote, 70);
+        }
     }
 
     _onKeyMouseUp = evt => {
-        const key = evt.target;
-        if (key) {
-            key.classList.toggle('down', false);
-            const note = Number(key.getAttribute('data-note'));
-            this._onKeyUp(note, 60);
-            key.removeEventListener('mouseup', this._onKeyMouseUp);
-            key.removeEventListener('mouseout', this._onKeyMouseUp);
-            delete this._currentKey;
-        }
         evt.preventDefault();
+        if (this._currentNote) {
+            this._onKeyUp(this._currentNote, 70);
+            document.body.removeEventListener('mousemove', this._onKeyMouseMove);
+            document.body.removeEventListener('mouseup', this._onKeyMouseUp);
+        }
     }
+
+    _onKeyTouchStart(evt) {
+        evt.preventDefault();
+        const key = evt.target;
+        if (key.classList.contains('key')) {
+            const note = Number(key.getAttribute('data-note'));
+            this._onKeyDown(note, 70);
+            this._notesTouched.includes(note) || this._notesTouched.push(note);
+            key.addEventListener('touchmove', this._onKeyTouchMove);
+            key.addEventListener('touchcancel', this._onKeyTouchCancel);
+            key.addEventListener('touchend', this._onKeyTouchEnd);
+        }
+    }
+
+    _compareNotesTouched(evt) {
+        const notesTouched = [];
+        Array.from(evt.touches).forEach(touch => {
+            const key = document.elementFromPoint(touch.pageX, touch.pageY);
+            if (key.classList.contains('key')) {
+                const note = Number(key.getAttribute('data-note'));
+                notesTouched.includes(note) || notesTouched.push(note);
+            }
+        });
+        // any notes newly in the array trigger a keyDown
+        notesTouched.filter(note => !this._notesTouched.includes(note)).forEach(note => {
+            this._onKeyDown(note, 70);
+        });
+        // any notes now missing trigger a keyUp
+        this._notesTouched.filter(note => !notesTouched.includes(note)).forEach(note => {
+            this._onKeyUp(note, 70);
+        });
+        this._notesTouched = notesTouched;
+    }
+
+    _onKeyTouchMove = evt => {
+        evt.preventDefault();
+        this._compareNotesTouched(evt);
+    }
+
+    _onKeyTouchCancel = evt => {
+        evt.preventDefault();
+        this._onKeyTouchEnd(evt);
+    }
+
+    _onKeyTouchEnd = evt => {
+        evt.preventDefault();
+        this._compareNotesTouched(evt);
+        const key = evt.target;
+        key.removeEventListener('touchmove', this._onKeyTouchMove);
+        key.removeEventListener('touchcancel', this._onKeyTouchCancel);
+        key.removeEventListener('touchend', this._onKeyTouchEnd);
+    }
+
 
     _onKeyDown(note, velocity) {
         const middleCOffset = (note - 60) * 100;
@@ -116,6 +180,8 @@ export default class ControllerModule extends AudioModule {
         this._middleCOffetOut.offset.cancelAndHoldAtTime(this._now).setTargetAtTime(middleCOffset, this._now, this._patch.get('glideTime'));
         this._downKeys.unshift(note);
         this._currentNote = note;
+        const key = document.querySelector(`.key[data-note="${note}"]`);
+        key && key.classList.toggle('down', true);
     }
 
     _onKeyUp(note, velocity) {
@@ -133,6 +199,8 @@ export default class ControllerModule extends AudioModule {
             });
             this._eventBus.dispatchEvent(event);
         }
+        const key = document.querySelector(`.key[data-note="${note}"]`);
+        key && key.classList.toggle('down', false);
     }
 
     _onPitchBend(value) {
