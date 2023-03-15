@@ -37,6 +37,14 @@ const waveforms = [
     {value: '0', label: 'SQU', param: 'square'},
 ];
 
+const lfoWaveforms = [
+    {value: '4', label: 'SIN', param: 'sine'},
+    {value: '3', label: 'TRI', param: 'triangle'},
+    {value: '2', label: 'SAW', param: 'sawtooth'},
+    {value: '1', label: 'WAS', param: 'inverse-sawtooth'},
+    {value: '0', label: 'SQU', param: 'square'},
+];
+
 const filterTypes = [
     {value: '2', label: 'HIGH', param: 'highpass'},
     {value: '1', label: 'BAND', param: 'bandpass'},
@@ -75,6 +83,15 @@ const oscTemplate = id => `
 </div>
 `;
 
+const lfoTemplate = `
+<div class="control-group">
+    ${verticalSlider(`lfo-waveform`, 'Wave', 0, 4, lfoWaveforms)}
+    ${verticalSlider(`lfo-frequency`, 'Freq.', 0, 100, ['0.1','0.2','0.4','0.8','1.5','3','6','12','25','50','100'])}
+    ${verticalSlider(`lfo-fixed-level`, 'Level', 0, 100, labels0to10)}
+    ${verticalSlider(`lfo-mod-wheel-level`, 'Mod Wheel', 0, 100, labels0to10)}
+</div>
+`;
+
 const filterTemplate = `
 <div class="control-group">
     ${verticalSlider(`filter-type`, 'Pass', 0, 2, filterTypes)}
@@ -98,7 +115,7 @@ const ADSRTemplate = id => `
 
 const controllersTemplate = `
 <div class="control-group">
-    <label><span>Legato</span><input class="legato" type="checkbox"/></label>
+    <label><span>Legato</span><input id="legato" type="checkbox"/></label>
     ${verticalSlider(`glide-time`, 'Glide', 0, 100, labels0to10log)}
 </div>
 `;
@@ -109,13 +126,22 @@ function bindControl(controlId, module, parameterName, controlToParam = a => Num
         throw new Error(`control #${controlId} does not exist.`)
     }
     const updateControl = evt => {
-        control.value = paramToControl(module.getParam(parameterName));
+        console.log(control.type);
+        if (control.type === 'checkbox') {
+            control.checked = module.getParam(parameterName);
+        } else {
+            control.value = paramToControl(module.getParam(parameterName));
+        }
     }
     updateControl();
     const updateModule = evt => {
-        module.setParam(parameterName, controlToParam(control.value));
+        if (control.type === 'checkbox') {
+            module.setParam(parameterName, control.checked);
+        } else {
+            module.setParam(parameterName, controlToParam(control.value));
+        }
     }
-    control.addEventListener('input', updateModule);
+    control.addEventListener(control.type === 'checkbox' ? 'change' : 'input', updateModule);
 }
 
 function linearToLog(linearMax, logMax, logMin = 0) {
@@ -170,6 +196,7 @@ export default class MonoSynth extends ModularSynth {
         this._loudnessEnvelope = this.createEnvelopeModule('loudnessEnvelope');
         this._filter = this.createFilterModule('filter');
         this._filterEnvelope = this.createEnvelopeModule('filterEnvelope');
+        this._lfo = this.createLFOModule('lfo');
 
         this.loadPatch();
         window.addEventListener('unload', () => {
@@ -177,6 +204,7 @@ export default class MonoSynth extends ModularSynth {
         });
 
         bindControl('glide-time', this._controllers, 'glideTime', linearToLog(100, 10), logToLinear(10, 100));
+        bindControl('legato', this._controllers, 'legato');
         const bindOscillator = number => {
             const osc = this[`_osc${number}`];
             const level = this[`_oscLevel${number}`];
@@ -206,6 +234,11 @@ export default class MonoSynth extends ModularSynth {
         bindControl('filter-modulation', this._filter, 'modAmount', a => Number(a)/100, a => String(a*100));
         bindControl('filter-keyboard', this._filter, 'keyboardFollowAmount', a => Number(a)/100, a => String(a*100));
 
+        bindControl(`lfo-waveform`, this._lfo, 'waveform', optionToParam(lfoWaveforms), paramToOption(lfoWaveforms));
+        bindControl('lfo-frequency', this._lfo, 'frequency', linearToLogRange(100, 0.1, 100), logRangeToLinear(0.1, 100, 100));
+        bindControl('lfo-fixed-level', this._lfo, 'fixedAmount', a => Number(a)/100, a => String(a*100));
+        bindControl('lfo-mod-wheel-level', this._lfo, 'modWheelAmount', a => Number(a)/100, a => String(a*100));
+
         this._controllers.C4Offset.connect(this._osc1.offsetCentsIn);
         this._controllers.C4Offset.connect(this._osc2.offsetCentsIn);
         this._controllers.pitchBend.connect(this._osc1.offsetCentsIn);
@@ -219,6 +252,9 @@ export default class MonoSynth extends ModularSynth {
         this._filterEnvelope.envelopeOut.connect(this._filter.envelopeIn);
         this._controllers.C4Offset.connect(this._filter.keyboardFollowIn);
         this._filter.audioOut.connect(this.audioContext.destination);
+        this._lfo.lfoOut.connect(this._osc1.modulationIn);
+        this._lfo.lfoOut.connect(this._osc2.modulationIn);
+        this._lfo.lfoOut.connect(this._filter.modulationIn);
     }
 
     savePatch() {
@@ -241,6 +277,10 @@ export default class MonoSynth extends ModularSynth {
                     <div class="panel">
                         <h2>Controllers</h2>
                         <div id="controllers">${controllersTemplate}</div>
+                    </div>
+                    <div class="panel">
+                        <h2>LFO</h2>
+                        <div id="lfo">${lfoTemplate}</div>
                     </div>
                     <div class="panel">
                         <h2>Oscillator 1</h2>

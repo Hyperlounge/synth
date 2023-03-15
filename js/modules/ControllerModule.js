@@ -6,10 +6,8 @@ export default class ControllerModule extends AudioModule {
         const context = this._audioContext;
 
         this._pitchBendOut = new ConstantSourceNode(context, {offset: 0});
-        this._modWheelOut = new ConstantSourceNode(context, {offset: 0});
         this._middleCOffetOut = new ConstantSourceNode(context, {offset: 0});
         this._pitchBendOut.start();
-        this._modWheelOut.start();
         this._middleCOffetOut.start();
         this._downKeys = [];
         this._currentNote = undefined;
@@ -33,6 +31,7 @@ export default class ControllerModule extends AudioModule {
     get _initialState() {
         return {
             glideTime: 0,   // in seconds
+            legato: false,
         };
     }
 
@@ -63,19 +62,16 @@ export default class ControllerModule extends AudioModule {
 
     _onMIDIMessage(evt) {
         const message = evt.data;
-        switch (message[0]) {
-            case 159:
-                this._onKeyDown(message[1], message[2]);
-                break;
-            case 143:
-                this._onKeyUp(message[1], message[2]);
-                break;
-            case 239:
-                this._onPitchBend(message[2]);
-        }
-        let str = ``;
-        for (const character of evt.data) {
-            str += `${character.toString(10)} `;
+        console.log(message[0], message[1], message[2]);
+        const statusByte = message[0];
+        if (statusByte >= 128 && statusByte <= 143) {
+            this._onKeyUp(message[1], message[2]);
+        } else if (statusByte >= 144 && statusByte <= 159) {
+            this._onKeyDown(message[1], message[2]);
+        } else if (statusByte >= 224 && statusByte <= 239) {
+            this._onPitchBend(message[2]);
+        } else if (statusByte >= 176 && statusByte <= 191 && message[1] === 1) {
+            this._onModWheel(message[2])
         }
     }
 
@@ -169,14 +165,16 @@ export default class ControllerModule extends AudioModule {
 
     _onKeyDown(note, velocity) {
         const middleCOffset = (note - 60) * 100;
-        const event = new CustomEvent('noteon', {
-            detail: {
-                MIDINote: note,
-                middleCOffset: middleCOffset,
-                velocity: velocity / 127,
-            },
-        });
-        this._eventBus.dispatchEvent(event);
+        if (!this.getParam('legato') || this._downKeys.length === 0) {
+            const event = new CustomEvent('noteon', {
+                detail: {
+                    MIDINote: note,
+                    middleCOffset: middleCOffset,
+                    velocity: velocity / 127,
+                },
+            });
+            this._eventBus.dispatchEvent(event);
+        }
         this._middleCOffetOut.offset.cancelAndHoldAtTime(this._now).setTargetAtTime(middleCOffset, this._now, this._patch.get('glideTime'));
         this._downKeys.unshift(note);
         this._currentNote = note;
@@ -192,12 +190,14 @@ export default class ControllerModule extends AudioModule {
                 const newNote = this._downKeys.shift();
                 this._onKeyDown(newNote, velocity);
             }
-            const event = new CustomEvent('noteoff', {
-                detail: {
-                    MIDINote: note,
-                },
-            });
-            this._eventBus.dispatchEvent(event);
+            if (!this.getParam('legato') || this._downKeys.length === 0) {
+                const event = new CustomEvent('noteoff', {
+                    detail: {
+                        MIDINote: note,
+                    },
+                });
+                this._eventBus.dispatchEvent(event);
+            }
         }
         const key = document.querySelector(`.key[data-note="${note}"]`);
         key && key.classList.toggle('down', false);
@@ -210,7 +210,12 @@ export default class ControllerModule extends AudioModule {
 
     _onModWheel(value) {
         // convert to value 0 - 1;
-        this._modWheelOut.offset.setTargetAtTime(value/127, this._now, this._minimumTimeConstant);
+        const event = new CustomEvent('modwheel', {
+            detail: {
+                value: value / 127,
+            },
+        });
+        this._eventBus.dispatchEvent(event);
     }
 
     get C4Offset() {
@@ -221,10 +226,5 @@ export default class ControllerModule extends AudioModule {
     get pitchBend() {
         // +- 200 cents
         return this._pitchBendOut;
-    }
-
-    get modWheel() {
-        // 0 - 1
-        return this._modWheelOut;
     }
 }
