@@ -4,7 +4,7 @@ import AmpModule from './AmpModule.js';
 import LevelModule from './LevelModule.js';
 import FilterModule from './FilterModule.js';
 import EnvelopeModule from './EnvelopeModule.js';
-import Model from '../Model.js';
+import Model from '../misc/Model.js';
 import LFOModule from './LFOModule.js';
 
 export default class ModularSynth {
@@ -12,12 +12,26 @@ export default class ModularSynth {
         this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
         this.eventBus = new EventTarget();
         this._patch = new Model({
+            global: new Model(this._initialGlobalPatch),
         });
+        if (this._initialState) {
+            this._state = new Model(this._initialState);
+        }
+    }
+
+    get _initialState() {
+        return undefined;
+    }
+
+    get _initialGlobalPatch() {
+        return {
+            totalVoices: 1,
+        }
     }
 
     _moduleCreator(Type) {
         return (patchId, options) => {
-            const module = new Type(this.audioContext, this.eventBus, options);
+            const module = new Type(this.audioContext, this.eventBus, this.globalPatch, this.options);
             patchId && this._patch.set({[patchId]: module._patch});
             return module;
         }
@@ -37,5 +51,9 @@ export default class ModularSynth {
 
     set patch(data) {
         this._patch.set(data);
+    }
+
+    get globalPatch() {
+        return this._patch.get('global');
     }
 }

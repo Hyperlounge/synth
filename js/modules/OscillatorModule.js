@@ -19,7 +19,7 @@ export default class OscillatorModule extends AudioModule {
         this._modulation.connect(this._oscillatorNode.detune);
     }
 
-    get _initialState() {
+    get _initialPatch() {
         return {
             waveform: 'sine',
             range: 0,       // 0 = C4, 1 = C5 etc

@@ -9,7 +9,7 @@ export default class LevelModule extends AudioModule {
         this._gainNode = new GainNode(context, {gain: 1});
     }
 
-    get _initialState() {
+    get _initialPatch() {
         return {
             level: 1,
         };

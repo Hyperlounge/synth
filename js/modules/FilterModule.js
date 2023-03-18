@@ -30,7 +30,7 @@ export default class FilterModule extends AudioModule {
         this._envelope.connect(this._filterNode.detune);
     }
 
-    get _initialState() {
+    get _initialPatch() {
         return {
             type: 'lowpass',    // lowpass, highpass or notch
             frequency: C4,      // hertz
