@@ -1,10 +1,10 @@
-export default class PolyVoice extends EventTarget {
+export default class PolyVoice {
     constructor(voiceCreator, voiceDestroyer = (voice) => {}) {
-        super();
         this._voiceCreator = voiceCreator;
         this._voiceDestroyer = voiceDestroyer;
         this._voices = [];
         this._connectionsTo = [];
+        this._connectionsFrom = [];
     }
 
     connect(toPolyVoice, parameterName) {
@@ -31,6 +31,28 @@ export default class PolyVoice extends EventTarget {
         }
     }
 
+    connectFrom(fromNode, parameterName) {
+        this.forEach(voice => fromNode.connect(parameterName ? voice[parameterName] : voice));
+        this._connectionsFrom.push({fromNode, parameterName});
+    }
+
+    disconnectFrom(fromNode, parameterName) {
+        this.forEach(voice => fromNode.disconnect(parameterName ? voice[parameterName] : voice));
+        this._connectionsFrom = this._connectionsFrom.filter(item => item.fromNode !== fromNode || item.parameterName !== parameterName);
+    }
+
+    createInput(parameterName) {
+        const self = this;
+        return new class {
+            get voices() {
+                return self._voices.map(voice => voice[parameterName]);
+            }
+            set totalVoices(number) {
+                self.totalVoices = number;
+            }
+        }
+    }
+
     set totalVoices(numberOfVoices) {
         this._connectionsTo.forEach(item => {
             item.toPolyVoice.totalVoices = numberOfVoices;
@@ -42,6 +64,7 @@ export default class PolyVoice extends EventTarget {
                 const toVoice = item.toPolyVoice.voices[this._voices.length - 1];
                 voice.connect(item.parameterName ? toVoice[item.parameterName] : toVoice);
             });
+            this._connectionsFrom.forEach(item => item.fromNode.connect(item.parameterName ? voice[item.parameterName] : voice));
         }
         while (numberOfVoices < this._voices.length) {
             const voice = this._voices.pop();
@@ -49,6 +72,7 @@ export default class PolyVoice extends EventTarget {
                 const toVoice = item.toPolyVoice.voices[this._voices.length - 1];
                 voice.disconnect(item.parameterName ? toVoice[item.parameterName] : toVoice);
             });
+            this._connectionsFrom.forEach(item => item.fromNode.disconnect(item.parameterName ? voice[item.parameterName] : voice));
             this._voiceDestroyer(voice);
         }
     }
@@ -59,5 +83,9 @@ export default class PolyVoice extends EventTarget {
 
     get voices() {
         return this._voices;
+    }
+
+    get forEach() {
+        return this._voices.forEach;
     }
 }

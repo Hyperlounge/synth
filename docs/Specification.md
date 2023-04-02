@@ -3,7 +3,7 @@
 MIDIKeyboard 
 - MIDI messages out
 
-VoiceAllocator
+VoiceAllocatorModule
 - MIDI messages in
 - NoteChange events out on event bus
 - NoteChange events are allocated a voice number

@@ -6,6 +6,13 @@ import FilterModule from './FilterModule.js';
 import EnvelopeModule from './EnvelopeModule.js';
 import Model from '../misc/Model.js';
 import LFOModule from './LFOModule.js';
+import VoiceAllocatorModule from './VoiceAllocatorModule.js';
+import SoftKeyboardModule from './SoftKeyboardModule.js';
+import PolyOscillatorModule from './PolyOscillatorModule.js';
+import PolyAmpModule from './PolyAmpModule.js';
+import PolyEnvelopeModule from './PolyEnvelopeModule.js';
+import PolyLevelModule from './PolyLevelModule.js';
+import PolyFilterModule from './PolyFilterModule.js';
 
 export default class ModularSynth {
     constructor() {
@@ -26,6 +33,7 @@ export default class ModularSynth {
     get _initialGlobalPatch() {
         return {
             totalVoices: 1,
+            legato: false,
         }
     }
 
@@ -37,12 +45,19 @@ export default class ModularSynth {
         }
     }
 
+    createSoftKeyboardModule = this._moduleCreator(SoftKeyboardModule);
+    createVoiceAllocatorModule = this._moduleCreator(VoiceAllocatorModule);
     createControllerModule = this._moduleCreator(ControllerModule);
     createOscillatorModule = this._moduleCreator(OscillatorModule);
     createAmpModule = this._moduleCreator(AmpModule);
     createEnvelopeModule = this._moduleCreator(EnvelopeModule);
     createLevelModule = this._moduleCreator(LevelModule);
     createFilterModule = this._moduleCreator(FilterModule);
+    createPolyOscillatorModule = this._moduleCreator(PolyOscillatorModule);
+    createPolyAmpModule = this._moduleCreator(PolyAmpModule);
+    createPolyEnvelopeModule = this._moduleCreator(PolyEnvelopeModule);
+    createPolyLevelModule = this._moduleCreator(PolyLevelModule);
+    createPolyFilterModule = this._moduleCreator(PolyFilterModule);
     createLFOModule = this._moduleCreator(LFOModule);
 
     get patch() {

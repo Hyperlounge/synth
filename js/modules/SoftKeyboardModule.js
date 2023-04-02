@@ -38,10 +38,10 @@ export default class SoftKeyboardModule extends AudioModule {
         const { statusByte, dataByte1 } = evt.detail;
         if (statusByte >= 128 && statusByte <= 143) {
             const key = this._keyboard.querySelector(`.key[data-note="${dataByte1}"]`);
-            key.classList.toggle('down', false);
+            key && key.classList.toggle('down', false);
         } else if (statusByte >= 144 && statusByte <= 159) {
             const key = this._keyboard.querySelector(`.key[data-note="${dataByte1}"]`);
-            key.classList.toggle('down', true);
+            key && key.classList.toggle('down', true);
         }
     }
 

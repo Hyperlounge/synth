@@ -68,14 +68,4 @@ export default class AudioModule extends EventTarget {
     get globalPatch() {
         return this._globalPatch.attributes;
     }
-
-    // TODO make this update when the number of voices changes
-    _createPolyphonicOutput(arrayOfOutputs) {
-        const polyphonicOutput = {
-            connect(polyphonicInput) {
-                arrayOfOutputs.forEach((output, i) => output.connect(polyphonicInput[i]));
-            }
-        }
-        return polyphonicOutput;
-    }
 }

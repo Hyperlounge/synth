@@ -11,6 +11,10 @@
 </body>
 <script>
   function logParams(audioNode) {
+      if (audioNode instanceof AudioScheduledSourceNode) {
+          audioNode.start();
+      }
+      console.log(audioNode);
     Object.getOwnPropertyNames(Object.getPrototypeOf(audioNode)).forEach(key => {
       const prop = audioNode[key];
       if (prop instanceof AudioParam) {
