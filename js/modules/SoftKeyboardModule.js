@@ -7,17 +7,44 @@ const PITCH_BEND = 224;
 const CONTROLLER = 176;
 const MOD_WHEEL = 1;
 
+function mapRange(a, b, func) {
+    return Array.from(Array(b - a + 1)).map((item, index) => func(index + a));
+}
+
+const keyBoardTemplate = data => `
+    <div class="ivory keys">
+        ${mapRange(data.bottomNote, data.topNote, note => {
+            const octave = Math.floor(note / 12);
+            const noteInOctave = note % 12;
+            const addLabel = noteInOctave === 0;
+            const isEbony = [1, 3, 6, 8, 10].includes(noteInOctave);
+            return isEbony ? '' : `<div class="key ${addLabel ? 'with-label' : ''}" data-note="${note}">${addLabel ? 'C' + octave : 'C0'}</div>`;
+        }).join('')}
+    </div>
+    <div class="ebony keys">
+        <div class="first spacer"> </div>
+        ${mapRange(data.bottomNote, data.topNote, note => {
+            const noteInOctave = note % 12;
+            const isEbony = [1, 3, 6, 8, 10].includes(noteInOctave);
+            return `${isEbony ? `<div class="key" data-note="${note}"> </div>` : `<div class="spacer"> </div>`}`;
+        }).join('')}
+        <div class="last spacer"> </div>
+    </div>
+`
+
 export default class SoftKeyboardModule extends AudioModule {
     _initialise() {
         super._initialise()
         this._downKeys = [];
         this._currentNote = undefined;
 
+        this._renderKeys();
+
         this._isTouchDevice = (('ontouchstart' in window) ||
                 (navigator.maxTouchPoints > 0) ||
                 (navigator.msMaxTouchPoints > 0));
 
-        this._keyboard = document.querySelector('.keyboard');
+        this._keyboard = document.querySelector('.keyboard-keys');
         if (this._isTouchDevice) {
             this._notesTouched = [];
             this._keyboard.addEventListener('touchstart', evt => this._onKeyTouchStart(evt))
@@ -25,13 +52,67 @@ export default class SoftKeyboardModule extends AudioModule {
             this._keyboard.addEventListener('mousedown', evt => this._onKeyMouseDown(evt))
         }
 
+        Array.from(document.querySelectorAll('button.keyboard-range')).forEach(button => {
+            button.addEventListener('click', evt => this._onKeyboardRangeClick(evt));
+        })
+
         this._eventBus.addEventListener(MidiEvent.type, evt => this._onMidiEvent(evt))
     }
 
     get _initialState() {
         return {
             velocity: 70,
+            bottomNote: 36,
+            topNote: 72,
         }
+    }
+
+    _renderKeys() {
+        document.querySelector('.keyboard-keys').innerHTML = keyBoardTemplate(this._state.attributes);
+    }
+
+    _onKeyboardRangeClick(evt) {
+        const { bottomNote, topNote } = this._state.attributes;
+        switch (evt.target.value) {
+            case 'transpose-down':
+                if (bottomNote > 12) {
+                    this._state.set({
+                        bottomNote: bottomNote - 12,
+                        topNote: topNote - 12,
+                    });
+                }
+                break;
+            case 'transpose-up':
+                if (topNote < 96) {
+                    this._state.set({
+                        bottomNote: bottomNote + 12,
+                        topNote: topNote + 12,
+                    });
+                }
+                break;
+            case 'fewer-octaves':
+                if (topNote - bottomNote > 24) {
+                    this._state.set({
+                        topNote: topNote - 12,
+                    });
+                }
+                break;
+            case 'more-octaves':
+                if (topNote - bottomNote < 84) {
+                    let newBottom = bottomNote;
+                    let newTop = topNote + 12;
+                    if (topNote > 84) {
+                        newBottom -= 12;
+                        newTop -= 12;
+                    }
+                    this._state.set({
+                        topNote: newTop,
+                        bottomNote: newBottom,
+                    });
+                }
+                break;
+        }
+        this._renderKeys();
     }
 
     _onMidiEvent(evt) {

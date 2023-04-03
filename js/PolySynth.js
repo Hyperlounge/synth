@@ -1,10 +1,5 @@
 import ModularSynth from './modules/ModularSynth.js';
 
-function mapRange(a, b, func) {
-    return Array.from(Array(b - a + 1)).map((item, index) => func(index + a));
-}
-
-
 function verticalSlider(id, label, min, max, list) {
     const isValuesList = !!(!!list && !!list.length && typeof list[0] === 'object');
     return `
@@ -313,35 +308,16 @@ export default class PolySynth extends ModularSynth {
                     </div>
                    <div class="panel keyboard">
                         <div>
-                            <button class="transpose" value="down">&minus;</button>
+                            <button class="keyboard-range" value="transpose-down">&minus;</button>
                             transpose
-                            <button class="transpose" value="up">+</button>
+                            <button class="keyboard-range" value="transpose-up">+</button>
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            <button class="octaves" value="down">&minus;</button>
+                            <button class="keyboard-range" value="fewer-octaves">&minus;</button>
                             octaves
-                            <button class="octaves" value="up">+</button>
+                            <button class="keyboard-range" value="more-octaves">+</button>
                         
                         </div>
-                        <div class="keyboard-keys">
-                            <div class="ivory keys">
-                                ${mapRange(36, 84, note => {
-                                    const octave = Math.floor(note / 12);
-                                    const noteInOctave = (note - 36) % 12;
-                                    const addLabel = noteInOctave === 0;
-                                    const isEbony = [1, 3, 6, 8, 10].includes((note - 36) % 12);
-                                    return isEbony ? '' : `<div class="key ${addLabel ? 'with-label' : ''}" data-note="${note}">${addLabel ? 'C' + octave : 'C0'}</div>`;
-                                }).join('')}
-                            </div>
-                            <div class="ebony keys">
-                                <div class="first spacer"> </div>
-                                ${mapRange(36, 84, note => {
-                                    const noteInOctave = (note - 36) % 12;
-                                    const isEbony = [1, 3, 6, 8, 10].includes(noteInOctave);
-                                    return `${isEbony ? `<div class="key" data-note="${note}"> </div>` : `<div class="spacer"> </div>`}`;
-                                }).join('')}
-                                <div class="last spacer"> </div>
-                            </div>
-                        </div>
+                        <div class="keyboard-keys"></div>
                     </div>
                 </div>
             </div>
