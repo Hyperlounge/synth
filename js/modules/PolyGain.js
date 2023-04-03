@@ -1,10 +1,9 @@
-import PolyNode from './PolyNode.js';
+import PolyAudioNode from './PolyAudioNode.js';
 
-export default class PolyGain extends PolyNode {
-    constructor(context, options) {
-        super(context, options);
-        this.AudioNodeClass = GainNode;
-        this._createPolyParam('gain');
-        this._createMonoParam('monoGain', 'gain');
+export default class PolyGain extends PolyAudioNode {
+    get _AudioNodeClass() { return GainNode }
+
+    get gain() {
+        return this.getPolyParam('gain');
     }
 }

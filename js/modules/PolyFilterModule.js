@@ -21,15 +21,15 @@ export default class PolyFilterModule extends AudioModule {
         this._modulation = new GainNode(context, {
             gain: this._patch.get('modAmount'),
         });
-        this._modulation.connect(this._filterNode.monoDetune);
+        this._filterNode.detune.fanOutConnectFrom(this._modulation);
         this._keyboardFollow = new PolyGain(context, {
             gain: this._patch.get('keyboardFollowAmount'),
         });
-        this._keyboardFollow.connect(this._filterNode.detune);
+        this._keyboardFollow.polyConnectTo(this._filterNode.detune);
         this._envelope = new PolyGain(context, {
             gain: this._patch.get('envelopeAmount'),
         });
-        this._envelope.connect(this._filterNode.detune);
+        this._filterNode.detune.polyConnectFrom(this._envelope);
     }
 
     get _initialPatch() {
@@ -53,8 +53,8 @@ export default class PolyFilterModule extends AudioModule {
         this._filterNode.frequency.setTargetAtTime(this._patch.get('frequency'), this._now, this._minimumTimeConstant);
         this._filterNode.Q.setTargetAtTime(this._patch.get('resonance'), this._now, this._minimumTimeConstant);
         this._modulation.gain.setTargetAtTime(this._patch.get('modAmount'), this._now, this._minimumTimeConstant);
-        this._keyboardFollow.monoGain.setTargetAtTime(this._patch.get('keyboardFollowAmount'), this._now, this._minimumTimeConstant);
-        this._envelope.monoGain.setTargetAtTime(this._patch.get('envelopeAmount'), this._now, this._minimumTimeConstant);
+        this._keyboardFollow.gain.setTargetAtTime(this._patch.get('keyboardFollowAmount'), this._now, this._minimumTimeConstant);
+        this._envelope.gain.setTargetAtTime(this._patch.get('envelopeAmount'), this._now, this._minimumTimeConstant);
     }
 
     get offsetCentsIn() {

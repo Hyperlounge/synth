@@ -18,7 +18,7 @@ export default class PolyLevelModule extends AudioModule {
 
     _onPatchChange(evt) {
         super._onPatchChange(evt);
-        this._gainNode.monoGain.setTargetAtTime(this._patch.get('level'), this._now, this._minimumTimeConstant);
+        this._gainNode.gain.setTargetAtTime(this._patch.get('level'), this._now, this._minimumTimeConstant);
     }
 
     get audioIn() {

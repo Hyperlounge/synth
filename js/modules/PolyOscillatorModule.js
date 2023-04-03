@@ -16,7 +16,7 @@ export default class PolyOscillatorModule extends AudioModule {
             frequency: this._hertzFromPatch,
         });
         this._modulation = new GainNode(context, {gain: this._patch.get('modAmount')});
-        this._modulation.connect(this._oscillatorNode.monoDetune);
+        this._oscillatorNode.detune.fanOutConnectFrom(this._modulation);
     }
 
     get _initialPatch() {

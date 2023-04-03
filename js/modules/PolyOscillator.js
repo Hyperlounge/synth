@@ -1,12 +1,22 @@
-import PolyNode from './PolyNode.js';
+import PolyAudioNode from './PolyAudioNode.js';
 
-export default class PolyOscillator extends PolyNode {
-    constructor(context, options) {
-        super(context, options);
-        this.AudioNodeClass = OscillatorNode;
-        this._createProperty('type');
-        this._createMonoParam('frequency');
-        this._createMonoParam('monoDetune', 'detune');
-        this._createPolyParam('detune');
+export default class PolyOscillator extends PolyAudioNode {
+    get _AudioNodeClass() { return OscillatorNode }
+
+    set type(value) {
+        this.setPolyProperty('type', value);
+    }
+
+    get type() {
+        return this.getPolyProperty('type');
+    }
+
+    get frequency() {
+        return this.getPolyParam('frequency');
+    }
+
+    get detune() {
+        return this.getPolyParam('detune');
     }
 }
+

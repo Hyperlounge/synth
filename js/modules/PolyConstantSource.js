@@ -1,9 +1,9 @@
-import PolyNode from './PolyNode.js';
+import PolyAudioNode from './PolyAudioNode.js';
 
-export default class PolyConstantSource extends PolyNode {
-    constructor(context, options) {
-        super(context, options);
-        this.AudioNodeClass = ConstantSourceNode;
-        this._createPolyParam('offset');
-     }
+export default class PolyConstantSource extends PolyAudioNode {
+    get _AudioNodeClass() {return ConstantSourceNode}
+
+    get offset() {
+        return this.getPolyParam('offset');
+    }
 }

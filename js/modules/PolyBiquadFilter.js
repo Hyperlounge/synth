@@ -1,13 +1,30 @@
-import PolyNode from './PolyNode.js';
+import PolyAudioNode from './PolyAudioNode.js';
 
-export default class PolyBiquadFilter extends PolyNode {
-    constructor(context, options) {
-        super(context, options);
-        this.AudioNodeClass = BiquadFilterNode;
-        this._createProperty('type');
-        this._createMonoParam('frequency');
-        this._createMonoParam('Q');
-        this._createMonoParam('monoDetune', 'detune');
-        this._createPolyParam('detune');
+export default class PolyBiquadFilter extends PolyAudioNode {
+    get _AudioNodeClass() { return BiquadFilterNode }
+
+    set type(value) {
+        this.setPolyProperty('type', value);
     }
+
+    get type() {
+        return this.getPolyProperty('type');
+    }
+
+    get frequency() {
+        return this.getPolyParam('frequency');
+    }
+
+    get detune() {
+        return this.getPolyParam('detune');
+    }
+
+    get Q() {
+        return this.getPolyParam('Q');
+    }
+
+    get gain() {
+        return this.getPolyParam('gain');
+    }
+
 }

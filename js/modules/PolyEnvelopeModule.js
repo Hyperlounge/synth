@@ -25,7 +25,7 @@ export default class PolyEnvelopeModule extends AudioModule {
 
     _onNoteChange(evt) {
         const { newNoteNumber, oldNoteNumber, voiceNumber, velocity } = evt.detail;
-        const { offset } = this._envelope.getNodeAt(voiceNumber);
+        const { offset } = this._envelope.nodes[voiceNumber];
         if (newNoteNumber !== undefined) {
             const { attackSeconds, decaySeconds, sustainLevel, velocityAmount } = this._patch.attributes;
             const maxGain = velocity * velocityAmount + (1 - velocityAmount);

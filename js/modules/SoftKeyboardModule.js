@@ -111,7 +111,7 @@ export default class SoftKeyboardModule extends AudioModule {
         });
         // any notes now missing trigger a keyUp
         this._notesTouched.filter(note => !notesTouched.includes(note)).forEach(note => {
-            this._eventBus.dispatchEvent(new MidiEvent(NOTE_OFF, this._currentNote, this._state.get('velocity')));
+            this._eventBus.dispatchEvent(new MidiEvent(NOTE_OFF, note, this._state.get('velocity')));
         });
         this._notesTouched = notesTouched;
     }

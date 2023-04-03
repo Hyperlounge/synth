@@ -27,7 +27,6 @@ export default class VoiceAllocatorModule extends AudioModule {
     }
 
     _initializeVoices() {
-        // TODO - when voices is adjusted down there's an infinite loop
         const { numberOfVoices } = this.patch;
         const totalVoices = Math.max(numberOfVoices, 1);
         this._globalPatch.set({
@@ -36,7 +35,7 @@ export default class VoiceAllocatorModule extends AudioModule {
         });
         this._usedVoices = [];
         this._freeVoices = Array(totalVoices).fill().map((item, i) => ({voiceNumber: i, note: undefined}));
-        this._pitches.totalNodes = totalVoices;
+        this._pitches.totalVoices = totalVoices;
         this._downNotes = [];
     }
 
@@ -97,7 +96,7 @@ export default class VoiceAllocatorModule extends AudioModule {
 
     _setPitch(voiceNumber, note) {
         const middleCOffset = (note - 60) * 100;
-        this._pitches.nodes[voiceNumber].offset.setTargetAtTime(middleCOffset, this._now, Math.max(this._patch.get('glideTime'), this._minimumTimeConstant));
+        this._pitches.nodes[voiceNumber].offset.setTargetAtTime(middleCOffset, this._now, this._patch.get('glideTime'));
     }
 
     get C4Offset() {
