@@ -26,16 +26,19 @@ export default class PolyEnvelopeModule extends AudioModule {
     _onNoteChange(evt) {
         const { newNoteNumber, oldNoteNumber, voiceNumber, velocity } = evt.detail;
         const { offset } = this._envelope.nodes[voiceNumber];
+        const { totalVoices, legato } = this._globalPatch.attributes;
         if (newNoteNumber !== undefined) {
-            const { attackSeconds, decaySeconds, sustainLevel, velocityAmount } = this._patch.attributes;
-            const maxGain = velocity * velocityAmount + (1 - velocityAmount);
-            const sustain = sustainLevel * maxGain;
-            const attack = Math.max(this._minimumTimeConstant, attackSeconds);
-            const decay = Math.max(this._minimumTimeConstant, decaySeconds);
-            if (offset.value === 0) offset.setValueAtTime(0, this._now);
-            offset.cancelAndHoldAtTime(this._now)
-                .linearRampToValueAtTime(maxGain, this._now + attack)
-                .setTargetAtTime(sustain, this._now + attack, decay);
+            if (!(legato && oldNoteNumber !== undefined)) {
+                const { attackSeconds, decaySeconds, sustainLevel, velocityAmount } = this._patch.attributes;
+                const maxGain = velocity * velocityAmount + (1 - velocityAmount);
+                const sustain = sustainLevel * maxGain;
+                const attack = Math.max(this._minimumTimeConstant, attackSeconds);
+                const decay = Math.max(this._minimumTimeConstant, decaySeconds);
+                if (offset.value === 0) offset.setValueAtTime(0, this._now);
+                offset.cancelAndHoldAtTime(this._now)
+                    .linearRampToValueAtTime(maxGain, this._now + attack)
+                    .setTargetAtTime(sustain, this._now + attack, decay);
+            }
         } else {
             const { releaseSeconds } = this._patch.attributes;
             const release = Math.max(this._minimumTimeConstant, releaseSeconds);
