@@ -50,11 +50,11 @@ const oscTemplate = id => `
 <div class="control-group">
     ${verticalSlider(`${id}-waveform`, 'Wave', 0, 3, waveforms)}
     ${verticalSlider(`${id}-range`, 'Range', -2, 2, [
-        {value: 2, label: '32'},
-        {value: 1, label: '16'},
+        {value: 2, label: '2'},
+        {value: 1, label: '4'},
         {value: 0, label: '8'},
-        {value: -1, label: '4'},
-        {value: -2, label: '2'},
+        {value: -1, label: '16'},
+        {value: -2, label: '32'},
     ])}
     ${verticalSlider(`${id}-tune`, 'Tune', -7, 7, [
         {value: 7, label: '+7'},
@@ -81,7 +81,7 @@ const oscTemplate = id => `
 const lfoTemplate = `
 <div class="control-group">
     ${verticalSlider(`lfo-waveform`, 'Wave', 0, 4, lfoWaveforms)}
-    ${verticalSlider(`lfo-frequency`, 'Freq.', 0, 100, ['0.1','0.2','0.4','0.8','1.5','3','6','12','25','50','100'])}
+    ${verticalSlider(`lfo-frequency`, 'Freq.', 0, 100, ['100','50','25','12','6','3','1.5','0.8','0.4','0.2','0.1'])}
     ${verticalSlider(`lfo-fixed-level`, 'Level', 0, 100, labels0to10)}
     ${verticalSlider(`lfo-mod-wheel-level`, 'Mod Wheel', 0, 100, labels0to10)}
 </div>
@@ -92,7 +92,7 @@ const filterTemplate = `
     ${verticalSlider(`filter-type`, 'Pass', 0, 2, filterTypes)}
     ${verticalSlider(`filter-frequency`, 'Freq.', 0, 100, ['20k','10k','5k','2.5k','1.2k','600','300','150','75','36','18'])}
     ${verticalSlider(`filter-resonance`, 'Res.', 0, 100, labels0to10)}
-    ${verticalSlider(`filter-envelope`, 'Env.', 0, 100, labels0to10)}
+    ${verticalSlider(`filter-envelope-amount`, 'Env.', 0, 100, labels0to10)}
     ${verticalSlider(`filter-modulation`, 'Mod.', 0, 100, labels0to10)}
     ${verticalSlider(`filter-keyboard`, 'Keys', 0, 100, labels0to10)}
 </div>
@@ -191,6 +191,8 @@ export default class PolySynth extends ModularSynth {
 
         this._render();
 
+        document.getElementById('save-patch').addEventListener('click', evt => this.savePatchToFile());
+
         this._softKeyboard = this.createSoftKeyboardModule('softKeyboard');
         this._voiceAllocator = this.createVoiceAllocatorModule('voiceAllocator');
         this._osc1 = this.createPolyOscillatorModule('osc1');
@@ -252,8 +254,8 @@ export default class PolySynth extends ModularSynth {
         bindControl('filter-type', this._filter, 'type', optionToParam(filterTypes), paramToOption(filterTypes));
         bindControl('filter-frequency', this._filter, 'frequency', linearToLogRange(100, 18, 20000), logRangeToLinear(18, 20000, 100));
         bindControl('filter-resonance', this._filter, 'resonance', a => Number(a)/5, a => String(a*5));
-        bindControl('filter-envelope', this._filter, 'envelopeAmount');
-        bindControl('filter-modulation', this._filter, 'modAmount');
+        bindControl('filter-envelope-amount', this._filter, 'envelopeAmount', a => Number(a)*5, a => String(a/5));
+        bindControl('filter-modulation', this._filter, 'modAmount', a => Number(a)*100, a => String(a/100));
         bindControl('filter-keyboard', this._filter, 'keyboardFollowAmount', a => Number(a)/100, a => String(a*100));
 
         bindControl(`lfo-waveform`, this._lfo, 'waveform', optionToParam(lfoWaveforms), paramToOption(lfoWaveforms));
@@ -271,12 +273,25 @@ export default class PolySynth extends ModularSynth {
         patch && (this.patch = JSON.parse(patch));
     }
 
+    savePatchToFile() {
+        const element = document.createElement('a');
+        element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(JSON.stringify(this.patch)));
+        element.setAttribute('download', 'synth-patch.txt');
+
+        element.style.display = 'none';
+        document.body.appendChild(element);
+
+        element.click();
+
+        document.body.removeChild(element);
+    }
+
     _render() {
 
         this._root && (this._root.innerHTML = `
             <div class="synth">
                 <div class="header">
-                    <p>Synth</p>
+                    Synth <button id="save-patch">Save patch</button>
                 </div>
                 <div class="controls">
                     <div class="panel">
@@ -299,15 +314,15 @@ export default class PolySynth extends ModularSynth {
                         <h2>Amp Envelope</h2>
                         <div id="loudness-envelope">${ADSRTemplate('loudness-envelope')}</div>
                     </div>
-                     <div class="panel">
-                        <h2>Filter</h2>
-                        <div id="filter">${filterTemplate}</div>
-                    </div>
                     <div class="panel">
                         <h2>Filter Envelope</h2>
                         <div id="filter-envelope">${ADSRTemplate('filter-envelope')}</div>
                     </div>
-                   <div class="panel keyboard">
+                    <div class="panel">
+                        <h2>Filter</h2>
+                        <div id="filter">${filterTemplate}</div>
+                    </div>
+                    <div class="panel keyboard">
                         <div>
                             <button class="keyboard-range" value="transpose-down">&minus;</button>
                             transpose
@@ -316,7 +331,6 @@ export default class PolySynth extends ModularSynth {
                             <button class="keyboard-range" value="fewer-octaves">&minus;</button>
                             octaves
                             <button class="keyboard-range" value="more-octaves">+</button>
-                        
                         </div>
                         <div class="keyboard-keys"></div>
                     </div>
