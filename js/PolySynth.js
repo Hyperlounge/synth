@@ -80,6 +80,7 @@ const oscTemplate = id => `
         {value: -7, label: '-7'},
     ])}
     ${verticalSlider(`${id}-fine-tune`, 'Fine', -50, 50, ['+0.5', '0', '–0.5'])}
+    ${id === 'oscillator-2' ? verticalSlider(`${id}-cross-mod`, `O-1 Mod`, 0, 100, labels0to10) : ''}
     ${verticalSlider(`${id}-level`, 'Level', 0, 100, labels0to10)}
 </div>
 `;
@@ -199,8 +200,8 @@ export default class PolySynth extends ModularSynth {
 
         document.getElementById('save-patch').addEventListener('click', evt => this.savePatchToFile());
 
-        this._midi = this.createMidiModule();
-        this._softKeyboard = this.createSoftKeyboardModule();
+        this.createMidiModule();
+        this.createSoftKeyboardModule();
         this._controllerHelper = this.createControllerHelperModule('controllerHelper');
         this._voiceAllocator = this.createVoiceAllocatorModule('voiceAllocator');
         this._osc1 = this.createPolyOscillatorModule('osc1');
@@ -220,6 +221,7 @@ export default class PolySynth extends ModularSynth {
         this._osc2.audioOut.polyConnectTo(this._oscLevel2.audioIn);
         this._osc1.offsetCentsIn.fanOutConnectFrom(this._controllerHelper.pitchBend);
         this._osc2.offsetCentsIn.fanOutConnectFrom(this._controllerHelper.pitchBend);
+        this._osc1.audioOut.polyConnectTo(this._osc2.crossModulationIn);
         this._oscLevel1.audioOut.polyConnectTo(this._amplifier.audioIn);
         this._oscLevel2.audioOut.polyConnectTo(this._amplifier.audioIn);
         this._amplifier.modulationIn.polyConnectFrom(this._loudnessEnvelope.envelopeOut);
@@ -245,6 +247,7 @@ export default class PolySynth extends ModularSynth {
             bindControl(`oscillator-${number}-range`, osc, 'range');
             bindControl(`oscillator-${number}-tune`, osc, 'tune');
             bindControl(`oscillator-${number}-fine-tune`, osc, 'fineTune');
+            number === 2 && bindControl(`oscillator-2-cross-mod`, osc, 'crossModAmount', a => Number(a)*100, a => String(a/100));
             bindControl(`oscillator-${number}-level`, level, 'level', a => Number(a)/1000, a => String(a*1000));
         }
         bindOscillator(1);
