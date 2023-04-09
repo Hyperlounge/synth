@@ -26,6 +26,7 @@ function verticalSlider(id, label, min, max, list) {
 }
 
 const labels0to10 = [10,9,8,7,6,5,4,3,2,1,0];
+const labelsMinus5toPlus5 = [5,4,3,2,1,0,-1,-2,-3,-4,-5];
 const labels0to10log = [10,5,2.5,1.2,600,300,150,70,30,10,0];
 
 const waveforms = [
@@ -80,6 +81,7 @@ const oscTemplate = id => `
         {value: -7, label: '-7'},
     ])}
     ${verticalSlider(`${id}-fine-tune`, 'Fine', -50, 50, ['+0.5', '0', '–0.5'])}
+    ${verticalSlider(`${id}-modulation`, 'Mod', -50, 50, labelsMinus5toPlus5)}
     ${id === 'oscillator-2' ? verticalSlider(`${id}-cross-mod`, `O-1 Mod`, 0, 100, labels0to10) : ''}
     ${verticalSlider(`${id}-level`, 'Level', 0, 100, labels0to10)}
 </div>
@@ -247,7 +249,8 @@ export default class PolySynth extends ModularSynth {
             bindControl(`oscillator-${number}-range`, osc, 'range');
             bindControl(`oscillator-${number}-tune`, osc, 'tune');
             bindControl(`oscillator-${number}-fine-tune`, osc, 'fineTune');
-            number === 2 && bindControl(`oscillator-2-cross-mod`, osc, 'crossModAmount', a => Number(a)*100, a => String(a/100));
+            bindControl(`oscillator-${number}-modulation`, osc, 'modAmount', a => Number(a)*2, a => String(a/2));
+            number === 2 && bindControl(`oscillator-2-cross-mod`, osc, 'crossModAmount', a => Number(a)*25, a => String(a/25));
             bindControl(`oscillator-${number}-level`, level, 'level', a => Number(a)/1000, a => String(a*1000));
         }
         bindOscillator(1);
@@ -274,7 +277,7 @@ export default class PolySynth extends ModularSynth {
         bindControl(`lfo-waveform`, this._lfo, 'waveform', optionToParam(lfoWaveforms), paramToOption(lfoWaveforms));
         bindControl('lfo-frequency', this._lfo, 'frequency', linearToLogRange(100, 0.1, 100), logRangeToLinear(0.1, 100, 100));
         bindControl('lfo-fixed-level', this._lfo, 'fixedAmount', a => Number(a)/100, a => String(a*100));
-        bindControl('lfo-mod-wheel-level', this._lfo, 'modWheelAmount', a => Number(a)/10, a => String(a*10));
+        bindControl('lfo-mod-wheel-level', this._lfo, 'modWheelAmount', a => Number(a)/50, a => String(a*50));
     }
 
     savePatch() {

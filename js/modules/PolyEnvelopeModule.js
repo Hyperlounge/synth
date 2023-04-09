@@ -62,7 +62,7 @@ export default class PolyEnvelopeModule extends AudioModule {
         } else {
             const { releaseSeconds } = this._patch.attributes;
             const release = Math.max(this._minimumTimeConstant, releaseSeconds);
-            offset.cancelScheduledValues(this._now)
+            offset.cancelAndHoldAtTime(this._now)
                 .setTargetAtTime(0, this._now, release);
         }
     }
