@@ -149,10 +149,10 @@ html, body {
   flex-grow: 100;
 }
 .panel.keyboard .keys.ebony .spacer.first {
-  flex-grow: 60;
+  flex-grow: 70;
 }
 .panel.keyboard .keys.ebony .spacer.last {
-  flex-grow: 72;
+  flex-grow: 90;
 }
 .panel.keyboard .keys.ebony .key {
   pointer-events: all;

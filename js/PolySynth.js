@@ -204,6 +204,7 @@ export default class PolySynth extends ModularSynth {
         this._render();
 
         document.getElementById('save-patch').addEventListener('click', evt => this.savePatchToFile());
+        document.getElementById('share-patch').addEventListener('click', evt => this.sharePatch());
 
         this.createMidiModule();
         this.createSoftKeyboardModule();
@@ -297,17 +298,46 @@ export default class PolySynth extends ModularSynth {
     }
 
     loadPatch() {
-        const patch = localStorage.getItem('PolySynth-current-patch') || initialPatch;
+        let patch;
+        if (/^\?patch=/.test(location.search)) {
+            patch = decodeURIComponent(location.search.replace(/^\?patch=/, ''));
+        } else {
+            patch = localStorage.getItem('PolySynth-current-patch') || initialPatch;
+        }
         patch && (this.patch = JSON.parse(patch));
+    }
+
+    sharePatch() {
+        const url = location.origin + location.pathname + '?patch=' + encodeURIComponent(JSON.stringify(this.patch));
+        new Dialog(`
+        <a href='${url}' target="_blank">Click to open in new tab</a>
+        `, {
+            maxWidth: 300,
+            title: 'Share Patch',
+            optionLabels: ['Copy link to clipboard', 'Cancel']
+        }).then(data => {
+            const { option } = data;
+            if (option === 0) {
+                navigator.clipboard.writeText(url);
+            }
+        })
     }
 
     savePatchToFile() {
         new Dialog(`
         <form>
-            <label for="patch-name">Patch name:</label><input type="text" name="patch-name"/>
-            <label for="patch-bank">Bank:</label><input type="text" name="patch-bank"/>
+            <label for="patch-name">Patch name: </label><input type="text" name="patch-name"/>
+            <label for="patch-bank">&nbsp;&nbsp;&nbsp;&nbsp;Bank: </label><select name="patch-bank">
+                <option>Leads</option>
+                <option>Keys</option>
+                <option>Basses</option>
+                <option>Pads</option>
+                <option>FX</option>
+                <option>Misc</option>
+            </select>
         </form>
         `, {
+            maxWidth: 400,
             title: 'Save Patch',
             optionLabels: ['Save', 'Cancel']
         }).then(data => {
@@ -336,7 +366,7 @@ export default class PolySynth extends ModularSynth {
         this._root && (this._root.innerHTML = `
             <div class="synth">
                 <div class="header">
-                    Synth <button id="save-patch">Save patch</button>
+                    Synth <button id="save-patch">Save patch</button> <button id="share-patch">Share patch</button>
                 </div>
                 <div class="controls">
                     <div class="panel">
