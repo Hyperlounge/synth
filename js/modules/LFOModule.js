@@ -33,9 +33,10 @@ export default class LFOModule extends AudioModule {
         const { newNoteNumber, oldNoteNumber } = evt.detail;
         const { delay, fixedAmount, modWheelAmount, waveform } = this._patch.attributes;
         if (delay !== 0 && newNoteNumber !== undefined) {
+            this._level.gain.cancelScheduledValues(this._now);
             this._level.gain.setTargetAtTime(0, this._now, 0);
             const level = (fixedAmount + (modWheelAmount * this._modWheelValue)) * (waveform === 'inverse-sawtooth' ? -1 : 1);
-            this._level.gain.setTargetAtTime(level, this._now, delay);
+            this._level.gain.setTargetAtTime(level, this._now + delay / 2, delay);
         }
     }
 

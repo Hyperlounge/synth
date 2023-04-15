@@ -156,6 +156,9 @@ function bindControl(controlId, module, parameterName, controlToParam = a => Num
         } else {
             module.setParam(parameterName, controlToParam(control.value));
         }
+        if (location.search) {
+            history.replaceState({}, '', location.origin + location.pathname);
+        }
     }
     control.addEventListener(control.type === 'checkbox' ? 'change' : 'input', updateModule);
 }
