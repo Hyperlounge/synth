@@ -1,7 +1,9 @@
 import ModularSynth from './modules/ModularSynth.js';
 import Dialog from './components/Dialog.js';
+import Library from './Library.js';
+import LibraryView from './LibraryView.js';
 
-const initialPatch = '{"global":{"totalVoices":8,"legato":false},"softKeyboard":{},"voiceAllocator":{"numberOfVoices":8,"glideTime":0},"osc1":{"waveform":"sawtooth","range":0,"tune":0,"fineTune":5,"modAmount":100},"osc2":{"waveform":"sawtooth","range":0,"tune":0,"fineTune":-4,"modAmount":100},"oscLevel1":{"level":0.042},"oscLevel2":{"level":0.036},"amplifier":{},"loudnessEnvelope":{"attackSeconds":0,"decaySeconds":0,"sustainLevel":1,"releaseSeconds":0,"velocityAmount":0.0059},"filter":{"type":"lowpass","frequency":96.88450011898634,"resonance":1,"modAmount":1900,"keyboardFollowAmount":1,"envelopeAmount":295},"filterEnvelope":{"attackSeconds":0.03836341792159985,"decaySeconds":1.0794767556393339,"sustainLevel":0.05,"releaseSeconds":0,"velocityAmount":0.48},"lfo":{"waveform":"sine","frequency":2.9512092266663865,"fixedAmount":0,"modWheelAmount":0}}';
+const initialPatch = '{"global":{"totalVoices":1,"legato":true,"envelopeStretch":false,"name":"Too High!","bank":"Basses"},"controllerHelper":{"pitchBendMax":200,"modulationMax":100},"voiceAllocator":{"numberOfVoices":0,"glideTime":0.019857606383389993},"osc1":{"waveform":"sawtooth","range":-1,"tune":0,"fineTune":2,"modAmount":100,"crossModAmount":0},"osc2":{"waveform":"triangle","range":-2,"tune":0,"fineTune":-1,"modAmount":100,"crossModAmount":0},"oscLevel1":{"level":0.066},"oscLevel2":{"level":0.048},"noiseLevel1":{"level":0},"amplifier":{},"loudnessEnvelope":{"attackSeconds":0,"decaySeconds":0,"sustainLevel":1,"releaseSeconds":0,"velocityAmount":0.5},"filter":{"type":"lowpass","frequency":69.35183155248555,"resonance":6.2,"modAmount":0,"keyboardFollowAmount":1,"envelopeAmount":4900},"filterEnvelope":{"attackSeconds":0.05830307435355809,"decaySeconds":0.5348507922869201,"sustainLevel":0.51,"releaseSeconds":0,"velocityAmount":0.56},"lfo":{"waveform":"triangle","frequency":5.495408738576245,"fixedAmount":0,"modWheelAmount":1,"delay":0},"noise":{"type":"white"},"softKeyboard":{}}';
 
 function verticalSlider(id, label, min, max, list) {
     const isValuesList = !!(!!list && !!list.length && typeof list[0] === 'object');
@@ -24,6 +26,19 @@ function verticalSlider(id, label, min, max, list) {
     </span>
     `
 }
+
+const banks = [
+    'Leads',
+    'Keys',
+    'Basses',
+    'Pads',
+    'Strings',
+    'Brass',
+    'Plucks',
+    'FX',
+    'Percussion',
+    'Misc',
+];
 
 const labels0to10 = [10,9,8,7,6,5,4,3,2,1,0];
 const labelsMinus5toPlus5 = [5,4,3,2,1,0,-1,-2,-3,-4,-5];
@@ -222,6 +237,14 @@ export default class PolySynth extends ModularSynth {
         document.getElementById('save-patch').addEventListener('click', evt => this.savePatchToFile());
         document.getElementById('share-patch').addEventListener('click', evt => this.sharePatch());
 
+        this._library = new Library();
+        fetch('library/index.json').then(response => {
+            response.text().then(text => {
+                this._library.library = JSON.parse(text).library;
+            });
+        });
+        document.getElementById('preset-name').addEventListener('click', evt => this.showLibrary(evt));
+
         this.createMidiModule();
         this.createSoftKeyboardModule();
         this._controllerHelper = this.createControllerHelperModule('controllerHelper');
@@ -265,6 +288,7 @@ export default class PolySynth extends ModularSynth {
             this.savePatch();
         });
 
+        document.getElementById('preset-name').innerHTML = this.globalPatch.get('name');
         bindControl('glide-time', this._voiceAllocator, 'glideTime', linearToLog(100, 10), logToLinear(10, 100));
         bindControl('voices', this._voiceAllocator, 'numberOfVoices');
         const bindOscillator = number => {
@@ -310,6 +334,40 @@ export default class PolySynth extends ModularSynth {
 
         bindControl('envelope-stretch', this, 'envelopeStretch');
         bindControl('noise-type', this._noise, 'type', optionToParam(noiseTypes), paramToOption(noiseTypes));
+
+        this.globalPatch.addEventListener('change', evt => {
+            document.getElementById('preset-name').innerHTML = this.globalPatch.get('name');
+        })
+    }
+
+    showLibrary(evt) {
+        const { target } = evt;
+        if (! this._libraryRoot) {
+            this._libraryRoot = document.createElement('div');
+            this._libraryRoot.id = 'library-root';
+            this._libraryRoot.className = 'library-root';
+            this._libraryRoot.style.left = target.offsetLeft + 'px';
+            this._libraryRoot.style.top = (target.offsetTop + target.offsetHeight) + 'px';
+            document.body.appendChild(this._libraryRoot);
+            const libraryView = new LibraryView(this._libraryRoot.id, this._library, '');
+            libraryView.addEventListener('preset-selected', evt => {
+                this._libraryRoot.style.display = 'none';
+                const { name, bank } = this._library.getPresetById(evt.detail);
+                const filePath = this._library.getPresetPathById(evt.detail);
+                const xhr = new XMLHttpRequest();
+                xhr.open('get', filePath);
+                xhr.onload = evt => {
+                    this.patch = JSON.parse(xhr.responseText);
+                    this.globalPatch.set({name, bank});
+                    if (location.search) {
+                        history.replaceState({}, '', location.origin + location.pathname);
+                    }
+                }
+                xhr.send();
+            });
+        } else {
+            this._libraryRoot.style.display = 'block';
+        }
     }
 
     dragOverHandler(ev) {
@@ -327,6 +385,8 @@ export default class PolySynth extends ModularSynth {
                     // If dropped items aren't files, reject them
                     if (item.kind === "file") {
                         const file = item.getAsFile();
+                        const fileName = file.name;
+                        const [name, bank] = fileName.replace(/^.*patch-([^-]+)-([^./]+)\.txt$/, '$2/$1').split('/');
                         file.text().then(text => {
                             let patch;
                             try {
@@ -336,6 +396,7 @@ export default class PolySynth extends ModularSynth {
                             }
                             if (patch) {
                                 this.patch = patch;
+                                this.globalPatch.set({name, bank});
                                 if (location.search) {
                                     history.replaceState({}, '', location.origin + location.pathname);
                                 }
@@ -351,6 +412,8 @@ export default class PolySynth extends ModularSynth {
         return {
             ...super._initialGlobalPatch,
             envelopeStretch: false,
+            name: 'Default preset',
+            bank: 'Misc',
         }
     }
 
@@ -365,7 +428,11 @@ export default class PolySynth extends ModularSynth {
         } else {
             patch = localStorage.getItem('PolySynth-current-patch') || initialPatch;
         }
-        patch && (this.patch = JSON.parse(patch));
+        try {
+            patch && (this.patch = JSON.parse(patch));
+        } catch (e) {
+            alert(e);
+        }
     }
 
     sharePatch() {
@@ -387,14 +454,9 @@ export default class PolySynth extends ModularSynth {
     savePatchToFile() {
         new Dialog(`
         <form>
-            <label for="patch-name">Patch name: </label><input type="text" name="patch-name"/>
-            <label for="patch-bank">&nbsp;&nbsp;&nbsp;&nbsp;Bank: </label><select name="patch-bank">
-                <option>Leads</option>
-                <option>Keys</option>
-                <option>Basses</option>
-                <option>Pads</option>
-                <option>FX</option>
-                <option>Misc</option>
+            <label for="preset-name">Patch name: </label><input type="text" name="preset-name" value="${this.globalPatch.get('name')}"/>
+            <label for="patch-bank">&nbsp;&nbsp;&nbsp;&nbsp;Bank: </label><select name="patch-bank" value="${this.globalPatch.get('bank')}">
+                ${banks.map(bank => `<option>${bank}</option>`).join('')}
             </select>
         </form>
         `, {
@@ -404,8 +466,9 @@ export default class PolySynth extends ModularSynth {
         }).then(data => {
             const { option, contentElement } = data;
             if (option === 0) {
-                const name = contentElement.querySelector('[name="patch-name"]').value || 'patch';
-                const bank = contentElement.querySelector('[name="patch-bank"]').value || 'misc';
+                const name = contentElement.querySelector('[name="preset-name"]').value || 'patch';
+                const bank = contentElement.querySelector('[name="patch-bank"]').value || 'Misc';
+                this.globalPatch.set({name, bank});
                 const element = document.createElement('a');
                 element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(JSON.stringify(this.patch)));
                 element.setAttribute('download', `patch-${bank}-${name}.txt`);
@@ -427,7 +490,7 @@ export default class PolySynth extends ModularSynth {
         this._root && (this._root.innerHTML = `
             <div class="synth">
                 <div class="header">
-                    Synth <button id="save-patch">Save patch</button> <button id="share-patch">Share patch</button>
+                    <span id="preset-name"></span> <button id="save-patch">Save patch</button> <button id="share-patch">Share patch</button>
                 </div>
                 <div class="controls">
                     <div class="panel">

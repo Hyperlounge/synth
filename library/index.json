@@ -1,0 +1,69 @@
+{
+  "library": [
+    {
+      "name": "Cello",
+      "bank": "Basses",
+      "fileName": "patch-Basses-Cello.txt"
+    },
+    {
+      "name": "Cellos",
+      "bank": "Basses",
+      "fileName": "patch-Basses-Cellos.txt"
+    },
+    {
+      "name": "Too High!",
+      "bank": "Basses",
+      "fileName": "patch-Basses-Too High!.txt"
+    },
+    {
+      "name": "Ragged Wah",
+      "bank": "Brass",
+      "fileName": "patch-Brass-Ragged Wah.txt"
+    },
+    {
+      "name": "Drawbars",
+      "bank": "Keys",
+      "fileName": "patch-Keys-Drawbars.txt"
+    },
+    {
+      "name": "Jazz Organ",
+      "bank": "Keys",
+      "fileName": "patch-Keys-Jazz Organ.txt"
+    },
+    {
+      "name": "Wurly",
+      "bank": "Keys",
+      "fileName": "patch-Keys-Wurly.txt"
+    },
+    {
+      "name": "Genius of Love",
+      "bank": "Leads",
+      "fileName": "patch-Leads-Genius of Love.txt"
+    },
+    {
+      "name": "Shine On!",
+      "bank": "Leads",
+      "fileName": "patch-Leads-Shine On!.txt"
+    },
+    {
+      "name": "Welcome to the Machine",
+      "bank": "Leads",
+      "fileName": "patch-Leads-Welcome to the Machine.txt"
+    },
+    {
+      "name": "Cello",
+      "bank": "Strings",
+      "fileName": "patch-Strings-Cello.txt"
+    },
+    {
+      "name": "Viola",
+      "bank": "Strings",
+      "fileName": "patch-Strings-Viola.txt"
+    },
+    {
+      "name": "Violin",
+      "bank": "Strings",
+      "fileName": "patch-Strings-Violin.txt"
+    }
+  ]
+}
