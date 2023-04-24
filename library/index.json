@@ -1,16 +1,6 @@
 {
   "library": [
     {
-      "name": "Cello",
-      "bank": "Basses",
-      "fileName": "patch-Basses-Cello.txt"
-    },
-    {
-      "name": "Cellos",
-      "bank": "Basses",
-      "fileName": "patch-Basses-Cellos.txt"
-    },
-    {
       "name": "Too High!",
       "bank": "Basses",
       "fileName": "patch-Basses-Too High!.txt"
@@ -21,14 +11,39 @@
       "fileName": "patch-Brass-Ragged Wah.txt"
     },
     {
+      "name": "Soft Brass",
+      "bank": "Brass",
+      "fileName": "patch-Brass-Soft Brass.txt"
+    },
+    {
+      "name": "Trombone",
+      "bank": "Brass",
+      "fileName": "patch-Brass-Trombone.txt"
+    },
+    {
       "name": "Drawbars",
       "bank": "Keys",
       "fileName": "patch-Keys-Drawbars.txt"
     },
     {
+      "name": "Harmonium",
+      "bank": "Keys",
+      "fileName": "patch-Keys-Harmonium.txt"
+    },
+    {
+      "name": "Harpsichord",
+      "bank": "Keys",
+      "fileName": "patch-Keys-Harpsichord.txt"
+    },
+    {
       "name": "Jazz Organ",
       "bank": "Keys",
       "fileName": "patch-Keys-Jazz Organ.txt"
+    },
+    {
+      "name": "Nasal",
+      "bank": "Keys",
+      "fileName": "patch-Keys-Nasal.txt"
     },
     {
       "name": "Wurly",
