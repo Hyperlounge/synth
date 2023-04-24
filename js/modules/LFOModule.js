@@ -53,7 +53,7 @@ export default class LFOModule extends AudioModule {
     }
 
     _onModWheelChange(evt) {
-        let offset = this._patch.get('modWheelAmount') * evt.detail.value/127;
+        let offset = this._patch.get('modWheelAmount') * evt.detail.value;
         if (this._patch.get('waveform') === 'inverse-sawtooth') {
             offset = -offset;
         }
