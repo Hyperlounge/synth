@@ -34,6 +34,27 @@ html, body {
       content: 'Preset name';
     }
   }
+
+  .recorder {
+    button#record {
+      color: red;
+      &::before {
+        content: 'record';
+      }
+      &.stop::before {
+        content: 'stop';
+      }
+    }
+
+    button#play {
+      &::before {
+        content: 'play';
+      }
+      &.stop::before {
+        content: 'stop';
+      }
+    }
+  }
 }
 
 .library-root {

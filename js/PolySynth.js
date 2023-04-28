@@ -2,6 +2,7 @@ import ModularSynth from './modules/ModularSynth.js';
 import Dialog from './components/Dialog.js';
 import Library from './Library.js';
 import LibraryView from './LibraryView.js';
+import MidiEvent from './events/MidiEvent.js';
 
 const initialPatch = '{"global":{"totalVoices":1,"legato":true,"envelopeStretch":false,"name":"Too High!","bank":"Basses"},"controllerHelper":{"pitchBendMax":200,"modulationMax":100},"voiceAllocator":{"numberOfVoices":0,"glideTime":0.019857606383389993},"osc1":{"waveform":"sawtooth","range":-1,"tune":0,"fineTune":2,"modAmount":100,"crossModAmount":0},"osc2":{"waveform":"triangle","range":-2,"tune":0,"fineTune":-1,"modAmount":100,"crossModAmount":0},"oscLevel1":{"level":0.066},"oscLevel2":{"level":0.048},"noiseLevel1":{"level":0},"amplifier":{},"loudnessEnvelope":{"attackSeconds":0,"decaySeconds":0,"sustainLevel":1,"releaseSeconds":0,"velocityAmount":0.5},"filter":{"type":"lowpass","frequency":69.35183155248555,"resonance":6.2,"modAmount":0,"keyboardFollowAmount":1,"envelopeAmount":4900},"filterEnvelope":{"attackSeconds":0.05830307435355809,"decaySeconds":0.5348507922869201,"sustainLevel":0.51,"releaseSeconds":0,"velocityAmount":0.56},"lfo":{"waveform":"triangle","frequency":5.495408738576245,"fixedAmount":0,"modWheelAmount":1,"delay":0},"noise":{"type":"white"},"softKeyboard":{}}';
 
@@ -237,6 +238,13 @@ export default class PolySynth extends ModularSynth {
         document.getElementById('save-patch').addEventListener('click', evt => this.savePatchToFile());
         document.getElementById('share-patch').addEventListener('click', evt => this.sharePatch());
 
+        this._recordingData = [];
+        this._recording = false;
+        this._playing = false;
+        document.getElementById('record').addEventListener('click', evt => this.toggleRecord());
+        document.getElementById('play').addEventListener('click', evt => this.togglePlay());
+
+
         this._library = new Library();
         fetch('library/index.json').then(response => {
             response.text().then(text => {
@@ -422,11 +430,22 @@ export default class PolySynth extends ModularSynth {
     }
 
     loadPatch() {
+        const params = {};
+        if (location.search) {
+            location.search.slice(1).split('&').map(item => {
+                const [ key, value ] = item.split('=');
+                params[key] = decodeURIComponent(value);
+            })
+        }
         let patch;
-        if (/^\?patch=/.test(location.search)) {
-            patch = decodeURIComponent(location.search.replace(/^\?patch=/, ''));
+        if (params.patch) {
+            patch = params.patch;
         } else {
             patch = localStorage.getItem('PolySynth-current-patch') || initialPatch;
+        }
+        if (params.ditty) {
+            this.setDecodedDitty(params.ditty);
+            this.togglePlay();
         }
         try {
             patch && (this.patch = JSON.parse(patch));
@@ -435,8 +454,27 @@ export default class PolySynth extends ModularSynth {
         }
     }
 
+    setDecodedDitty(encoded) {
+        this._recordingData = encoded.split('|').map(item => {
+            const [ timeString, hexBytes ] = item.split('-');
+            const time = parseFloat(timeString);
+            const statusByte = parseInt(hexBytes.slice(0,2), 16);
+            const dataByte1 = parseInt(hexBytes.slice(2,4), 16);
+            const dataByte2 = parseInt(hexBytes.slice(4), 16);
+            return {
+                time,
+                detail: { statusByte, dataByte1, dataByte2 },
+            }
+        });
+    }
+
+    getEncodedDitty() {
+        const toHex = val => Number(val).toString(16)
+        return this._recordingData.map(item => `${Math.round(item.time * 1000)/1000}-${toHex(item.detail.statusByte)}${toHex(item.detail.dataByte1)}${toHex(item.detail.dataByte2)}`).join('|');
+    }
+
     sharePatch() {
-        const url = location.origin + location.pathname + '?patch=' + encodeURIComponent(JSON.stringify(this.patch));
+        const url = location.origin + location.pathname + '?patch=' + encodeURIComponent(JSON.stringify(this.patch)) + '&ditty=' + this.getEncodedDitty();
         new Dialog(`
         <a href='${url}' target="_blank">Click to open in new tab</a>
         `, {
@@ -485,12 +523,64 @@ export default class PolySynth extends ModularSynth {
 
     }
 
-    _render() {
+    toggleRecord() {
+        if (this._playing) {
+            this.togglePlay();
+        }
+        this._recording = !this._recording;
+        document.getElementById('record').classList.toggle('stop', this._recording);
+        if (this._recording) {
+            this._recordingStartTime = this.audioContext.currentTime;
+            this._recordingData = [];
+            this.eventBus.addEventListener(MidiEvent.type, this.addRecordingEvent);
+        } else {
+            this.eventBus.removeEventListener(MidiEvent.type, this.addRecordingEvent);
+        }
+    }
 
+    addRecordingEvent = (event) => {
+        const { statusByte, dataByte1 } = event.detail;
+        if ((statusByte >= 128 && statusByte <= 143) || (statusByte >= 144 && statusByte <= 159) || statusByte === MidiEvent.CONTROLLER && dataByte1 === MidiEvent.SUSTAIN_PEDAL) {
+            this._recordingData.push({
+                time: this.audioContext.currentTime - this._recordingStartTime,
+                detail: {...event.detail},
+            });
+        }
+    }
+
+    togglePlay() {
+        if (this._recording) {
+            this.toggleRecord();
+        }
+        this._playing = !this._playing && this._recordingData.length > 0;
+        document.getElementById('play').classList.toggle('stop', this._playing);
+        if (this._playing) {
+            this._recordingData.forEach((item, i) => {
+                item.timeoutId = setTimeout(() => {
+                    const { statusByte, dataByte1, dataByte2 } = item.detail;
+                    this.eventBus.dispatchEvent(new MidiEvent(statusByte, dataByte1, dataByte2));
+                    delete item.timeoutId;
+                    if (i === this._recordingData.length - 1) {
+                        this.togglePlay();
+                    }
+                }, item.time * 1000);
+            });
+        } else {
+            this._recordingData.forEach(item => {
+                if (item.timeoutId !== undefined) {
+                    clearTimeout(item.timeoutId);
+                    delete item.timeoutId;
+                }
+            })
+        }
+    }
+
+    _render() {
         this._root && (this._root.innerHTML = `
             <div class="synth">
                 <div class="header">
                     <span id="preset-name"></span> <button id="save-patch">Save patch</button> <button id="share-patch">Share patch</button>
+                    <span class="recorder"><button id="record"></button><button id="play"></button></span>
                 </div>
                 <div class="controls">
                     <div class="panel">

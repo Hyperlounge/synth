@@ -34,6 +34,21 @@ html, body {
 .header #preset-name:empty::before {
   content: "Preset name";
 }
+.header .recorder button#record {
+  color: red;
+}
+.header .recorder button#record::before {
+  content: "record";
+}
+.header .recorder button#record.stop::before {
+  content: "stop";
+}
+.header .recorder button#play::before {
+  content: "play";
+}
+.header .recorder button#play.stop::before {
+  content: "stop";
+}
 
 .library-root {
   position: absolute;
