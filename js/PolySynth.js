@@ -455,8 +455,8 @@ export default class PolySynth extends ModularSynth {
         new Dialog(`
         <form>
             <label for="preset-name">Patch name: </label><input type="text" name="preset-name" value="${this.globalPatch.get('name')}"/>
-            <label for="patch-bank">&nbsp;&nbsp;&nbsp;&nbsp;Bank: </label><select name="patch-bank" value="${this.globalPatch.get('bank')}">
-                ${banks.map(bank => `<option>${bank}</option>`).join('')}
+            <label for="patch-bank">&nbsp;&nbsp;&nbsp;&nbsp;Bank: </label><select name="patch-bank">
+                ${banks.map(bank => `<option ${this.globalPatch.get('bank') === bank ? 'selected' : ''}>${bank}</option>`).join('')}
             </select>
         </form>
         `, {
