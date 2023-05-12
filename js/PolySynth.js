@@ -361,7 +361,7 @@ export default class PolySynth extends ModularSynth {
             const libraryView = new LibraryView(this._libraryRoot.id, this._library, '');
             libraryView.addEventListener('preset-selected', evt => {
                 this._libraryRoot.style.display = 'none';
-                this.loadPatchFromLibrary(evt.detail).then(patch => {
+                this.loadPresetFromLibrary(evt.detail).then(patch => {
                     this.patch = patch;
                     this._presetId = evt.detail;
                     if (location.search) {
@@ -374,7 +374,7 @@ export default class PolySynth extends ModularSynth {
         }
     }
 
-    loadPatchFromLibrary(id) {
+    loadPresetFromLibrary(id) {
         return new Promise(resolve => {
             const filePath = this._library.getPresetPathById(id);
             const xhr = new XMLHttpRequest();
@@ -448,7 +448,7 @@ export default class PolySynth extends ModularSynth {
         if (params.preset) {
             const preset = this._library.getPresetByNameAndBank(params.preset, params.bank);
             this._presetId = preset.id;
-            this.loadPatchFromLibrary(preset.id).then(patch => {
+            this.loadPresetFromLibrary(preset.id).then(patch => {
                 this.patch = patch;
                 if (params.changes) {
                     this._patch.set(JSON.parse(params.changes));
@@ -495,7 +495,7 @@ export default class PolySynth extends ModularSynth {
 
     getPatchChanges() {
         return new Promise(resolve => {
-            this.loadPatchFromLibrary(this._presetId).then(patch => {
+            this.loadPresetFromLibrary(this._presetId).then(patch => {
                 const preset = patch;
                 const currentPatch = this.patch;
                 const changes = {};
