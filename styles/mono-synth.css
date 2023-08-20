@@ -10,6 +10,7 @@ html, body {
 }
 
 * {
+  box-sizing: border-box;
   user-select: none !important;
 }
 
@@ -74,6 +75,7 @@ html, body {
 .library-root .library .presets {
   display: flex;
   flex-direction: column;
+  flex-wrap: wrap;
   background: white;
 }
 .library-root .library .presets div {

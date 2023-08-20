@@ -356,7 +356,9 @@ export default class PolySynth extends ModularSynth {
             this._libraryRoot.id = 'library-root';
             this._libraryRoot.className = 'library-root';
             this._libraryRoot.style.left = target.offsetLeft + 'px';
-            this._libraryRoot.style.top = (target.offsetTop + target.offsetHeight) + 'px';
+            const top = (target.offsetTop + target.offsetHeight);
+            this._libraryRoot.style.top = top + 'px';
+            this._libraryRoot.style.maxHeight = (window.innerHeight - top) + 'px';
             document.body.appendChild(this._libraryRoot);
             const libraryView = new LibraryView(this._libraryRoot.id, this._library, '');
             libraryView.addEventListener('preset-selected', evt => {
