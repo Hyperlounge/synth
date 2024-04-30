@@ -2,26 +2,24 @@
 import PropTypes from './helpers/PropTypes.js';
 import addTwiddling from './helpers/addTwiddling.js';
 
-export default class RotaryKnob extends HTMLElement {
+const LABELS_LEFT = 'left';
+const LABELS_RIGHT = 'right';
+const LABELS_AROUND = 'around';
+
+
+export default class RotarySwitch extends HTMLElement {
     static propTypes = {
         id: PropTypes.string,
         class: PropTypes.string,
         style: PropTypes.string,
-        scaleMin: PropTypes.number.default(0),
-        scaleMax: PropTypes.number.default(10),
-        scaleStep: PropTypes.number.default(1),
-        minimal: PropTypes.bool.default(false),
-        value: PropTypes.number.default(0).observed,
-        minValue: PropTypes.number.default(0),
-        maxValue: PropTypes.number.default(1),
-        units: PropTypes.string.default(''),
-        logarithmic: PropTypes.bool.default(false),
         capColor: PropTypes.string.default('yellow').observed,
+        title: PropTypes.string.default('Title').observed,
+        labels: PropTypes.string.lookup([LABELS_LEFT, LABELS_RIGHT, LABELS_AROUND]).default(LABELS_AROUND),
     }
 
     static template = data => `
 <style>
-    .rotary-knob {
+    .rotary-switch {
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -54,10 +52,9 @@ export default class RotaryKnob extends HTMLElement {
     }
     .label {
         font-size: 80%;
-        transform: translate(-50%, -50%);
     }
 </style>
-<div class="rotary-knob">
+<div class="rotary-switch">
     <div class="title">${data.title}</div>
     
     <div class="rotor">
@@ -74,14 +71,25 @@ export default class RotaryKnob extends HTMLElement {
         this._root = this.attachShadow({mode: 'open'});
         this._props = PropTypes.attributesToProps(this);
         this._title = this.innerHTML;
-        this._minAngle = 0.2 * Math.PI;
-        this._maxAngle = 1.8 * Math.PI;
+        this._minAngle = (this._props.labels === LABELS_RIGHT ? 1.2 : 0.2) * Math.PI;
+        this._maxAngle = (this._props.labels === LABELS_LEFT ? 0.8 : 1.8) * Math.PI;
+        this.selectedIndex = 0;
+
+        this._options = Array.from(this.querySelectorAll('option')).map((option, i) => {
+            if (option.selected) {
+                this._selectedIndex = i;
+            }
+            return {
+                label: option.innerHTML,
+                value: option.value,
+                style: option.style,
+            };
+        });
 
         const data = {
             ...this._props,
-            title: this._title,
         }
-        this._root.innerHTML = RotaryKnob.template(data);
+        this._root.innerHTML = RotarySwitch.template(data);
         this._drawScale();
         this._updateView();
         this._addControlListeners();
@@ -94,15 +102,11 @@ export default class RotaryKnob extends HTMLElement {
     }
 
     _updateView() {
-        const {value, minValue, maxValue} = this._props;
         const rotor = this._root.querySelector('.rotor');
-        this._rotorAngle = -Math.PI + this._minAngle + (value-minValue)/(maxValue-minValue) * (this._maxAngle-this._minAngle);
-        rotor.style.transform = `rotate(${this._rotorAngle}rad)`;
+        rotor.style.transform = `rotate(${this._options[this._selectedIndex].angle + Math.PI}rad)`;
     }
 
     _drawScale() {
-        const {scaleMin, scaleMax, scaleStep} = this._props;
-
         const rotor = this._root.querySelector('.rotor');
         const rotorRadius = rotor.offsetWidth / 2;
         const rotorCenter = {
@@ -110,15 +114,14 @@ export default class RotaryKnob extends HTMLElement {
             y: rotor.offsetTop + rotorRadius,
         };
         const labelRadius = rotorRadius + 8;
-        const angleStep = 1.6 * Math.PI * scaleStep / (scaleMax - scaleMin);
+        const angleStep = (this._maxAngle - this._minAngle) / (this._options.length - 1);
         let angle = this._minAngle;
+        const rotarySwitch = this._root.querySelector('.rotary-switch');
 
-        const rotaryKnob = this._root.querySelector('.rotary-knob');
-
-        for (let notch = scaleMin; notch <= scaleMax; notch += scaleStep) {
+        this._options.forEach(option => {
             const tick = document.createElement('div');
             tick.classList.add('tick');
-            rotaryKnob.append(tick);
+            rotarySwitch.append(tick);
             tick.style.position = 'absolute';
             tick.style.top = (rotorCenter.y + Math.cos(angle) * rotorRadius) + 'px';
             tick.style.left = (rotorCenter.x - Math.sin(angle) * rotorRadius) + 'px';
@@ -126,37 +129,44 @@ export default class RotaryKnob extends HTMLElement {
 
             const label = document.createElement('div');
             label.classList.add('label');
-            if (!this._props.minimal || notch === 0) {
-                label.innerHTML = notch;
-            } else if (notch === scaleMin) {
-                label.innerHTML = '&minus;';
-            } else if (notch === scaleMax) {
-                label.innerHTML = '+';
-            }
-            rotaryKnob.append(label);
+            label.innerHTML = option.label;
+            rotarySwitch.append(label);
             label.style.position = 'absolute';
             label.style.top = (rotorCenter.y + Math.cos(angle) * labelRadius) + 'px';
             label.style.left = (rotorCenter.x - Math.sin(angle) * labelRadius) + 'px';
+            const translateX = option.style.textAlign ? {
+                right: '-100%',
+                left: '0',
+                center: '-50%',
+            }[option.style.textAlign] : {
+                [LABELS_LEFT]: '-100%',
+                [LABELS_RIGHT]: '0',
+                [LABELS_AROUND]: '-50%',
+            }[this._props.labels];
+            label.style.transform = `translate(${translateX}, -50%)`;
+            option.angle = angle;
             angle += angleStep;
-        }
+        });
     }
 
     _addControlListeners() {
         const {minValue, maxValue} = this._props;
 
         const rotor = this._root.querySelector('.rotor');
-        let startAngle;
+        let startIndex;
 
         addTwiddling(rotor)
             .onStart(() => {
-                startAngle = this._rotorAngle;
+                startIndex = this._selectedIndex;
             })
             .onTwiddle((deltaX, deltaY) => {
-                const newAngle = startAngle - (deltaY - deltaX) * 0.05;
-                this._rotorAngle = Math.min(Math.max(this._minAngle - Math.PI, newAngle), this._maxAngle - Math.PI);
-                rotor.style.transform = `rotate(${this._rotorAngle}rad)`;
-                this._props.value = minValue + (maxValue-minValue) * this._rotorAngle/(this._maxAngle-this._minAngle);
-                this._dispatchChangeEvent();
+                let newIndex = startIndex - Math.round((deltaY * (this._props.labels === LABELS_RIGHT ? -1 : 1) - deltaX) / 10);
+                newIndex = Math.max(0, Math.min(this._options.length - 1, newIndex));
+                if (newIndex !== this._selectedIndex) {
+                    this._selectedIndex = newIndex;
+                    this._updateView();
+                    this._dispatchChangeEvent();
+                }
             });
     }
 
@@ -166,8 +176,8 @@ export default class RotaryKnob extends HTMLElement {
     }
 
     get value() {
-        return this._props.value;
+        return this._props.options[this._selectedIndex].value;
     }
 }
 
-customElements.define('rotary-knob', RotaryKnob);
+customElements.define('rotary-switch', RotarySwitch);

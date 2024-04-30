@@ -232,10 +232,10 @@ class PropTypes {
                             convertedValue = value;
                         } else {
                             const lowerCaseValue = value.toLowerCase();
-                            if (lowerCaseValue !== 'true' && lowerCaseValue !== 'false') {
+                            if (lowerCaseValue !== '' && lowerCaseValue !== 'true' && lowerCaseValue !== 'false') {
                                 throw new Error(`Attribute "${name}" must be either "true" or "false". ${elementId}`);
                             } else {
-                                convertedValue = lowerCaseValue === 'true';
+                                convertedValue = lowerCaseValue !== 'false';
                             }
                         }
                         break;
