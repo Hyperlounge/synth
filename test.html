@@ -7,47 +7,32 @@
 <body>
 
 <button onclick="start()">Start</button>
+<button onmousedown="pluck()">Pluck</button>
 
 </body>
 <script>
-  function logParams(audioNode) {
-      if (audioNode instanceof AudioScheduledSourceNode) {
-          audioNode.start();
-      }
-      console.log(audioNode);
-    Object.getOwnPropertyNames(Object.getPrototypeOf(audioNode)).forEach(key => {
-      const prop = audioNode[key];
-      if (prop instanceof AudioParam) {
-        console.log(`  ${key}: min: ${prop.minValue}; max: ${prop.maxValue}; default: ${prop.defaultValue}`);
-      } else if (key !== 'constructor') {
-        console.log(`   ${key}: ${typeof audioNode[key]}`);
-      }
-    });
-  }
-
-
-  function start() {
     const context = new AudioContext();
-    function createAndLog(name) {
-      console.log(name);
-      logParams(context[`create${name}`]());
+    const delay = context.createDelay(0.1);
+    const feedbackGain = context.createGain();
+    const pulseGen = context.createConstantSource();
+
+    function start() {
+        pulseGen.connect(delay);
+        delay.connect(feedbackGain);
+        feedbackGain.connect(delay);
+        delay.connect(context.destination);
+
+        delay.delayTime.value = 0.001;
+        feedbackGain.gain.value = 0.999;
+
+        pulseGen.start();
+        pulseGen.offset.value = 0;
     }
 
-    createAndLog('Oscillator');
-    createAndLog('BiquadFilter');
-    createAndLog('Convolver');
-    createAndLog('Delay');
-    createAndLog('DynamicsCompressor');
-    createAndLog('Gain');
-    createAndLog('WaveShaper');
-    createAndLog('Analyser');
-    createAndLog('ChannelSplitter');
-    createAndLog('ChannelMerger');
-    createAndLog('Panner');
-    createAndLog('StereoPanner');
-    createAndLog('ConstantSource');
-
-  }
+    function pluck() {
+        pulseGen.offset.setValueAtTime(0.5, context.currentTime + 0.1);
+        pulseGen.offset.setValueAtTime(0, context.currentTime + 0.101);
+    }
 
 </script>
 </html>
