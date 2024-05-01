@@ -2,6 +2,7 @@ import MonoSynth from './MonoSynth.js';
 import PolySynth from './PolySynth.js';
 import './components/RotaryKnob.js';
 import './components/RotarySwitch.js';
+import './components/VerticalSlider.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     document.body.innerHTML = `
@@ -41,6 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <option value="4">Bluetooth</option>
         </rotary-switch>
         <rotary-knob>Volume</rotary-knob>
+        <vertical-slider>Level</vertical-slider>
         <rotary-knob scale-min="-5" scale-max="5" min-value="-1" max-value="1">Bass</rotary-knob>
         <rotary-knob scale-min="-5" scale-max="5" min-value="-1" max-value="1" minimal>Treble</rotary-knob>
     </div>

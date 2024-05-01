@@ -73,7 +73,7 @@ export default class RotarySwitch extends HTMLElement {
         this._title = this.innerHTML;
         this._minAngle = (this._props.labels === LABELS_RIGHT ? 1.2 : 0.2) * Math.PI;
         this._maxAngle = (this._props.labels === LABELS_LEFT ? 0.8 : 1.8) * Math.PI;
-        this.selectedIndex = 0;
+        this._selectedIndex = 0;
 
         this._options = Array.from(this.querySelectorAll('option')).map((option, i) => {
             if (option.selected) {
@@ -119,6 +119,8 @@ export default class RotarySwitch extends HTMLElement {
         const rotarySwitch = this._root.querySelector('.rotary-switch');
 
         this._options.forEach(option => {
+            option.angle = angle;
+
             const tick = document.createElement('div');
             tick.classList.add('tick');
             rotarySwitch.append(tick);
@@ -144,7 +146,6 @@ export default class RotarySwitch extends HTMLElement {
                 [LABELS_AROUND]: '-50%',
             }[this._props.labels];
             label.style.transform = `translate(${translateX}, -50%)`;
-            option.angle = angle;
             angle += angleStep;
         });
     }
@@ -171,12 +172,18 @@ export default class RotarySwitch extends HTMLElement {
     }
 
     _dispatchChangeEvent() {
-        const evt = new CustomEvent('change');
+        const evt = new CustomEvent('input');
         this.dispatchEvent(evt);
     }
 
     get value() {
-        return this._props.options[this._selectedIndex].value;
+        return this._options[this._selectedIndex].value;
+    }
+
+    set value(newValue) {
+        const option = this._options.find(item => item.value === newValue);
+        this._selectedIndex = this._options.indexOf(option);
+        this._updateView();
     }
 }
 

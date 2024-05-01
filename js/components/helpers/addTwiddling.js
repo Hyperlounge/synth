@@ -43,10 +43,13 @@ export default function addTwiddling(element) {
         }
 
         const endHandler = evt => {
-            document.body.removeEventListener('touchmove', moveHandler);
-            document.body.removeEventListener('touchend', endHandler);
-            document.body.removeEventListener('touchcancel', endHandler);
-            _endCallback();
+            const touch = Array.from(evt.changedTouches).find(item => item.identifier === touchId);
+            if (touch) {
+                document.body.removeEventListener('touchmove', moveHandler);
+                document.body.removeEventListener('touchend', endHandler);
+                document.body.removeEventListener('touchcancel', endHandler);
+                _endCallback();
+            }
         }
 
         document.body.addEventListener('touchmove', moveHandler);
