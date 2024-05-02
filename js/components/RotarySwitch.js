@@ -86,6 +86,8 @@ export default class RotarySwitch extends HTMLElement {
             };
         });
 
+        this._defaultIndex = this._selectedIndex;
+
         const data = {
             ...this._props,
         }
@@ -161,13 +163,18 @@ export default class RotarySwitch extends HTMLElement {
                 startIndex = this._selectedIndex;
             })
             .onTwiddle((deltaX, deltaY) => {
-                let newIndex = startIndex - Math.round((deltaY * (this._props.labels === LABELS_RIGHT ? -1 : 1) - deltaX) / 10);
+                let newIndex = startIndex - Math.round((deltaY * (this._props.labels === LABELS_RIGHT ? -1 : 1) - deltaX) / 20);
                 newIndex = Math.max(0, Math.min(this._options.length - 1, newIndex));
                 if (newIndex !== this._selectedIndex) {
                     this._selectedIndex = newIndex;
                     this._updateView();
                     this._dispatchChangeEvent();
                 }
+            })
+            .onDoubleTap(() => {
+                this._selectedIndex = this._defaultIndex;
+                this._updateView();
+                this._dispatchChangeEvent();
             });
     }
 
