@@ -56,20 +56,20 @@ const noiseTypes = [
 ]
 
 const waveforms = [
-    {label: 'SIN', value: 'sine'},
-    {label: 'TRI', value: 'triangle', default: true},
-    {label: 'SAW', value: 'sawtooth'},
-    {label: 'SQU', value: 'square'},
+    {label: '<img src="/media/svg/sine-wave.svg"/>', value: 'sine'},
+    {label: '<img src="/media/svg/triangle.svg"/>', value: 'triangle', default: true},
+    {label: '<img src="/media/svg/saw-tooth.svg"/>', value: 'sawtooth'},
+    {label: '<img src="/media/svg/square-wave.svg"/>', value: 'square'},
 ];
 
 const lfoWaveforms = [
-    {label: 'SIN', value: 'sine'},
-    {label: 'TRI', value: 'triangle', default: true},
-    {label: 'SAW', value: 'sawtooth'},
-    {label: 'WAS', value: 'inverse-sawtooth'},
-    {label: 'SQU', value: 'square'},
-    {label: 'S+H', value: 'sample-hold'},
-    {label: 'NSE', value: 'noise'},
+    {label: '<img src="/media/svg/sine-wave.svg"/>', value: 'sine'},
+    {label: '<img src="/media/svg/triangle.svg"/>', value: 'triangle', default: true},
+    {label: '<img src="/media/svg/saw-tooth.svg"/>', value: 'sawtooth'},
+    {label: '<img src="/media/svg/reverse-saw.svg"/>', value: 'inverse-sawtooth'},
+    {label: '<img src="/media/svg/square-wave.svg"/>', value: 'square'},
+    {label: '<img src="/media/svg/sample-and-hold.svg"/>', value: 'sample-hold'},
+    {label: '<img src="/media/svg/noise.svg"/>', value: 'noise'},
 ];
 
 const filterTypes = [
@@ -674,15 +674,8 @@ export default class PolySynth extends ModularSynth {
                         <div id="controllers">${controllersTemplate}</div>
                     </div>
                     <div class="panel">
-                        <h2>Global</h2>
-                        <div class="control-group">
-                            <div class="vertical-group">
-                                <rotary-switch id="noise-type" title="Noise" labels="right">
-                                    ${renderOptions(noiseTypes)}
-                                </rotary-switch>
-                                <label>Envelope Stretch <input type="checkbox" id="envelope-stretch"/></label>
-                            </div>
-                        </div>
+                        <h2>LFO</h2>
+                        <div id="lfo">${lfoTemplate}</div>
                     </div>
                     <div class="panel">
                         <h2>Oscillator 1</h2>
@@ -705,8 +698,15 @@ export default class PolySynth extends ModularSynth {
                         <div id="filter">${filterTemplate}</div>
                     </div>
                     <div class="panel">
-                        <h2>LFO</h2>
-                        <div id="lfo">${lfoTemplate}</div>
+                        <h2>Global</h2>
+                        <div class="control-group">
+                            <div class="vertical-group">
+                                <rotary-switch id="noise-type" title="Noise" labels="right">
+                                    ${renderOptions(noiseTypes)}
+                                </rotary-switch>
+                                <label>Envelope Stretch <input type="checkbox" id="envelope-stretch"/></label>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="panel keyboard">

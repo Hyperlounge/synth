@@ -53,6 +53,10 @@ export default class RotarySwitch extends HTMLElement {
     .label {
         font-size: 80%;
     }
+    .label img {
+        width: 10px;
+        height: 10px;
+    }
 </style>
 <div class="rotary-switch">
     <div class="title">${data.title}</div>
@@ -115,7 +119,7 @@ export default class RotarySwitch extends HTMLElement {
             x: rotor.offsetLeft + rotorRadius,
             y: rotor.offsetTop + rotorRadius,
         };
-        const labelRadius = rotorRadius + 8;
+        const labelRadius = rotorRadius + 10;
         const angleStep = (this._maxAngle - this._minAngle) / (this._options.length - 1);
         let angle = this._minAngle;
         const rotarySwitch = this._root.querySelector('.rotary-switch');
@@ -140,11 +144,11 @@ export default class RotarySwitch extends HTMLElement {
             label.style.left = (rotorCenter.x - Math.sin(angle) * labelRadius) + 'px';
             const translateX = option.style.textAlign ? {
                 right: '-100%',
-                left: '0',
+                left: '-4px',
                 center: '-50%',
             }[option.style.textAlign] : {
                 [LABELS_LEFT]: '-100%',
-                [LABELS_RIGHT]: '0',
+                [LABELS_RIGHT]: '-4px',
                 [LABELS_AROUND]: '-50%',
             }[this._props.labels];
             label.style.transform = `translate(${translateX}, -50%)`;
