@@ -10,6 +10,8 @@ import './components/ModWheel.js';
 
 const initialPatch = '{"global":{"totalVoices":1,"legato":true,"envelopeStretch":false,"name":"Too High!","bank":"Basses"},"controllerHelper":{"pitchBendMax":200,"modulationMax":100},"voiceAllocator":{"numberOfVoices":0,"glideTime":0.019857606383389993},"osc1":{"waveform":"sawtooth","range":-1,"tune":0,"fineTune":2,"modAmount":100,"crossModAmount":0},"osc2":{"waveform":"triangle","range":-2,"tune":0,"fineTune":-1,"modAmount":100,"crossModAmount":0},"oscLevel1":{"level":0.066},"oscLevel2":{"level":0.048},"noiseLevel1":{"level":0},"amplifier":{},"loudnessEnvelope":{"attackSeconds":0,"decaySeconds":0,"sustainLevel":1,"releaseSeconds":0,"velocityAmount":0.5},"filter":{"type":"lowpass","frequency":69.35183155248555,"resonance":6.2,"modAmount":0,"keyboardFollowAmount":1,"envelopeAmount":4900},"filterEnvelope":{"attackSeconds":0.05830307435355809,"decaySeconds":0.5348507922869201,"sustainLevel":0.51,"releaseSeconds":0,"velocityAmount":0.56},"lfo":{"waveform":"triangle","frequency":5.495408738576245,"fixedAmount":0,"modWheelAmount":1,"delay":0},"noise":{"type":"white"},"softKeyboard":{}}';
 
+const SVG = 'media/svg'
+
 const banks = [
     'Leads',
     'Keys',
@@ -30,20 +32,20 @@ const noiseTypes = [
 ]
 
 const waveforms = [
-    {label: '<img alt="sine" src="/media/svg/sine-wave.svg"/>', value: 'sine'},
-    {label: '<img alt="triangle" src="/media/svg/triangle.svg"/>', value: 'triangle', default: true},
-    {label: '<img alt="sawtooth" src="/media/svg/saw-tooth.svg"/>', value: 'sawtooth'},
-    {label: '<img alt="square" src="/media/svg/square-wave.svg"/>', value: 'square'},
+    {label: `<img alt="sine" src="${SVG}/sine-wave.svg"/>`, value: 'sine'},
+    {label: `<img alt="triangle" src="${SVG}/triangle.svg"/>`, value: 'triangle', default: true},
+    {label: `<img alt="sawtooth" src="${SVG}/saw-tooth.svg"/>`, value: 'sawtooth'},
+    {label: `<img alt="square" src="${SVG}/square-wave.svg"/>`, value: 'square'},
 ];
 
 const lfoWaveforms = [
-    {label: '<img alt="sine" src="/media/svg/sine-wave.svg"/>', value: 'sine'},
-    {label: '<img alt="triangle" src="/media/svg/triangle.svg"/>', value: 'triangle', default: true},
-    {label: '<img alt="sawtooth" src="/media/svg/saw-tooth.svg"/>', value: 'sawtooth'},
-    {label: '<img alt="reverse sawtooth" src="/media/svg/reverse-saw.svg"/>', value: 'inverse-sawtooth'},
-    {label: '<img alt="square" src="/media/svg/square-wave.svg"/>', value: 'square'},
-    {label: '<img alt="sample and hold" src="/media/svg/sample-and-hold.svg"/>', value: 'sample-hold'},
-    {label: '<img alt="noise" src="/media/svg/noise.svg"/>', value: 'noise'},
+    {label: `<img alt="sine" src="${SVG}/sine-wave.svg"/>`, value: 'sine'},
+    {label: `<img alt="triangle" src="${SVG}/triangle.svg"/>`, value: 'triangle', default: true},
+    {label: `<img alt="sawtooth" src="${SVG}/saw-tooth.svg"/>`, value: 'sawtooth'},
+    {label: `<img alt="reverse sawtooth" src="${SVG}/reverse-saw.svg"/>`, value: 'inverse-sawtooth'},
+    {label: `<img alt="square" src="${SVG}/square-wave.svg"/>`, value: 'square'},
+    {label: `<img alt="sample and hold" src="${SVG}/sample-and-hold.svg"/>`, value: 'sample-hold'},
+    {label: `<img alt="noise" src="${SVG}/noise.svg"/>`, value: 'noise'},
 ];
 
 const filterTypes = [
