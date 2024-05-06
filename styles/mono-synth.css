@@ -15,6 +15,10 @@ html, body {
   user-select: none !important;
 }
 
+.modal {
+  z-index: 999999;
+}
+
 #synth {
   height: 100%;
 }
