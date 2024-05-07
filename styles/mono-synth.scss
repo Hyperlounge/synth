@@ -12,6 +12,7 @@ html, body {
 * {
   box-sizing: border-box;
   user-select: none !important;
+  -webkit-user-select: none !important;
 }
 
 .modal {
@@ -69,11 +70,17 @@ html, body {
 }
 
 .library-root {
+  display: none;
   position: absolute;
   background: silver;
   padding: 10px;
   border: 1px solid gray;
   border-radius: 0 10px 10px 10px;
+  font-size: 150%;
+
+  &.show {
+    display: block;
+  }
 
   .library {
     display: flex;
@@ -141,7 +148,7 @@ html, body {
   }
 }
 
-@media (max-height: 800px) {
+@media (max-height: 600px) {
   .expression-controls {
     .panel .control-group {
       flex-wrap: nowrap !important;
