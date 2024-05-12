@@ -13,8 +13,8 @@ fs.readdir(__dirname + '/../library', (err, files) => {
         console.log(err);
     else {
         files.forEach(fileName => {
-             if (/^patch-.*\.txt$/.test(fileName)) {
-                const [name, bank] = fileName.replace(/^.*patch-([^-]+)-([^./]+)\.txt$/, '$2/$1').split('/');
+             if (/^.*\.hspatch$/.test(fileName)) {
+                const [name, bank] = fileName.replace(/^([^-]+)- ([^./]+)\.hspatch$/, '$2/$1').split('/');
                 json.library.push({name, bank, fileName});
             }
         });
