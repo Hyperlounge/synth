@@ -377,6 +377,14 @@ export default class PolySynth extends ModularSynth {
         document.getElementById('reference-tone').addEventListener('change', this.onReferenceToneChange);
 
         document.getElementById('power').addEventListener('change', evt => {
+            if (this._powerFirstTouch) {
+                clearTimeout(this._powerFirstTouch);
+                window.location.reload();
+            } else {
+                this._powerFirstTouch = setTimeout(() => {
+                    delete this._powerFirstTouch;
+                }, 500);
+            }
             if (evt.target.checked) {
                 this.audioContext.resume();
             } else {
