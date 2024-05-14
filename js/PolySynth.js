@@ -24,6 +24,7 @@ const banks = [
     'FX',
     'Percussion',
     'Misc',
+    'Prototypes'
 ];
 
 const noiseTypes = [
@@ -135,6 +136,32 @@ const filterTemplate = `
     </div>
 </div>
 `;
+
+const globalTemplate = `
+<div class="control-group">
+    <div class="vertical-group">
+        <rotary-switch id="voices" title="Voices">
+            <option value="0">LEG.</option>
+            <option value="1" selected>1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+        </rotary-switch>
+        <rotary-knob id="glide-time" max-value="100">Glide</rotary-knob>
+    </div>
+    <div class="vertical-group">
+        <rotary-switch id="noise-type" title="Noise" labels="right">
+            ${renderOptions(noiseTypes)}
+        </rotary-switch>
+        <toggle-switch id="envelope-stretch">Env. Stretch</toggle-switch>
+        <toggle-switch id="reference-tone">C4 Tone</toggle-switch>
+    </div>
+</div>
+`
 
 const ADSRTemplate = id => `
 <div class="control-group">
@@ -525,9 +552,9 @@ export default class PolySynth extends ModularSynth {
             const { name, bank } = this.globalPatch.attributes;
             const url = location.origin + location.pathname + '?preset=' + encodeURIComponent(name) + '&bank=' + encodeURIComponent(bank) + '&changes=' + encodeURIComponent(JSON.stringify(changes)) + (ditty ? '&ditty=' + ditty : '');
             new Dialog(`
-                <a href='${url}' target="_blank">Click to open in new tab</a>
+                <p class="centered"><a href='${url}' target="_blank">Click to open in new tab</a></p>
                 `, {
-                maxWidth: 300,
+                maxWidth: 500,
                 title: 'Share Patch' + (ditty ? ' and Ditty' : ''),
                 optionLabels: ['Copy link to clipboard', 'Cancel']
             }).then(data => {
@@ -542,10 +569,10 @@ export default class PolySynth extends ModularSynth {
     savePatchToFile() {
         new Dialog(`
         <form>
-            <label for="preset-name">Patch name: </label><input type="text" name="preset-name" value="${this.globalPatch.get('name')}"/>
-            <label for="patch-bank">&nbsp;&nbsp;&nbsp;&nbsp;Bank: </label><select name="patch-bank">
+            <p><label for="preset-name">Patch name:</label><input type="text" name="preset-name" value="${this.globalPatch.get('name')}"/></p>
+            <p><label for="patch-bank">Bank:</label><select name="patch-bank">
                 ${banks.map(bank => `<option ${this.globalPatch.get('bank') === bank ? 'selected' : ''}>${bank}</option>`).join('')}
-            </select>
+            </select></p>
         </form>
         `, {
             maxWidth: 400,
@@ -659,6 +686,7 @@ export default class PolySynth extends ModularSynth {
                 <div class="header">
                     <span id="preset-name"></span> <button id="save-patch">Save patch</button> <button id="share-patch">Share patch</button>
                     <!--span class="recorder"><button id="record"></button><button id="play"></button></span-->
+                    <toggle-switch id="power" format="horizontal" cap-color="orangered">Power: </toggle-switch>
                 </div>
                 <div class="controls">
                     <div class="expression-controls">
@@ -694,29 +722,7 @@ export default class PolySynth extends ModularSynth {
                         </div>
                         <div class="panel">
                             <h2>Global</h2>
-                            <div class="control-group">
-                                <div class="vertical-group">
-                                    <rotary-switch id="voices" title="Voices">
-                                        <option value="0">LEG.</option>
-                                        <option value="1" selected>1</option>
-                                        <option value="2">2</option>
-                                        <option value="3">3</option>
-                                        <option value="4">4</option>
-                                        <option value="5">5</option>
-                                        <option value="6">6</option>
-                                        <option value="7">7</option>
-                                        <option value="8">8</option>
-                                    </rotary-switch>
-                                    <rotary-knob id="glide-time" max-value="100">Glide</rotary-knob>
-                                </div>
-                                <div class="vertical-group">
-                                    <rotary-switch id="noise-type" title="Noise" labels="right">
-                                        ${renderOptions(noiseTypes)}
-                                    </rotary-switch>
-                                    <toggle-switch id="envelope-stretch">Env. Stretch</toggle-switch>
-                                    <toggle-switch id="reference-tone">C4 Tone</toggle-switch>
-                                </div>
-                            </div>
+                            <div id="global">${globalTemplate}</div>
                         </div>
                     </div>
                 </div>
