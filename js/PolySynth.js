@@ -375,6 +375,14 @@ export default class PolySynth extends ModularSynth {
         });
 
         document.getElementById('reference-tone').addEventListener('change', this.onReferenceToneChange);
+
+        document.getElementById('power').addEventListener('change', evt => {
+            if (evt.target.checked) {
+                this.audioContext.resume();
+            } else {
+                this.audioContext.suspend();
+            }
+        });
     }
 
     showLibrary(evt) {
