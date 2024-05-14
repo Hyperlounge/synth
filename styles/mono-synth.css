@@ -267,18 +267,38 @@ html, body {
   pointer-events: none;
 }
 .panel.keyboard .keys.ebony .spacer {
-  flex-grow: 100;
+  flex-grow: 2;
+}
+.panel.keyboard .keys.ebony .spacer + .spacer {
+  flex-grow: 5;
 }
 .panel.keyboard .keys.ebony .spacer.first {
-  flex-grow: 70;
+  flex-grow: 0;
 }
 .panel.keyboard .keys.ebony .spacer.last {
-  flex-grow: 90;
+  flex-grow: 0;
 }
 .panel.keyboard .keys.ebony .key {
   pointer-events: all;
-  flex-grow: 100;
+  flex-grow: 3;
   background: #222222;
+  padding: 0;
+  border: 0;
+}
+.panel.keyboard .keys.ebony .key.note-1 {
+  transform: translateX(-65%);
+}
+.panel.keyboard .keys.ebony .key.note-3 {
+  transform: translateX(-35%);
+}
+.panel.keyboard .keys.ebony .key.note-6 {
+  transform: translateX(-65%);
+}
+.panel.keyboard .keys.ebony .key.note-8 {
+  transform: translateX(-50%);
+}
+.panel.keyboard .keys.ebony .key.note-10 {
+  transform: translateX(-35%);
 }
 .panel.keyboard .keys.ebony .key.down {
   background: #444444;
