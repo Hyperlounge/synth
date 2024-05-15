@@ -292,13 +292,13 @@ html, body {
   transform: translateX(-35%);
 }
 .panel.keyboard .keys.ebony .key.note-6 {
-  transform: translateX(-65%);
+  transform: translateX(-75%);
 }
 .panel.keyboard .keys.ebony .key.note-8 {
   transform: translateX(-50%);
 }
 .panel.keyboard .keys.ebony .key.note-10 {
-  transform: translateX(-35%);
+  transform: translateX(-25%);
 }
 .panel.keyboard .keys.ebony .key.down {
   background: #444444;
