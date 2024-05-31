@@ -10,9 +10,8 @@ import './components/ToggleSwitch.js';
 import './components/VerticalSlider.js';
 import './components/ModWheel.js';
 import './components/KeyboardAdjuster.js';
-import SoftKeyboardModule from './modules/SoftKeyboardModule.js';
 
-const initialPatch = '{"global":{"totalVoices":1,"legato":true,"envelopeStretch":false,"name":"Too High!","bank":"Basses"},"controllerHelper":{"pitchBendMax":200,"modulationMax":100},"voiceAllocator":{"numberOfVoices":0,"glideTime":0.019857606383389993},"osc1":{"waveform":"sawtooth","range":-1,"tune":0,"fineTune":2,"modAmount":100,"crossModAmount":0},"osc2":{"waveform":"triangle","range":-2,"tune":0,"fineTune":-1,"modAmount":100,"crossModAmount":0},"oscLevel1":{"level":0.066},"oscLevel2":{"level":0.048},"noiseLevel1":{"level":0},"amplifier":{},"loudnessEnvelope":{"attackSeconds":0,"decaySeconds":0,"sustainLevel":1,"releaseSeconds":0,"velocityAmount":0.5},"filter":{"type":"lowpass","frequency":69.35183155248555,"resonance":6.2,"modAmount":0,"keyboardFollowAmount":1,"envelopeAmount":4900},"filterEnvelope":{"attackSeconds":0.05830307435355809,"decaySeconds":0.5348507922869201,"sustainLevel":0.51,"releaseSeconds":0,"velocityAmount":0.56},"lfo":{"waveform":"triangle","frequency":5.495408738576245,"fixedAmount":0,"modWheelAmount":1,"delay":0},"noise":{"type":"white"},"softKeyboard":{}}';
+const initialPatch = '{"global":{"totalVoices":1,"legato":true,"envelopeStretch":false,"name":"Too High!","bank":"Basses"},"controllerHelper":{"pitchBendMax":200,"modulationMax":100},"voiceAllocator":{"numberOfVoices":0,"glideTime":0.019857606383389993},"osc1":{"waveform":"sawtooth","range":-1,"tune":0,"fineTune":2,"modAmount":100,"crossModAmount":0},"osc2":{"waveform":"triangle","range":-2,"tune":0,"fineTune":-1,"modAmount":100,"crossModAmount":0},"oscLevel1":{"level":0.066},"oscLevel2":{"level":0.048},"noiseLevel1":{"level":0},"amplifier":{},"loudnessEnvelope":{"attackSeconds":0,"decaySeconds":0,"sustainLevel":1,"releaseSeconds":0,"velocityAmount":0.5},"filter":{"type":"lowpass","rolloff":24,"frequency":69.35183155248555,"resonance":6.2,"modAmount":0,"keyboardFollowAmount":1,"envelopeAmount":4900},"filterEnvelope":{"attackSeconds":0.05830307435355809,"decaySeconds":0.5348507922869201,"sustainLevel":0.51,"releaseSeconds":0,"velocityAmount":0.56},"lfo":{"waveform":"triangle","frequency":5.495408738576245,"fixedAmount":0,"modWheelAmount":1,"delay":0},"noise":{"type":"white"},"softKeyboard":{}}';
 
 const SVG = 'media/svg'
 
@@ -29,33 +28,6 @@ const banks = [
     'Misc',
     'Prototypes'
 ];
-
-const noiseTypes = [
-    {label: 'WHITE', value: 'white', default: true},
-    {label: 'PINK', value: 'pink'},
-    {label: 'BROWN', value: 'brown'},
-]
-
-const waveforms = [
-    {label: `<img alt="sine" src="${SVG}/sine-wave.svg"/>`, value: 'sine'},
-    {label: `<img alt="triangle" src="${SVG}/triangle.svg"/>`, value: 'triangle', default: true},
-    {label: `<img alt="sawtooth" src="${SVG}/saw-tooth.svg"/>`, value: 'sawtooth'},
-    {label: `<img alt="square" src="${SVG}/square-wave.svg"/>`, value: 'square'},
-];
-
-const lfoWaveforms = [
-    {label: `<img alt="sine" src="${SVG}/sine-wave.svg"/>`, value: 'sine'},
-    {label: `<img alt="triangle" src="${SVG}/triangle.svg"/>`, value: 'triangle', default: true},
-    {label: `<img alt="sawtooth" src="${SVG}/saw-tooth.svg"/>`, value: 'sawtooth'},
-    {label: `<img alt="reverse sawtooth" src="${SVG}/reverse-saw.svg"/>`, value: 'inverse-sawtooth'},
-    {label: `<img alt="square" src="${SVG}/square-wave.svg"/>`, value: 'square'},
-    {label: `<img alt="sample and hold" src="${SVG}/sample-and-hold.svg"/>`, value: 'sample-hold'},
-    {label: `<img alt="noise" src="${SVG}/noise.svg"/>`, value: 'noise'},
-];
-
-function renderOptions(optionsList) {
-    return optionsList.map(item => `<option value="${item.value}"${!!item.default ? ' selected' : ''}>${item.label}</option>`).join('');
-}
 
 const template = () => `
 <div class="synth">
@@ -115,7 +87,10 @@ const oscTemplate = id => `
 <div class="control-group">
     <div class="vertical-group">
     <rotary-switch id="${id}-waveform" title="Waveform" labels="right">
-        ${renderOptions(waveforms)}
+        <option value="sine"><img alt="sine" src="${SVG}/sine-wave.svg"/></option>
+        <option value="triangle" selected><img alt="triangle" src="${SVG}/triangle.svg"/></option>
+        <option value="sawtooth"><img alt="sawtooth" src="${SVG}/saw-tooth.svg"/></option>
+        <option value="square"><img alt="square" src="${SVG}/square-wave.svg"/></option>   
     </rotary-switch>
     <rotary-switch id="${id}-range" title="Range" labels="right">
         <option value="2">2</option>
@@ -157,7 +132,13 @@ const lfoTemplate = `
 <div class="control-group">
     <div class="vertical-group">
         <rotary-switch id="lfo-waveform" title="Waveform">
-            ${renderOptions(lfoWaveforms)}
+            <option value="sine"><img alt="sine" src="${SVG}/sine-wave.svg"/></option>
+            <option value="triangle" selected><img alt="triangle" src="${SVG}/triangle.svg"/></option>
+            <option value="sawtooth"><img alt="sawtooth" src="${SVG}/saw-tooth.svg"/></option>
+            <option value="inverse-sawtooth"><img alt="reverse sawtooth" src="${SVG}/reverse-saw.svg"/></option>
+            <option value="square"><img alt="square" src="${SVG}/square-wave.svg"/></option>
+            <option value="sample-hold"><img alt="sample and hold" src="${SVG}/sample-and-hold.svg"/></option>
+            <option value="noise"><img alt="noise" src="${SVG}/noise.svg"/></option>
         </rotary-switch>
         <rotary-knob id="lfo-frequency" value="60" max-value="100">Rate</rotary-knob>
     </div>
@@ -212,7 +193,9 @@ const globalTemplate = `
     </div>
     <div class="vertical-group">
         <rotary-switch id="noise-type" title="Noise" labels="right">
-            ${renderOptions(noiseTypes)}
+            <option value="white" selected>WHITE</option>
+            <option value="pink">PINK</option>
+            <option value="brown">BROWN</option>
         </rotary-switch>
         <toggle-switch id="envelope-stretch">Env. Stretch</toggle-switch>
         <toggle-switch id="reference-tone">C4 Tone</toggle-switch>
