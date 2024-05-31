@@ -33,7 +33,6 @@ const template = () => `
 <div class="synth">
     <div class="header">
         <span id="preset-name"></span> <button id="save-patch">Save patch</button> <button id="share-patch">Share patch</button>
-        <!--span class="recorder"><button id="record"></button><button id="play"></button></span-->
         <toggle-switch id="power" format="horizontal" cap-color="orangered">Power: </toggle-switch>
     </div>
     <div class="controls">
@@ -68,10 +67,6 @@ const template = () => `
                 <h2>Filter</h2>
                 <div id="filter">${filterTemplate}</div>
             </div>
-            <!--div class="panel">
-                <h2>Effects</h2>
-                <div id="effects">${effectsTemplate}</div>
-            </div-->
             <div class="panel">
                 <h2>Global</h2>
                 <div id="global">${globalTemplate}</div>
@@ -203,21 +198,6 @@ const globalTemplate = `
 </div>
 `
 
-const effectsTemplate = `
-<div class="control-group">
-    <div class="vertical-group compact">
-        <toggle-switch id="reverb-on">Reverb</toggle-switch>
-        <select id="reverb-type">
-            <option value="small" selected>Small</option>
-            <option value="medium">Medium</option>
-            <option value="large">Large</option>
-            <option value="huge">Huge</option>
-        </select>
-        <rotary-knob id="reverb-mix" minimal>Mix</rotary-knob>
-    </div>
-</div>
-`
-
 const ADSRTemplate = id => `
 <div class="control-group">
     <vertical-slider id="${id}-attack" max-value="100">Attack</vertical-slider>
@@ -305,13 +285,6 @@ export default class PolySynth extends ModularSynth {
         document.getElementById('save-patch').addEventListener('click', () => this.savePatchToFile());
         document.getElementById('share-patch').addEventListener('click', () => this.sharePatch());
 
-        this._recordingData = [];
-        this._recording = false;
-        this._playing = false;
-        //document.getElementById('record').addEventListener('click', evt => this.toggleRecord());
-        //document.getElementById('play').addEventListener('click', evt => this.togglePlay());
-
-
         this._library = new Library();
         fetch('library/index.json').then(response => {
             response.text().then(text => {
@@ -321,6 +294,31 @@ export default class PolySynth extends ModularSynth {
         });
         document.getElementById('preset-name').addEventListener('click', evt => this.showLibrary(evt));
 
+        this.createModules();
+        this.connectModules();
+
+        window.addEventListener('unload', () => {
+            this.savePatch();
+        });
+
+        document.getElementById('preset-name').innerHTML = this.globalPatch.get('name');
+
+        this.bindControlsToModules();
+
+        this.globalPatch.addEventListener('change', () => {
+            document.getElementById('preset-name').innerHTML = this.globalPatch.get('name');
+        });
+
+        this.eventBus.addEventListener('modwheel', evt => {
+            document.getElementById('mod-wheel').value = evt.detail.midiValue;
+        });
+
+        this.eventBus.addEventListener('pitchbend', evt => {
+            document.getElementById('pitch-bend').value = evt.detail.midiValue - 64;
+        });
+    }
+
+    createModules() {
         this.createMidiModule();
         this.createSoftKeyboardModule();
         this._controllerHelper = this.createControllerHelperModule('controllerHelper');
@@ -336,7 +334,9 @@ export default class PolySynth extends ModularSynth {
         this._filterEnvelope = this.createPolyEnvelopeModule('filterEnvelope');
         this._lfo = this.createLFOModule('lfo');
         this._noise = this.createNoiseModule('noise');
+    }
 
+    connectModules() {
         this._voiceAllocator.C4Offset.polyConnectTo(this._osc1.offsetCentsIn);
         this._voiceAllocator.C4Offset.polyConnectTo(this._osc2.offsetCentsIn);
         this._voiceAllocator.C4Offset.polyConnectTo(this._filter.keyboardFollowIn);
@@ -357,20 +357,9 @@ export default class PolySynth extends ModularSynth {
         this._amplifier.audioIn.polyConnectFrom(this._noiseLevel1.audioOut);
         this._noiseLevel1.audioIn.fanOutConnectFrom(this._noise.noiseOut);
         this._noise.noiseOut.connect(this._lfo.noiseIn);
+    }
 
-        window.addEventListener('unload', () => {
-            this.savePatch();
-        });
-
-        document.getElementById('preset-name').innerHTML = this.globalPatch.get('name');
-
-        document.getElementById('pitch-bend').addEventListener('input', evt => {
-            this._controllerHelper._onPitchBend(evt.target.value + 64);
-        });
-        document.getElementById('mod-wheel').addEventListener('input', evt => {
-            this._controllerHelper._onModWheel(evt.target.value);
-        });
-
+    bindControlsToModules() {
         bindControl('glide-time', this._voiceAllocator, 'glideTime', linearToLog(100, 10), logToLinear(10, 100));
         bindControl('voices', this._voiceAllocator, 'numberOfVoices');
         const bindOscillator = number => {
@@ -418,35 +407,32 @@ export default class PolySynth extends ModularSynth {
         bindControl('envelope-stretch', this, 'envelopeStretch');
         bindControl('noise-type', this._noise, 'type', a => a);
 
-        this.globalPatch.addEventListener('change', () => {
-            document.getElementById('preset-name').innerHTML = this.globalPatch.get('name');
+        document.getElementById('pitch-bend').addEventListener('input', evt => {
+            this._controllerHelper._onPitchBend(evt.target.value + 64);
         });
-
-        this.eventBus.addEventListener('modwheel', evt => {
-            document.getElementById('mod-wheel').value = evt.detail.midiValue;
-        });
-
-        this.eventBus.addEventListener('pitchbend', evt => {
-            document.getElementById('pitch-bend').value = evt.detail.midiValue - 64;
+        document.getElementById('mod-wheel').addEventListener('input', evt => {
+            this._controllerHelper._onModWheel(evt.target.value);
         });
 
         document.getElementById('reference-tone').addEventListener('change', this.onReferenceToneChange);
 
-        document.getElementById('power').addEventListener('change', evt => {
-            if (this._powerFirstTouch) {
-                clearTimeout(this._powerFirstTouch);
-                window.location.reload();
-            } else {
-                this._powerFirstTouch = setTimeout(() => {
-                    delete this._powerFirstTouch;
-                }, 500);
-            }
-            if (evt.target.checked) {
-                this.audioContext.resume();
-            } else {
-                this.audioContext.suspend();
-            }
-        });
+        document.getElementById('power').addEventListener('change', this.onPowerSwitchChange);
+    }
+
+    onPowerSwitchChange = evt => {
+        if (this._powerFirstTouch) {
+            clearTimeout(this._powerFirstTouch);
+            window.location.reload();
+        } else {
+            this._powerFirstTouch = setTimeout(() => {
+                delete this._powerFirstTouch;
+            }, 500);
+        }
+        if (evt.target.checked) {
+            this.audioContext.resume();
+        } else {
+            this.audioContext.suspend();
+        }
     }
 
     showLibrary(evt) {
@@ -554,10 +540,6 @@ export default class PolySynth extends ModularSynth {
                 this.patch = patch;
                 if (params.changes) {
                     this._patch.set(JSON.parse(params.changes));
-                    if (params.ditty) {
-                        this.setDecodedDitty(params.ditty);
-                        this.togglePlay();
-                    }
                 }
             });
         } else {
@@ -571,28 +553,6 @@ export default class PolySynth extends ModularSynth {
                 alert(e);
             }
         }
-    }
-
-    setDecodedDitty(encoded) {
-        this._recordingData = encoded.match(/.{10}/g).map(item => {
-            const time = parseInt(item.slice(0,4), 16)/100;
-            const statusByte = parseInt(item.slice(4,6), 16);
-            const dataByte1 = parseInt(item.slice(6,8), 16);
-            const dataByte2 = parseInt(item.slice(8,10), 16);
-            return {
-                time,
-                detail: { statusByte, dataByte1, dataByte2 },
-            }
-        });
-    }
-
-    getEncodedDitty() {
-        const toHex = (val, digits) => {
-            let hex = Number(val).toString(16);
-            while (hex.length < digits) hex = '0' + hex;
-            return hex;
-        }
-        return this._recordingData.map(item => `${toHex(Math.round(item.time * 100), 4)}${toHex(item.detail.statusByte, 2)}${toHex(item.detail.dataByte1, 2)}${toHex(item.detail.dataByte2, 2)}`).join('');
     }
 
     getPatchChanges() {
@@ -619,15 +579,14 @@ export default class PolySynth extends ModularSynth {
     }
 
     sharePatch() {
-        const ditty = this.getEncodedDitty();
         this.getPatchChanges().then(changes => {
             const { name, bank } = this.globalPatch.attributes;
-            const url = location.origin + location.pathname + '?preset=' + encodeURIComponent(name) + '&bank=' + encodeURIComponent(bank) + '&changes=' + encodeURIComponent(JSON.stringify(changes)) + (ditty ? '&ditty=' + ditty : '');
+            const url = location.origin + location.pathname + '?preset=' + encodeURIComponent(name) + '&bank=' + encodeURIComponent(bank) + '&changes=' + encodeURIComponent(JSON.stringify(changes));
             new Dialog(`
                 <p class="centered"><a href='${url}' target="_blank">Click to open in new tab</a></p>
                 `, {
                 maxWidth: 500,
-                title: 'Share Patch' + (ditty ? ' and Ditty' : ''),
+                title: 'Share Patch',
                 optionLabels: ['Copy link to clipboard', 'Cancel']
             }).then(data => {
                 const { option } = data;
@@ -691,65 +650,6 @@ export default class PolySynth extends ModularSynth {
             delete this._refToneLevel;
         }
 
-    }
-
-    toggleRecord() {
-        if (this._playing) {
-            this.togglePlay();
-        }
-        this._recording = !this._recording;
-        document.getElementById('record').classList.toggle('stop', this._recording);
-        if (this._recording) {
-            this._recordingStartTime = this.audioContext.currentTime;
-            this._recordingData = [];
-            this.eventBus.addEventListener(MidiEvent.type, this.addRecordingEvent);
-        } else {
-            this.eventBus.removeEventListener(MidiEvent.type, this.addRecordingEvent);
-        }
-    }
-
-    addRecordingEvent = (event) => {
-        const { statusByte, dataByte1 } = event.detail;
-        if ((statusByte >= 128 && statusByte <= 143) || (statusByte >= 144 && statusByte <= 159) || statusByte === MidiEvent.CONTROLLER && dataByte1 === MidiEvent.SUSTAIN_PEDAL) {
-            this._recordingData.push({
-                time: this.audioContext.currentTime - this._recordingStartTime,
-                detail: {...event.detail},
-            });
-        }
-    }
-
-    togglePlay() {
-        if (this._recording) {
-            this.toggleRecord();
-        }
-        this._playing = !this._playing && this._recordingData.length > 0;
-        document.getElementById('play').classList.toggle('stop', this._playing);
-        if (this._playing) {
-            this._playStartTime = this.audioContext.currentTime;
-            this._playEventIndex = 0;
-
-            const playNextEvent = () => {
-                const event = this._recordingData[this._playEventIndex++];
-                this._playTimeoutId = setTimeout(() => {
-                    delete this._playTimeoutId;
-                    const { statusByte, dataByte1, dataByte2 } = event.detail;
-                    this.eventBus.dispatchEvent(new MidiEvent(statusByte, dataByte1, dataByte2));
-                    if (this._playEventIndex === this._recordingData.length) {
-                        this.togglePlay();
-                    } else {
-                        playNextEvent();
-                    }
-                }, (this._playStartTime + event.time - this.audioContext.currentTime) * 1000);
-            }
-            playNextEvent();
-        } else {
-            if (this._playTimeoutId !== undefined) {
-                clearTimeout(this._playTimeoutId);
-                delete this._playTimeoutId;
-            }
-            delete this._playStartTime;
-            delete this._playEventIndex;
-        }
     }
 
     _render() {
