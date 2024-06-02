@@ -27,19 +27,19 @@ const template = () => `
             </div>
             <div class="panel">
                 <h2>Oscillator 1</h2>
-                <div id="oscillator-1">${oscTemplate('oscillator-1')}</div>
+                <div id="oscillator-1">${oscTemplate(1)}</div>
             </div>
             <div class="panel">
                 <h2>Oscillator 2</h2>
-                <div id="oscillator-2">${oscTemplate('oscillator-2')}</div>
+                <div id="oscillator-2">${oscTemplate(2)}</div>
             </div>
             <div class="panel">
                 <h2>Amp Envelope</h2>
-                <div id="loudness-envelope">${ADSRTemplate('loudness-envelope')}</div>
+                <div id="loudness-envelope">${ADSRTemplate('loudnessEnvelope')}</div>
             </div>
             <div class="panel">
                 <h2>Filter Envelope</h2>
-                <div id="filter-envelope">${ADSRTemplate('filter-envelope')}</div>
+                <div id="filter-envelope">${ADSRTemplate('filterEnvelope')}</div>
             </div>
             <div class="panel">
                 <h2>Filter</h2>

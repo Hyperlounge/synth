@@ -5,7 +5,7 @@ import '../components/ToggleSwitch.js';
 const globalTemplate = `
 <div class="control-group">
     <div class="vertical-group">
-        <rotary-switch id="voices" title="Voices">
+        <rotary-switch module-id="voiceAllocator" parameter-name="numberOfVoices" numeric title="Voices">
             <option value="0">LEG.</option>
             <option value="1" selected>1</option>
             <option value="2">2</option>
@@ -16,15 +16,15 @@ const globalTemplate = `
             <option value="8">8</option>
             <option value="16">16</option>
         </rotary-switch>
-        <rotary-knob id="glide-time" max-value="100">Glide</rotary-knob>
+        <rotary-knob module-id="voiceAllocator" parameter-name="glideTime" logarithmic max-value="10">Glide</rotary-knob>
     </div>
     <div class="vertical-group">
-        <rotary-switch id="noise-type" title="Noise" labels="right">
+        <rotary-switch module-id="noise" parameter-name="type" title="Noise" labels="right">
             <option value="white" selected>WHITE</option>
             <option value="pink">PINK</option>
             <option value="brown">BROWN</option>
         </rotary-switch>
-        <toggle-switch id="envelope-stretch">Env. Stretch</toggle-switch>
+        <toggle-switch module-id="global" parameter-name="envelopeStretch">Env. Stretch</toggle-switch>
         <toggle-switch id="reference-tone">C4 Tone</toggle-switch>
     </div>
 </div>

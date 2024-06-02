@@ -1,6 +1,6 @@
 import ModularSynth from './modules/ModularSynth.js';
 import template from './templates/template.js';
-import Dialog from './components/Dialog.js';
+import Dialog from './misc/Dialog.js';
 import Library from './Library.js';
 import LibraryView from './LibraryView.js';
 
@@ -165,53 +165,6 @@ export default class PolySynth extends ModularSynth {
     }
 
     bindControlsToModules() {
-        bindControl('glide-time', this._voiceAllocator, 'glideTime', linearToLog(100, 10), logToLinear(10, 100));
-        bindControl('voices', this._voiceAllocator, 'numberOfVoices');
-        const bindOscillator = number => {
-            const osc = this[`_osc${number}`];
-            const level = this[`_oscLevel${number}`];
-            bindControl(`oscillator-${number}-waveform`, osc, 'waveform', a => a);
-            bindControl(`oscillator-${number}-range`, osc, 'range');
-            bindControl(`oscillator-${number}-tune`, osc, 'tune');
-            bindControl(`oscillator-${number}-fine-tune`, osc, 'fineTune');
-            bindControl(`oscillator-${number}-modulation`, osc, 'modAmount', a => Number(a)*2, a => String(a/2));
-            if (number === 1) {
-                bindControl(`oscillator-1-noise-level`, this._noiseLevel1, 'level', a => Number(a)/1000, a => String(a*1000));
-            } else {
-                bindControl(`oscillator-2-cross-mod`, osc, 'crossModAmount', a => Number(a)*25, a => String(a/25));
-            }
-            bindControl(`oscillator-${number}-level`, level, 'level', a => Number(a)/1000, a => String(a*1000));
-        }
-        bindOscillator(1);
-        bindOscillator(2);
-
-        const bindADSR = (id, module) => {
-            bindControl(`${id}-attack`, module, 'attackSeconds', linearToLog(100, 10), logToLinear(10, 100));
-            bindControl(`${id}-decay`, module, 'decaySeconds', linearToLog(100, 10), logToLinear(10, 100));
-            bindControl(`${id}-sustain`, module, 'sustainLevel', a => Number(a)/100, a => String(a*100));
-            bindControl(`${id}-release`, module, 'releaseSeconds', linearToLog(100, 10), logToLinear(10, 100));
-            bindControl(`${id}-velocity`, module, 'velocityAmount', a => Number(a)/100, a => String(a*100));
-        }
-        bindADSR('loudness-envelope', this._loudnessEnvelope);
-        bindADSR('filter-envelope', this._filterEnvelope);
-
-        bindControl('filter-type', this._filter, 'type', a => a);
-        bindControl('filter-rolloff', this._filter, 'rolloff', a => Number(a), a => String(a));
-        bindControl('filter-frequency', this._filter, 'frequency', linearToLogRange(100, 4.5, 5000), logRangeToLinear(4.5, 5000, 100));
-        bindControl('filter-resonance', this._filter, 'resonance', a => Number(a)/5, a => String(a*5));
-        bindControl('filter-envelope-amount', this._filter, 'envelopeAmount', a => Number(a)*100, a => String(a/100));
-        bindControl('filter-modulation', this._filter, 'modAmount', a => Number(a)*100, a => String(a/100));
-        bindControl('filter-keyboard', this._filter, 'keyboardFollowAmount', a => Number(a)/100, a => String(a*100));
-
-        bindControl(`lfo-waveform`, this._lfo, 'waveform', a => a);
-        bindControl('lfo-frequency', this._lfo, 'frequency', linearToLogRange(100, 0.1, 100), logRangeToLinear(0.1, 100, 100));
-        bindControl('lfo-fixed-level', this._lfo, 'fixedAmount', a => Number(a)/100, a => String(a*100));
-        bindControl('lfo-mod-wheel-level', this._lfo, 'modWheelAmount', a => Number(a)/100, a => String(a*100));
-        bindControl(`lfo-mod-delay`, this._lfo, 'delay', linearToLog(100, 10), logToLinear(10, 100));
-
-        bindControl('envelope-stretch', this, 'envelopeStretch');
-        bindControl('noise-type', this._noise, 'type', a => a);
-
         document.getElementById('pitch-bend').addEventListener('input', evt => {
             this._controllerHelper._onPitchBend(evt.target.value + 64);
         });
@@ -233,7 +186,7 @@ export default class PolySynth extends ModularSynth {
                 delete this._powerFirstTouch;
             }, 500);
         }
-        if (evt.target.checked) {
+        if (evt.target.value) {
             this.audioContext.resume();
         } else {
             this.audioContext.suspend();
@@ -438,7 +391,7 @@ export default class PolySynth extends ModularSynth {
 
     onReferenceToneChange = evt => {
         const ctx = this.audioContext;
-        if (evt.target.checked) {
+        if (evt.target.value) {
             this._refToneNode = ctx.createOscillator();
             this._refToneNode.type = 'sine';
             this._refToneNode.frequency.setValueAtTime(261.63, ctx.currentTime);

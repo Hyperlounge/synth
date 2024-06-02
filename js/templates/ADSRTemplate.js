@@ -1,12 +1,12 @@
 import '../components/VerticalSlider.js';
 
-const ADSRTemplate = id => `
+const ADSRTemplate = moduleId => `
 <div class="control-group">
-    <vertical-slider id="${id}-attack" max-value="100">Attack</vertical-slider>
-    <vertical-slider id="${id}-decay" max-value="100">Decay</vertical-slider>
-    <vertical-slider id="${id}-sustain" value="100" max-value="100">Sustain</vertical-slider>
-    <vertical-slider id="${id}-release" max-value="100">Release</vertical-slider>
-    <vertical-slider id="${id}-velocity" value="50" max-value="100">Velocity</vertical-slider>
+    <vertical-slider module-id="${moduleId}" parameter-name="attackSeconds" logarithmic max-value="10">Attack</vertical-slider>
+    <vertical-slider module-id="${moduleId}" parameter-name="decaySeconds" logarithmic max-value="10">Decay</vertical-slider>
+    <vertical-slider module-id="${moduleId}" parameter-name="sustainLevel" value="1" max-value="1">Sustain</vertical-slider>
+    <vertical-slider module-id="${moduleId}" parameter-name="releaseSeconds" logarithmic max-value="10">Release</vertical-slider>
+    <vertical-slider module-id="${moduleId}" parameter-name="velocityAmount" value="0.5" max-value="1">Velocity</vertical-slider>
 </div>
 `;
 export default ADSRTemplate;
