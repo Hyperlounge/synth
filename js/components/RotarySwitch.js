@@ -174,13 +174,6 @@ export default class RotarySwitch extends AbstractComponent {
             });
     }
 
-    // TODO: get rid of this once all converted
-    dispatchChangeEvent() {
-        super.dispatchChangeEvent();
-        const evt = new CustomEvent('input');
-        this.dispatchEvent(evt);
-    }
-
     get value() {
         return this._options[this._selectedIndex].value;
     }

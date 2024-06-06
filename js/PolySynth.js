@@ -4,7 +4,7 @@ import Dialog from './misc/Dialog.js';
 import Library from './Library.js';
 import LibraryView from './LibraryView.js';
 
-const initialPatch = '{"global":{"totalVoices":1,"legato":true,"envelopeStretch":false,"name":"Too High!","bank":"Basses"},"controllerHelper":{"pitchBendMax":200,"modulationMax":100},"voiceAllocator":{"numberOfVoices":0,"glideTime":0.019857606383389993},"osc1":{"waveform":"sawtooth","range":-1,"tune":0,"fineTune":2,"modAmount":100,"crossModAmount":0},"osc2":{"waveform":"triangle","range":-2,"tune":0,"fineTune":-1,"modAmount":100,"crossModAmount":0},"oscLevel1":{"level":0.066},"oscLevel2":{"level":0.048},"noiseLevel1":{"level":0},"amplifier":{},"loudnessEnvelope":{"attackSeconds":0,"decaySeconds":0,"sustainLevel":1,"releaseSeconds":0,"velocityAmount":0.5},"filter":{"type":"lowpass","rolloff":24,"frequency":69.35183155248555,"resonance":6.2,"modAmount":0,"keyboardFollowAmount":1,"envelopeAmount":4900},"filterEnvelope":{"attackSeconds":0.05830307435355809,"decaySeconds":0.5348507922869201,"sustainLevel":0.51,"releaseSeconds":0,"velocityAmount":0.56},"lfo":{"waveform":"triangle","frequency":5.495408738576245,"fixedAmount":0,"modWheelAmount":1,"delay":0},"noise":{"type":"white"},"softKeyboard":{}}';
+const initialPatch = {"global":{"totalVoices":1,"legato":true,"envelopeStretch":false,"name":"Too High!","bank":"Basses"},"controllerHelper":{"pitchBendMax":200,"modulationMax":100},"voiceAllocator":{"numberOfVoices":0,"glideTime":0.019857606383389993},"osc1":{"waveform":"sawtooth","range":-1,"tune":0,"fineTune":2,"modAmount":100,"crossModAmount":0},"osc2":{"waveform":"triangle","range":-2,"tune":0,"fineTune":-1,"modAmount":100,"crossModAmount":0},"oscLevel1":{"level":0.066},"oscLevel2":{"level":0.048},"noiseLevel1":{"level":0},"amplifier":{},"loudnessEnvelope":{"attackSeconds":0,"decaySeconds":0,"sustainLevel":1,"releaseSeconds":0,"velocityAmount":0.5},"filter":{"type":"lowpass","rolloff":12,"frequency":69.35183155248555,"resonance":6.2,"modAmount":0,"keyboardFollowAmount":1,"envelopeAmount":4900},"filterEnvelope":{"attackSeconds":0.05830307435355809,"decaySeconds":0.5348507922869201,"sustainLevel":0.51,"releaseSeconds":0,"velocityAmount":0.56},"lfo":{"waveform":"triangle","frequency":5.495408738576245,"fixedAmount":0,"modWheelAmount":1,"delay":0},"noise":{"type":"white"},"softKeyboard":{}};
 
 const banks = [
     'Leads',
@@ -84,12 +84,6 @@ export default class PolySynth extends ModularSynth {
 
         this._render();
 
-        this._root.addEventListener('drop', evt => this.dropHandler(evt));
-        this._root.addEventListener('dragover', evt => this.dragOverHandler(evt));
-
-        document.getElementById('save-patch').addEventListener('click', () => this.savePatchToFile());
-        document.getElementById('share-patch').addEventListener('click', () => this.sharePatch());
-
         this._library = new Library();
         fetch('library/index.json').then(response => {
             response.text().then(text => {
@@ -97,30 +91,13 @@ export default class PolySynth extends ModularSynth {
                 this.loadPatch();
             });
         });
-        document.getElementById('preset-name').addEventListener('click', evt => this.showLibrary(evt));
 
         this.createModules();
         this.connectModules();
 
-        window.addEventListener('unload', () => {
-            this.savePatch();
-        });
-
         document.getElementById('preset-name').innerHTML = this.globalPatch.get('name');
 
-        this.bindControlsToModules();
-
-        this.globalPatch.addEventListener('change', () => {
-            document.getElementById('preset-name').innerHTML = this.globalPatch.get('name');
-        });
-
-        this.eventBus.addEventListener('modwheel', evt => {
-            document.getElementById('mod-wheel').value = evt.detail.midiValue;
-        });
-
-        this.eventBus.addEventListener('pitchbend', evt => {
-            document.getElementById('pitch-bend').value = evt.detail.midiValue - 64;
-        });
+        this.addEventListeners();
     }
 
     createModules() {
@@ -164,17 +141,32 @@ export default class PolySynth extends ModularSynth {
         this._noise.noiseOut.connect(this._lfo.noiseIn);
     }
 
-    bindControlsToModules() {
+    addEventListeners() {
+        document.getElementById('preset-name').addEventListener('click', evt => this.showLibrary(evt));
+        document.getElementById('save-patch').addEventListener('click', () => this.savePatchToFile());
+        document.getElementById('share-patch').addEventListener('click', () => this.sharePatch());
         document.getElementById('pitch-bend').addEventListener('input', evt => {
             this._controllerHelper._onPitchBend(evt.target.value + 64);
         });
         document.getElementById('mod-wheel').addEventListener('input', evt => {
             this._controllerHelper._onModWheel(evt.target.value);
         });
-
         document.getElementById('reference-tone').addEventListener('change', this.onReferenceToneChange);
-
         document.getElementById('power').addEventListener('change', this.onPowerSwitchChange);
+        this._root.addEventListener('drop', evt => this.dropHandler(evt));
+        this._root.addEventListener('dragover', evt => this.dragOverHandler(evt));
+        this.globalPatch.addEventListener('change', () => {
+            document.getElementById('preset-name').innerHTML = this.globalPatch.get('name');
+        });
+        window.addEventListener('unload', () => {
+            this.savePatch();
+        });
+        this.eventBus.addEventListener('modwheel', evt => {
+            document.getElementById('mod-wheel').value = evt.detail.midiValue;
+        });
+        this.eventBus.addEventListener('pitchbend', evt => {
+            document.getElementById('pitch-bend').value = evt.detail.midiValue - 64;
+        });
     }
 
     onPowerSwitchChange = evt => {
@@ -208,6 +200,7 @@ export default class PolySynth extends ModularSynth {
             libraryView.addEventListener('preset-selected', evt => {
                 this._libraryRoot.classList.toggle('show', false);
                 this.loadPresetFromLibrary(evt.detail).then(patch => {
+                    this.patch = initialPatch;
                     this.patch = patch;
                     this._presetId = evt.detail;
                     if (location.search) {
@@ -257,6 +250,7 @@ export default class PolySynth extends ModularSynth {
                                 alert(e);
                             }
                             if (patch) {
+                                this.patch = initialPatch;
                                 this.patch = patch;
                                 this.globalPatch.set({name, bank});
                                 if (location.search) {
@@ -295,6 +289,7 @@ export default class PolySynth extends ModularSynth {
             const preset = this._library.getPresetByNameAndBank(params.preset, params.bank);
             this._presetId = preset.id;
             this.loadPresetFromLibrary(preset.id).then(patch => {
+                this.patch = initialPatch;
                 this.patch = patch;
                 if (params.changes) {
                     this._patch.set(JSON.parse(params.changes));
@@ -304,7 +299,10 @@ export default class PolySynth extends ModularSynth {
             const patch = localStorage.getItem('PolySynth-current-patch') || initialPatch;
 
             try {
-                patch && (this.patch = JSON.parse(patch));
+                if (patch) {
+                    this.patch = initialPatch;
+                    this.patch = JSON.parse(patch);
+                }
                 const preset = this._library.getPresetByNameAndBank(this.globalPatch.get('name'), this.globalPatch.get('bank'));
                 preset && (this._presetId = preset.id);
             } catch (e) {
