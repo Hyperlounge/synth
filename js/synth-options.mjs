@@ -1,6 +1,6 @@
 import PolySynth from './PolySynth.js';
 
-document.addEventListener('DOMContentLoaded', () => {
+const launch = () => {
     document.body.innerHTML = `
 <style>
     #synth {
@@ -15,6 +15,8 @@ document.addEventListener('DOMContentLoaded', () => {
 </div>
     `;
     new PolySynth('synth');
-})
+};
 
-
+document.getElementById('launch-button').onclick = evt => {
+    launch();
+}
