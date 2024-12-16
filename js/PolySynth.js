@@ -3,6 +3,7 @@ import template from './templates/template.js';
 import Dialog from './misc/Dialog.js';
 import Library from './Library.js';
 import LibraryView from './LibraryView.js';
+import Model from './misc/Model.js';
 
 const initialPatch = {"global":{"totalVoices":1,"legato":true,"envelopeStretch":false,"name":"Too High!","bank":"Basses"},"controllerHelper":{"pitchBendMax":200,"modulationMax":100},"voiceAllocator":{"numberOfVoices":0,"glideTime":0.019857606383389993},"osc1":{"waveform":"sawtooth","range":-1,"tune":0,"fineTune":2,"modAmount":100,"crossModAmount":0},"osc2":{"waveform":"triangle","range":-2,"tune":0,"fineTune":-1,"modAmount":100,"crossModAmount":0},"oscLevel1":{"level":0.066},"oscLevel2":{"level":0.048},"noiseLevel1":{"level":0},"amplifier":{},"loudnessEnvelope":{"attackSeconds":0,"decaySeconds":0,"sustainLevel":1,"releaseSeconds":0,"velocityAmount":0.5},"filter":{"type":"lowpass","rolloff":12,"frequency":69.35183155248555,"resonance":6.2,"modAmount":0,"keyboardFollowAmount":1,"envelopeAmount":4900},"filterEnvelope":{"attackSeconds":0.05830307435355809,"decaySeconds":0.5348507922869201,"sustainLevel":0.51,"releaseSeconds":0,"velocityAmount":0.56},"lfo":{"waveform":"triangle","frequency":5.495408738576245,"fixedAmount":0,"modWheelAmount":1,"delay":0},"noise":{"type":"white"},"softKeyboard":{}};
 
@@ -20,10 +21,19 @@ const banks = [
     'Prototypes'
 ];
 
+const uiSettingsPage = {
+    MAIN: 1,
+    EFFECTS: 2,
+}
+
 export default class PolySynth extends ModularSynth {
     constructor(elementId) {
         super();
         this._root = document.getElementById(elementId);
+
+        this._uiState = new Model({
+            settingsPage: uiSettingsPage.MAIN,
+        });
 
         this._render();
 
@@ -357,6 +367,6 @@ export default class PolySynth extends ModularSynth {
     }
 
     _render() {
-        this._root && (this._root.innerHTML = template());
+        this._root && (this._root.innerHTML = template(this._uiState.attributes));
     }
 }
