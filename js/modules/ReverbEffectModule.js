@@ -4,13 +4,14 @@ import fetchAndCacheBuffers from '../misc/fetchAndCacheBuffers.js';
 export default class ReverbEffectModule extends AudioModule {
     _initialise() {
         const context = this._audioContext;
+        this._buffers = {};
+        this._isFirstUpdate = true;
 
         fetchAndCacheBuffers(context, [
             'media/irs/small.ogg',
             'media/irs/room.ogg',
             'media/irs/hall.ogg',
         ]).then(cache => {
-            this._buffers = {};
             cache.forEach(entry => {
                 this._buffers[entry.path.replace(/^.*\/(\w+)\.ogg$/, '$1')] = entry.buffer;
             });
@@ -30,7 +31,7 @@ export default class ReverbEffectModule extends AudioModule {
 
     get _initialPatch() {
         return {
-            power: false,
+            power: true,
             mix: 0.5,       // 0 - 1
             type: 'small',
             highPass: 0,    // 0 - 1
@@ -47,7 +48,7 @@ export default class ReverbEffectModule extends AudioModule {
         const mix = this._patch.get('mix');
         const type = this._patch.get('type');
 
-        if (this._patch.hasChanged('power')) {
+        if (this._patch.hasChanged('power') || this._isFirstUpdate) {
             if (power) {
 
                 this._audioIn.disconnect();
@@ -77,8 +78,12 @@ export default class ReverbEffectModule extends AudioModule {
         }
 
         if (this._patch.hasChanged('type')) {
-            this._convolver.buffer = this._buffers[type];
+            const buffer = this._buffers[type];
+            if (buffer) {
+                this._convolver.buffer = buffer;
+            }
         }
+        this._isFirstUpdate = false;
     }
 
     get audioOut() {
