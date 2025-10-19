@@ -8,7 +8,7 @@ const reverbTemplate = `
     </div>
     <rotary-knob module-id="reverb" parameter-name="mix" value="0.5">Mix</rotary-knob>
     <rotary-knob module-id="reverb" parameter-name="size">Size</rotary-knob>
-    <rotary-knob module-id="reverb" parameter-name="high-pass">High-pass</rotary-knob>
+    <rotary-knob module-id="reverb" parameter-name="highPass">High-pass</rotary-knob>
 </div>
 `;
 export default reverbTemplate;

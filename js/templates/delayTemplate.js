@@ -9,7 +9,7 @@ const delayTemplate = `
     <rotary-knob module-id="delay" parameter-name="mix" value="0.5">Mix</rotary-knob>
     <rotary-knob module-id="delay" parameter-name="time">Time</rotary-knob>
     <rotary-knob module-id="delay" parameter-name="feedback">Feedback</rotary-knob>
-    <rotary-knob module-id="delay" parameter-name="spread">Spread</rotary-knob>
+    <rotary-knob module-id="delay" parameter-name="highPass">High-pass</rotary-knob>
 </div>
 `;
 export default delayTemplate;

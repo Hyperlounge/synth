@@ -59,6 +59,7 @@ export default class PolySynth extends ModularSynth {
         this._filterEnvelope = this.createPolyEnvelopeModule('filterEnvelope');
         this._lfo = this.createLFOModule('lfo');
         this._noise = this.createNoiseModule('noise');
+        this._delayEffect = this.createDelayEffectModule('delay');
     }
 
     connectModules() {
@@ -78,10 +79,11 @@ export default class PolySynth extends ModularSynth {
         this._lfo.lfoOut.connect(this._osc1.modulationIn);
         this._lfo.lfoOut.connect(this._osc2.modulationIn);
         this._lfo.lfoOut.connect(this._filter.modulationIn);
-        this._filter.audioOut.fanInConnectTo(this.audioContext.destination);
+        this._filter.audioOut.fanInConnectTo(this._delayEffect.audioIn);
         this._amplifier.audioIn.polyConnectFrom(this._noiseLevel1.audioOut);
         this._noiseLevel1.audioIn.fanOutConnectFrom(this._noise.noiseOut);
         this._noise.noiseOut.connect(this._lfo.noiseIn);
+        this._delayEffect.audioOut.connect(this.audioContext.destination);
     }
 
     addEventListeners() {
