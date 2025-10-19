@@ -60,6 +60,7 @@ export default class PolySynth extends ModularSynth {
         this._lfo = this.createLFOModule('lfo');
         this._noise = this.createNoiseModule('noise');
         this._delayEffect = this.createDelayEffectModule('delay');
+        this._reverbEffect = this.createReverbEffectModule('reverb');
     }
 
     connectModules() {
@@ -83,7 +84,8 @@ export default class PolySynth extends ModularSynth {
         this._amplifier.audioIn.polyConnectFrom(this._noiseLevel1.audioOut);
         this._noiseLevel1.audioIn.fanOutConnectFrom(this._noise.noiseOut);
         this._noise.noiseOut.connect(this._lfo.noiseIn);
-        this._delayEffect.audioOut.connect(this.audioContext.destination);
+        this._delayEffect.audioOut.connect(this._reverbEffect.audioIn);
+        this._reverbEffect.audioOut.connect(this.audioContext.destination);
     }
 
     addEventListeners() {
