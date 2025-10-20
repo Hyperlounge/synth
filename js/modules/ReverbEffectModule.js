@@ -32,7 +32,7 @@ export default class ReverbEffectModule extends AudioModule {
 
     get _initialPatch() {
         return {
-            power: true,
+            power: false,
             mix: 0.5,       // 0 - 1
             type: 'small',
             highPass: 0,    // 0 - 1
