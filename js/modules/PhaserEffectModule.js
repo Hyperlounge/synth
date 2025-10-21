@@ -82,10 +82,10 @@ export default class PhaserEffectModule extends AudioModule {
             this._dryLevel.gain.setTargetAtTime((1-mix) * 2, this._now, this._minimumTimeConstant);
         }
 
-        this._gain.gain.setTargetAtTime(depth*0.1, this._now, this._minimumTimeConstant);
+        this._gain.gain.setTargetAtTime(depth*0.1/(rate+1), this._now, this._minimumTimeConstant);
         this._lfo.frequency.setTargetAtTime(rate, this._now, this._minimumTimeConstant);
         this._constant.offset.setTargetAtTime(1 + delay, this._now, this._minimumTimeConstant);
-        this._feedback.gain.setTargetAtTime(resonance*1.5, this._now, this._minimumTimeConstant);
+        this._feedback.gain.setTargetAtTime(resonance, this._now, this._minimumTimeConstant);
     }
 
     get audioOut() {
