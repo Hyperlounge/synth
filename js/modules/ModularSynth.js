@@ -12,7 +12,7 @@ import ControllerHelperModule from './ControllerHelperModule.js';
 import NoiseModule from './NoiseModule.js';
 import DelayEffectModule from './DelayEffectModule.js';
 import ReverbEffectModule from './ReverbEffectModule.js';
-import LevelsEffectModule from './levelsEffectModule.js';
+import LevelsEffectModule from './LevelsEffectModule.js';
 import PhaserEffectModule from './PhaserEffectModule.js';
 
 export default class ModularSynth extends EventTarget {
