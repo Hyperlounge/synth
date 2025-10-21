@@ -11,15 +11,13 @@ export default class PhaserEffectModule extends AudioModule {
 
         this._lfo = new OscillatorNode(context, {type: 'sine', frequency: 1});
         this._gain = new GainNode(context, {gain: 0.1});
-        this._delay = new DelayNode(context, {delayTime: 0});
         this._constant = new ConstantSourceNode(context, {offset: 1});
         this._feedback = new GainNode(context, {gain: 0});
 
         this._lfo.connect(this._gain);
         this._constant.connect(this._gain);
-        this._gain.connect(this._delay.delayTime);
-        this._delay.connect(this._wetLevel);
-        this._feedback.connect(this._delay);
+
+        this._createDelayNode();
 
         this._constant.start();
         this._lfo.start();
@@ -43,6 +41,26 @@ export default class PhaserEffectModule extends AudioModule {
         this._update();
     }
 
+    _destroyDelayNode() {
+        if (this._delay) {
+            this._gain.disconnect();
+            this._feedback.disconnect();
+            this._delay.disconnect();
+            this._delay = undefined;
+        }
+    }
+
+    _createDelayNode() {
+        const context = this._audioContext;
+
+        this._delay && this._destroyDelayNode();
+
+        this._delay = new DelayNode(context, {delayTime: 0});
+        this._gain.connect(this._delay.delayTime);
+        this._delay.connect(this._wetLevel);
+        this._feedback.connect(this._delay);
+    }
+
     _update() {
         const power = this._patch.get('power');
         const mix = this._patch.get('mix');
@@ -56,6 +74,7 @@ export default class PhaserEffectModule extends AudioModule {
 
                 this._audioIn.disconnect();
 
+                this._createDelayNode();
                 this._audioIn.connect(this._delay);
                 this._audioIn.connect(this._dryLevel);
                 this._dryLevel.connect(this._audioOut);
@@ -69,6 +88,7 @@ export default class PhaserEffectModule extends AudioModule {
                 this._audioIn.disconnect();
                 this._dryLevel.disconnect();
                 this._wetLevel.disconnect();
+                this._destroyDelayNode();
 
                 this._audioIn.connect(this._audioOut);
             }

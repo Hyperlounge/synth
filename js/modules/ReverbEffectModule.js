@@ -24,9 +24,7 @@ export default class ReverbEffectModule extends AudioModule {
         this._dryLevel = new GainNode(context, {gain: 0.5});
         this._wetLevel = new GainNode(context, {gain: 0.5});
 
-        this._convolver = new ConvolverNode(context);
-        this._convolver.normalize = true;
-        this._convolver.connect(this._wetLevel);
+        this._createConvolverNode();
 
     }
 
@@ -44,6 +42,20 @@ export default class ReverbEffectModule extends AudioModule {
         this._update();
     }
 
+    _destroyConvolverNode() {
+        this._convolver.disconnect();
+        this._convolver = undefined;
+    }
+
+    _createConvolverNode() {
+        const context = this._audioContext;
+
+        this._convolver && this._destroyConvolverNode();
+        this._convolver = new ConvolverNode(context);
+        this._convolver.normalize = true;
+        this._convolver.connect(this._wetLevel);
+    }
+
     _update() {
         const power = this._patch.get('power');
         const mix = this._patch.get('mix');
@@ -54,6 +66,7 @@ export default class ReverbEffectModule extends AudioModule {
 
                 this._audioIn.disconnect();
 
+                this._createConvolverNode();
                 this._audioIn.connect(this._convolver);
                 this._audioIn.connect(this._dryLevel);
                 this._dryLevel.connect(this._audioOut);
@@ -65,6 +78,7 @@ export default class ReverbEffectModule extends AudioModule {
                 this._audioIn.disconnect();
                 this._dryLevel.disconnect();
                 this._wetLevel.disconnect();
+                this._destroyConvolverNode();
 
                 this._audioIn.connect(this._audioOut);
             }
@@ -78,7 +92,7 @@ export default class ReverbEffectModule extends AudioModule {
             this._dryLevel.gain.setTargetAtTime((1-mix) * 2, this._now, this._minimumTimeConstant);
         }
 
-        if (this._patch.hasChanged('type')) {
+        if (this._convolver && (this._patch.hasChanged('type') || this._isFirstUpdate || this._patch.hasChanged('power'))) {
             const buffer = this._buffers[type];
             if (buffer) {
                 this._convolver.buffer = buffer;
