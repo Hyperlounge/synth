@@ -10,6 +10,10 @@ import PolyFilterModule from './PolyFilterModule.js';
 import MidiModule from './MidiModule.js';
 import ControllerHelperModule from './ControllerHelperModule.js';
 import NoiseModule from './NoiseModule.js';
+import DelayEffectModule from './DelayEffectModule.js';
+import ReverbEffectModule from './ReverbEffectModule.js';
+import LevelsEffectModule from './LevelsEffectModule.js';
+import PhaserEffectModule from './PhaserEffectModule.js';
 
 export default class ModularSynth extends EventTarget {
     constructor() {
@@ -106,6 +110,11 @@ export default class ModularSynth extends EventTarget {
     createPolyFilterModule = this._moduleCreator(PolyFilterModule);
     createLFOModule = this._moduleCreator(LFOModule);
     createNoiseModule = this._moduleCreator(NoiseModule);
+    createDelayEffectModule = this._moduleCreator(DelayEffectModule);
+    createReverbEffectModule = this._moduleCreator(ReverbEffectModule);
+    createLevelsEffectModule = this._moduleCreator(LevelsEffectModule);
+    createPhaserEffectModule = this._moduleCreator(PhaserEffectModule);
+    
 
     get patch() {
         return this._patch.attributes;
