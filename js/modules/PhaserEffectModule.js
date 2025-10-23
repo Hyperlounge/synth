@@ -11,6 +11,7 @@ export default class PhaserEffectModule extends AudioModule {
 
         this._lfo = new OscillatorNode(context, {type: 'sine', frequency: 1});
         this._gain = new GainNode(context, {gain: 0.1});
+        this._delayTime = new ConstantSourceNode(context, {offset: 0});
         this._constant = new ConstantSourceNode(context, {offset: 1});
         this._feedback = new GainNode(context, {gain: 0});
 
@@ -20,6 +21,7 @@ export default class PhaserEffectModule extends AudioModule {
         this._createDelayNode();
 
         this._constant.start();
+        this._delayTime.start();
         this._lfo.start();
 
         this._update();
@@ -44,6 +46,7 @@ export default class PhaserEffectModule extends AudioModule {
     _destroyDelayNode() {
         if (this._delay) {
             this._gain.disconnect();
+            this._delayTime.disconnect();
             this._feedback.disconnect();
             this._delay.disconnect();
             this._delay = undefined;
@@ -57,6 +60,7 @@ export default class PhaserEffectModule extends AudioModule {
 
         this._delay = new DelayNode(context, {delayTime: 0});
         this._gain.connect(this._delay.delayTime);
+        this._delayTime.connect(this._delay.delayTime);
         this._delay.connect(this._wetLevel);
         this._feedback.connect(this._delay);
     }
@@ -104,7 +108,7 @@ export default class PhaserEffectModule extends AudioModule {
 
         this._gain.gain.setTargetAtTime(depth*0.1/(rate+1), this._now, this._minimumTimeConstant);
         this._lfo.frequency.setTargetAtTime(rate, this._now, this._minimumTimeConstant);
-        this._constant.offset.setTargetAtTime(1 + delay, this._now, this._minimumTimeConstant);
+        this._delayTime.offset.setTargetAtTime(delay, this._now, this._minimumTimeConstant);
         this._feedback.gain.setTargetAtTime(resonance, this._now, this._minimumTimeConstant);
     }
 

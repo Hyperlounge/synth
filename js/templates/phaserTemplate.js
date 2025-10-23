@@ -8,7 +8,7 @@ const phaserTemplate = `
     </div>
     <rotary-knob module-id="phaser" parameter-name="mix" value="0.5">Mix</rotary-knob>
     <rotary-knob module-id="phaser" parameter-name="rate" min-value="0.02" max-value="10" logarithmic>Rate</rotary-knob>
-    <rotary-knob module-id="phaser" parameter-name="depth">Depth</rotary-knob>
+    <rotary-knob module-id="phaser" parameter-name="depth" logarithmic>Depth</rotary-knob>
     <rotary-knob module-id="phaser" parameter-name="resonance">Resonance</rotary-knob>
     <rotary-knob module-id="phaser" parameter-name="delay">Delay</rotary-knob>
 </div>
