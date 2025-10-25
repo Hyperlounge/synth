@@ -46,6 +46,11 @@
       "fileName": "Brass- Coronet.hspatch.json"
     },
     {
+      "name": "Distant Horn",
+      "bank": "Brass",
+      "fileName": "Brass- Distant Horn.hspatch.json"
+    },
+    {
       "name": "Fanfare",
       "bank": "Brass",
       "fileName": "Brass- Fanfare.hspatch.json"
@@ -104,6 +109,11 @@
       "name": "Jazz Organ",
       "bank": "Keys",
       "fileName": "Keys- Jazz Organ.hspatch.json"
+    },
+    {
+      "name": "Mellow Church",
+      "bank": "Keys",
+      "fileName": "Keys- Mellow Church.hspatch.json"
     },
     {
       "name": "Mellow Piano",
@@ -224,6 +234,11 @@
       "name": "Cello",
       "bank": "Strings",
       "fileName": "Strings- Cello.hspatch.json"
+    },
+    {
+      "name": "In the mood for viola",
+      "bank": "Strings",
+      "fileName": "Strings- In the mood for viola.hspatch.json"
     },
     {
       "name": "String Voice",
