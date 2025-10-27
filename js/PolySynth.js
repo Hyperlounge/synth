@@ -196,8 +196,6 @@ export default class PolySynth extends ModularSynth {
                     // If dropped items aren't files, reject them
                     if (item.kind === "file") {
                         const file = item.getAsFile();
-                        const fileName = file.name;
-                        const [name, bank] = fileName.replace(/^([^-]+)- ([^./]+)\.hspatch.json$/, '$2/$1').split('/');
                         file.text().then(text => {
                             let patch;
                             try {
@@ -206,11 +204,20 @@ export default class PolySynth extends ModularSynth {
                                 alert(e);
                             }
                             if (patch) {
-                                this.patch = initialPatch;
-                                this.patch = patch;
-                                this.globalPatch.set({name, bank});
-                                if (location.search) {
-                                    history.replaceState({}, '', location.origin + location.pathname);
+                                let name, bank;
+                                if (patch.global !== undefined) {
+                                    name = patch.global.name;
+                                    bank = patch.global.bank;
+                                };
+                                if (name && bank) {
+                                    this.patch = initialPatch;
+                                    this.patch = patch;
+                                    this.globalPatch.set({name, bank});
+                                    if (location.search) {
+                                        history.replaceState({}, '', location.origin + location.pathname);
+                                    }
+                                } else {
+                                    alert("That file is not a valid patch");
                                 }
                             }
                         });
