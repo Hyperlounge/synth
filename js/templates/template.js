@@ -14,7 +14,7 @@ import levelsTemplate from './levelsTemplate.js';
 const template = () => `
 <div class="synth">
     <div class="header">
-        <span id="preset-name"></span> <button id="save-patch">Save patch</button> <button id="share-patch">Share patch</button>
+        <span id="preset-name"></span> <input id="load-patch-input" type="file" accept=".json," style="display: none"></input><button id="load-patch">Load patch</button> <button id="save-patch">Save patch</button> <button id="share-patch">Share patch</button>
         <toggle-switch id="show-effects" format="horizontal" on-text="EFFECTS" off-text="EFFECTS"></toggle-switch>
         <toggle-switch id="reference-tone" format="horizontal">C4 Tone</toggle-switch>
         <toggle-switch id="power" format="horizontal" cap-color="orangered" checked>Power: </toggle-switch>

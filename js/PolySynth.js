@@ -94,6 +94,10 @@ export default class PolySynth extends ModularSynth {
 
     addEventListeners() {
         document.getElementById('preset-name').addEventListener('click', evt => this.showLibrary(evt));
+        document.getElementById('load-patch').addEventListener('click', () => {
+            document.getElementById('load-patch-input').click();
+        });
+        document.getElementById('load-patch-input').addEventListener('change', evt => this.loadPatchfromFile(evt));
         document.getElementById('save-patch').addEventListener('click', () => this.savePatchToFile());
         document.getElementById('share-patch').addEventListener('click', () => this.sharePatch());
         document.getElementById('pitch-bend').addEventListener('input', evt => {
@@ -185,6 +189,34 @@ export default class PolySynth extends ModularSynth {
         ev.preventDefault();
     }
 
+    decodePatchFile(file) {
+        file.text().then(text => {
+            let patch;
+            try {
+                patch = JSON.parse(text);
+            } catch(e) {
+                alert(e);
+            }
+            if (patch) {
+                let name, bank;
+                if (patch.global !== undefined) {
+                    name = patch.global.name;
+                    bank = patch.global.bank;
+                };
+                if (name && bank) {
+                    this.patch = initialPatch;
+                    this.patch = patch;
+                    this.globalPatch.set({name, bank});
+                    if (location.search) {
+                        history.replaceState({}, '', location.origin + location.pathname);
+                    }
+                } else {
+                    alert("That file is not a valid patch");
+                }
+            }
+        });
+    }
+
     dropHandler(ev) {
         ev.preventDefault();
         if (ev.dataTransfer.items) {
@@ -195,32 +227,7 @@ export default class PolySynth extends ModularSynth {
                 [...ev.dataTransfer.items].forEach(item => {
                     // If dropped items aren't files, reject them
                     if (item.kind === "file") {
-                        const file = item.getAsFile();
-                        file.text().then(text => {
-                            let patch;
-                            try {
-                                patch = JSON.parse(text);
-                            } catch(e) {
-                                alert(e);
-                            }
-                            if (patch) {
-                                let name, bank;
-                                if (patch.global !== undefined) {
-                                    name = patch.global.name;
-                                    bank = patch.global.bank;
-                                };
-                                if (name && bank) {
-                                    this.patch = initialPatch;
-                                    this.patch = patch;
-                                    this.globalPatch.set({name, bank});
-                                    if (location.search) {
-                                        history.replaceState({}, '', location.origin + location.pathname);
-                                    }
-                                } else {
-                                    alert("That file is not a valid patch");
-                                }
-                            }
-                        });
+                        this.decodePatchFile(item.getAsFile());
                     }
                 });
             }
@@ -319,6 +326,10 @@ export default class PolySynth extends ModularSynth {
                 }
             });
         });
+    }
+
+    loadPatchfromFile(evt) {
+        this.decodePatchFile(evt.target.files[0]);
     }
 
     savePatchToFile() {
