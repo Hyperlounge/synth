@@ -147,7 +147,7 @@ export default class PolySynth extends ModularSynth {
 
     showLibrary(evt) {
         const { target } = evt;
-        if (! this._libraryRoot) {
+        if (! this._libraryView) {
             this._libraryRoot = document.createElement('div');
             this._libraryRoot.id = 'library-root';
             this._libraryRoot.className = 'library-root show';
@@ -156,8 +156,8 @@ export default class PolySynth extends ModularSynth {
             this._libraryRoot.style.top = top + 'px';
             this._libraryRoot.style.maxHeight = (window.innerHeight - top) + 'px';
             document.body.appendChild(this._libraryRoot);
-            const libraryView = new LibraryView(this._libraryRoot.id, this._library, '');
-            libraryView.addEventListener('preset-selected', evt => {
+            this._libraryView = new LibraryView(this._libraryRoot.id, this._library, this.patch.global.name, this.patch.global.bank);
+            this._libraryView.addEventListener('preset-selected', evt => {
                 this._libraryRoot.classList.toggle('show', false);
                 this.loadPresetFromLibrary(evt.detail).then(patch => {
                     this.patch = initialPatch;
@@ -169,6 +169,7 @@ export default class PolySynth extends ModularSynth {
                 });
             });
         } else {
+            this._libraryView.selectPreset(this.patch.global.name, this.patch.global.bank);
             this._libraryRoot.classList.toggle('show');
         }
     }

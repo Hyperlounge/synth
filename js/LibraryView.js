@@ -1,11 +1,12 @@
 export default class LibraryView extends EventTarget {
-    constructor(rootId, library, currentPresetId) {
+    constructor(rootId, library, currentPresetName, currentBank) {
         super();
 
         this.rootElement = document.getElementById(rootId);
         this.library = library;
-        this.selectedBank = this.library.getBanks()[0];
-        this.currentPresetId = currentPresetId;
+        this.currentPreset = this.library.getPresetByNameAndBank(currentPresetName, currentBank) || {};
+        this.currentPresetId = this.currentPreset.id;
+        this.selectedBank = currentBank;
 
         this.render();
         this.rootElement.addEventListener('click', evt => this.onClick(evt));
@@ -34,6 +35,13 @@ export default class LibraryView extends EventTarget {
             this.render();
             this.dispatchEvent(new CustomEvent('preset-selected', {detail: this.currentPresetId}));
         }
+    }
+
+    selectPreset(name, bank) {
+        this.currentPreset = this.library.getPresetByNameAndBank(name, bank) || {};
+        this.currentPresetId = this.currentPreset.id;
+        this.selectedBank = bank;
+        this.render();
     }
 
 }
