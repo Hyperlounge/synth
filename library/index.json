@@ -46,11 +46,6 @@
       "fileName": "Brass- Coronet.hspatch.json"
     },
     {
-      "name": "Distant Horn",
-      "bank": "Brass",
-      "fileName": "Brass- Distant Horn.hspatch.json"
-    },
-    {
       "name": "Fanfare",
       "bank": "Brass",
       "fileName": "Brass- Fanfare.hspatch.json"
@@ -109,11 +104,6 @@
       "name": "Jazz Organ",
       "bank": "Keys",
       "fileName": "Keys- Jazz Organ.hspatch.json"
-    },
-    {
-      "name": "Mellow Church",
-      "bank": "Keys",
-      "fileName": "Keys- Mellow Church.hspatch.json"
     },
     {
       "name": "Mellow Piano",
@@ -201,14 +191,29 @@
       "fileName": "Pads- S and H pad.hspatch.json"
     },
     {
+      "name": "Shiny Poly",
+      "bank": "Pads",
+      "fileName": "Pads- Shiny Poly.hspatch.json"
+    },
+    {
       "name": "bendy pad",
       "bank": "Pads",
       "fileName": "Pads- bendy pad.hspatch.json"
     },
     {
+      "name": "Bellissimo!",
+      "bank": "Percussion",
+      "fileName": "Percussion- Bellissimo!.hspatch.json"
+    },
+    {
       "name": "Carnival",
       "bank": "Percussion",
       "fileName": "Percussion- Carnival.hspatch.json"
+    },
+    {
+      "name": "Marimba",
+      "bank": "Percussion",
+      "fileName": "Percussion- Marimba.hspatch.json"
     },
     {
       "name": "Marimboid",
@@ -236,11 +241,6 @@
       "fileName": "Strings- Cello.hspatch.json"
     },
     {
-      "name": "In the mood for viola",
-      "bank": "Strings",
-      "fileName": "Strings- In the mood for viola.hspatch.json"
-    },
-    {
       "name": "String Voice",
       "bank": "Strings",
       "fileName": "Strings- String Voice.hspatch.json"
@@ -264,6 +264,16 @@
       "name": "Violin",
       "bank": "Strings",
       "fileName": "Strings- Violin.hspatch.json"
+    },
+    {
+      "name": "Flutilicious",
+      "bank": "Woodwind",
+      "fileName": "Woodwind- Flutilicious.hspatch.json"
+    },
+    {
+      "name": "Wind harp",
+      "bank": "Woodwind",
+      "fileName": "Woodwind- Wind harp.hspatch.json"
     }
   ]
 }
