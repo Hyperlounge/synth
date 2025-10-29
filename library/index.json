@@ -186,14 +186,14 @@
       "fileName": "Pads- Phase Strings.hspatch.json"
     },
     {
+      "name": "Pretty Poly",
+      "bank": "Pads",
+      "fileName": "Pads- Pretty Poly.hspatch.json"
+    },
+    {
       "name": "S and H pad",
       "bank": "Pads",
       "fileName": "Pads- S and H pad.hspatch.json"
-    },
-    {
-      "name": "Shiny Poly",
-      "bank": "Pads",
-      "fileName": "Pads- Shiny Poly.hspatch.json"
     },
     {
       "name": "bendy pad",
