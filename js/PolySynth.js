@@ -13,6 +13,7 @@ const banks = [
     'Pads',
     'Strings',
     'Brass',
+    'Woodwind',
     'Plucks',
     'FX',
     'Percussion',
