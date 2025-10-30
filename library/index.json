@@ -211,6 +211,11 @@
       "fileName": "Percussion- Carnival.hspatch.json"
     },
     {
+      "name": "Chirpz",
+      "bank": "Percussion",
+      "fileName": "Percussion- Chirpz.hspatch.json"
+    },
+    {
       "name": "Marimba",
       "bank": "Percussion",
       "fileName": "Percussion- Marimba.hspatch.json"
