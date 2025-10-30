@@ -188,8 +188,9 @@ export default class SoftKeyboardModule extends AudioModule {
         evt.preventDefault();
         const key = evt.target;
         if (key.classList.contains('key')) {
+            const velocity = Math.floor(128*evt.offsetY/key.offsetHeight);
             const note = Number(key.getAttribute('data-note'));
-            this._eventBus.dispatchEvent(new MidiEvent(MidiEvent.NOTE_ON, note, this._state.get('velocity')));
+            this._eventBus.dispatchEvent(new MidiEvent(MidiEvent.NOTE_ON, note, velocity));
             this._currentNote = note;
             document.body.addEventListener('mousemove', this._onKeyMouseMove);
             document.body.addEventListener('mouseup', this._onKeyMouseUp);
