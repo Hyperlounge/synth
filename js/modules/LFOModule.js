@@ -37,18 +37,22 @@ export default class LFOModule extends AudioModule {
             fixedAmount: 0,       // 0 - 1
             modWheelAmount: 0, // 0 - 1
             delay: 0,   // 0 - 10
+            expression: 0,
         };
     }
 
     _onNoteChange(evt) {
-        const { newNoteNumber, oldNoteNumber } = evt.detail;
-        const { delay, fixedAmount, modWheelAmount, waveform } = this._patch.attributes;
+        const { newNoteNumber, oldNoteNumber, voiceNumber, velocity } = evt.detail;
+        const { delay, fixedAmount, modWheelAmount, waveform, expression } = this._patch.attributes;
+        const delayAdjusted = delay * (1 - expression*velocity/127);
+        const level = fixedAmount * (waveform === 'inverse-sawtooth' ? -1 : 1) * (1+velocity/127);
+        
         if (delay !== 0 && newNoteNumber !== undefined) {
             this._fixedNode.offset.cancelScheduledValues(this._now);
             this._fixedNode.offset.setTargetAtTime(0, this._now, 0);
             const level = fixedAmount * (waveform === 'inverse-sawtooth' ? -1 : 1);
-            this._fixedNode.offset.linearRampToValueAtTime(0, this._now + delay / 2)
-            this._fixedNode.offset.linearRampToValueAtTime(level, this._now + delay * 2);
+            this._fixedNode.offset.linearRampToValueAtTime(0, this._now + delayAdjusted / 2)
+            this._fixedNode.offset.linearRampToValueAtTime(level, this._now + delayAdjusted * 2);
         }
     }
 

@@ -1,6 +1,5 @@
 import '../components/RotaryKnob.js';
 import '../components/RotarySwitch.js';
-import '../components/VerticalSlider.js';
 const SVG = './media/svg';
 
 const lfoTemplate = `
@@ -21,7 +20,10 @@ const lfoTemplate = `
         <rotary-knob module-id="lfo" parameter-name="modWheelAmount" value="0.1" max-value="1">Mod Wheel</rotary-knob>
         <rotary-knob module-id="lfo" parameter-name="delay" value="1" logarithmic max-value="10">Delay</rotary-knob>
     </div>
-    <vertical-slider module-id="lfo" parameter-name="fixedAmount" value="0.1" max-value="1">Level</vertical-slider>
+    <div class="vertical-group">
+        <rotary-knob module-id="lfo" parameter-name="fixedAmount" value="0.1" max-value="1">Level</rotary-knob>
+        <rotary-knob module-id="lfo" parameter-name="expression" value="0" max-value="1">Expression</rotary-knob>
+    </div>
 </div>
 `;
 

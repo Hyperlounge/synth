@@ -33,6 +33,7 @@ export default class PolyEnvelopeModule extends AudioModule {
             sustainLevel: 1,
             releaseSeconds: 0,
             velocityAmount: 1,
+            expression: 0,
         };
     }
 
@@ -62,10 +63,10 @@ export default class PolyEnvelopeModule extends AudioModule {
         if (newNoteNumber !== undefined) {
             if (!(legato && oldNoteNumber !== undefined)) {
                 const stretchFactor = envelopeStretch ? noteToStretchFactor(newNoteNumber) : 1;
-                const { attackSeconds, decaySeconds, sustainLevel, velocityAmount } = this._patch.attributes;
+                const { attackSeconds, decaySeconds, sustainLevel, velocityAmount, expression } = this._patch.attributes;
                 const maxGain = velocity/64 * velocityAmount + (1 - velocityAmount);
                 const sustain = sustainLevel * maxGain;
-                const attack = Math.max(this._minimumTimeConstant, attackSeconds);
+                const attack = Math.max(this._minimumTimeConstant, attackSeconds * (1 - expression*velocity/127));
                 const decay = Math.max(this._minimumTimeConstant, decaySeconds * stretchFactor);
                 if (offset.value === 0) offset.setValueAtTime(0, this._now);
                 offset.cancelScheduledValues(this._now)
