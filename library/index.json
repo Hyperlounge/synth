@@ -246,6 +246,11 @@
       "fileName": "Strings- Cello.hspatch.json"
     },
     {
+      "name": "In the mood for viola",
+      "bank": "Strings",
+      "fileName": "Strings- In the mood for viola.hspatch.json"
+    },
+    {
       "name": "String Voice",
       "bank": "Strings",
       "fileName": "Strings- String Voice.hspatch.json"
