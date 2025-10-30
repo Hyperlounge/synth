@@ -19,11 +19,11 @@ const globalTemplate = `
         <rotary-knob module-id="voiceAllocator" parameter-name="glideTime" logarithmic max-value="10">Glide Time</rotary-knob>
     </div>
     <div class="vertical-group">
-        <rotary-switch module-id="noise" parameter-name="type" title="Noise" labels="right">
+        <cycle-switch module-id="noise" parameter-name="type" title="Noise">
             <option value="white" selected>WHITE</option>
             <option value="pink">PINK</option>
             <option value="brown">BROWN</option>
-        </rotary-switch>
+        </cycle-switch>
         <cycle-switch module-id="voiceAllocator" parameter-name="glideType" title="Glide Type">
             <option value="off" selected>OFF</option>
             <option value="always">ALL</option>
