@@ -266,9 +266,19 @@
       "fileName": "Strings- Violin.hspatch.json"
     },
     {
+      "name": "Flute Solo",
+      "bank": "Woodwind",
+      "fileName": "Woodwind- Flute Solo.hspatch.json"
+    },
+    {
       "name": "Flutilicious",
       "bank": "Woodwind",
       "fileName": "Woodwind- Flutilicious.hspatch.json"
+    },
+    {
+      "name": "So Many Flutes!",
+      "bank": "Woodwind",
+      "fileName": "Woodwind- So Many Flutes!.hspatch.json"
     },
     {
       "name": "Wind harp",
