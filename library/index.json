@@ -231,6 +231,16 @@
       "fileName": "Percussion- The Bells!.hspatch.json"
     },
     {
+      "name": "Timpani",
+      "bank": "Percussion",
+      "fileName": "Percussion- Timpani.hspatch.json"
+    },
+    {
+      "name": "Toms",
+      "bank": "Percussion",
+      "fileName": "Percussion- Toms.hspatch.json"
+    },
+    {
       "name": "Vibra-prone",
       "bank": "Percussion",
       "fileName": "Percussion- Vibra-prone.hspatch.json"
