@@ -6,10 +6,6 @@ function stripMultiline(text) {
     return text.replace(/^[ \n]*(.*?)[ \n]*$/s, '$1').replace(/\.\.\/media\//sg, 'media/');
 }
 
-function processHtml(html) {
-    return html.replace(/<thead.*?<\/thead>/sg, '');
-}
-
 const sourceFile = fs.readFileSync('../docs/live-help-source.md', 'utf8');
 
 const md = markdownIt({html: true});
@@ -17,34 +13,65 @@ const md = markdownIt({html: true});
 const defines = {};
 const modules = {};
 
-let doc = `<div class="help">\n`;
-
-
 sourceFile.match(/\{define: *.*?\}.*?\{end-define\}/sg).forEach(match => {
     const parts = match.match(/\{define: *(.*?) *\}(.*?)\{end-define\}/s);
     defines[parts[1]] = stripMultiline(parts[2]);
 });
 
-sourceFile.match(/\{module: *.*?\}.*?(\{module:|\{define:|$)/sg).forEach(match => {
-    const parts = match.match(/\{module: *(.*?) *\}(.*?)(\{module:|\{define:|$)/s);
+sourceFile.match(/\{module: *.*?\}.*?\{end-module\}/sg).forEach(match => {
+    const parts = match.match(/\{module: *(.*?) *\}(.*?)\{end-module\}/s);
     const moduleName = parts[1];
-    let moduleContent = stripMultiline(parts[2]);
-    moduleContent = moduleContent.replace(/\{ *include: *(.*?) *\}/sg, (match, p1) => {
+    let template = stripMultiline(parts[2]);
+    template = template.replace(/\{ *include: *(.*?) *\}/sg, (match, p1) => {
         return defines[p1];
     });
-    moduleContent = moduleContent.replace(/\{ *control: *(\S+?) *\}/sg, (match, p1) => {
+    template = template.replace(/\{ *control: *(\S+?) *\}/sg, (match, p1) => {
         return `{control: ${moduleName} > ${p1}}`;
     });
-    moduleContent = moduleContent.replace(/\{ *control: *(\S+?) *> *(\S+?) *\}([^{]*)/sg, (match, p1, p2, p3) => {
-        return `<div class="control" data-module="${p1}" data-control="${p2}">\n\n${stripMultiline(p3)}\n</div>\n`;
+    template = template.replace(/\{ *control: *(\S+?) *> *(\S+?) *\}([^{]*)/sg, (match, p1, p2, p3) => {
+        (modules[p1] || (modules[p1] = {controls: {}})).controls[p2] = {
+            html: md.render(stripMultiline(p3)),
+        }
+        return `\n\${help.modules.${p1}.controls.${p2}.html}`;
     });
-    modules[moduleName] = moduleContent;
-    doc += `<div class="panel" data-module="${moduleName}">${processHtml(md.render(moduleContent))}</div>`;
+    template = template.replace(/^(.*?)(\$\{.*)$/s, (match, p1, p2) => {
+        return `${md.render(stripMultiline(p1))}\n${p2}`
+    });
+    (modules[moduleName] || (modules[moduleName] = {controls: {}})).template = template;
 });
 
-doc += "\n</div>";
+let doc = `const help = {`;
+Object.keys(modules).forEach(moduleName => {
+    const module = modules[moduleName];
+    doc += `\n  ${moduleName}: {`
+         + (module.template ? `\n    template: help => \`${module.template}\`,` : '')
+         + `\n    controls: {`;
 
-fs.writeFile('../live-help/output.html', doc, (err) => {
+    Object.keys(module.controls).forEach(controlName => {
+        const control = module.controls[controlName];
+        doc += `\n      ${controlName}: {`
+             + `\n        html: \`${control.html}\`,`
+             + `\n      },`
+    })
+    doc += `\n    },`
+         + `\n  },`;
+});
+
+doc += `
+};
+
+function getHelpHtml(moduleName, controlName) {
+    if (controlName === undefined) {
+        return help.module[moduleName].template(help);
+    } else {
+        return help.module[moduleName].controls[controlName].html;
+    }
+}
+
+export default getHelpHtml`;
+
+
+fs.writeFile('../js/misc/getHelp.js', doc, (err) => {
             if (err) {
                 console.log(err);
             } else {

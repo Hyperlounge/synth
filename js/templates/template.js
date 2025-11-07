@@ -27,31 +27,31 @@ const template = () => `
             </div>
         </div>
         <div class="settings">
-            <div class="panel">
+            <div class="panel" data-module="lfo">
                 <h2>LFO</h2>
                 <div id="lfo">${lfoTemplate}</div>
             </div>
-            <div class="panel">
+            <div class="panel" data-module="osc1">
                 <h2>Oscillator 1</h2>
                 <div id="oscillator-1">${oscTemplate(1)}</div>
             </div>
-            <div class="panel">
+            <div class="panel" data-module="osc2">
                 <h2>Oscillator 2</h2>
                 <div id="oscillator-2">${oscTemplate(2)}</div>
             </div>
-            <div class="panel">
+            <div class="panel" data-module="loudnessEnvelope">
                 <h2>Amp Envelope</h2>
                 <div id="loudness-envelope">${ADSRTemplate('loudnessEnvelope')}</div>
             </div>
-            <div class="panel">
+            <div class="panel" data-module="filterEnvelope">
                 <h2>Filter Envelope</h2>
                 <div id="filter-envelope">${ADSRTemplate('filterEnvelope')}</div>
             </div>
-            <div class="panel">
+            <div class="panel" data-module="filter">
                 <h2>Filter</h2>
                 <div id="filter">${filterTemplate}</div>
             </div>
-            <div class="panel">
+            <div class="panel" data-module="global">
                 <h2>Global</h2>
                 <div id="global">${globalTemplate}</div>
             </div>           
