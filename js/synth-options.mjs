@@ -15,6 +15,7 @@ const launch = () => {
 </div>
     `;
     new PolySynth('synth');
+    document.getElementById('synth').requestFullscreen();
 };
 
 document.getElementById('launch-button').onclick = evt => {
