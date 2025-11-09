@@ -171,9 +171,19 @@
       "fileName": "Leads- Welcome to the Machine.hspatch.json"
     },
     {
+      "name": "Bell Pad",
+      "bank": "Pads",
+      "fileName": "Pads- Bell Pad.hspatch.json"
+    },
+    {
       "name": "Big sweep",
       "bank": "Pads",
       "fileName": "Pads- Big sweep.hspatch.json"
+    },
+    {
+      "name": "Bowed Pad",
+      "bank": "Pads",
+      "fileName": "Pads- Bowed Pad.hspatch.json"
     },
     {
       "name": "FM Pad",
