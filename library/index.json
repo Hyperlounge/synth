@@ -191,6 +191,11 @@
       "fileName": "Pads- FM Pad.hspatch.json"
     },
     {
+      "name": "Mass-ive",
+      "bank": "Pads",
+      "fileName": "Pads- Mass-ive.hspatch.json"
+    },
+    {
       "name": "Phase Strings",
       "bank": "Pads",
       "fileName": "Pads- Phase Strings.hspatch.json"
