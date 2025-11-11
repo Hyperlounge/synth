@@ -1,11 +1,17 @@
 const help = {modules: {
   header: {
     template: help => `
+${help.modules.header.controls.library.html}
 ${help.modules.header.controls.loadPatch.html}
 ${help.modules.header.controls.savePatch.html}
 ${help.modules.header.controls.sharePatch.html}
 ${help.modules.header.controls.c4Tone.html}`,
     controls: {
+      library: {
+        html: `<h3>Current Patch and Patch Selector</h3>
+<p>This shows the name of the current patch, and clicking on gives access to a built in library of preset patches.</p>
+`,
+      },
       loadPatch: {
         html: `<h3>Load Patch</h3>
 <p>Allows you to load a patch from your device. Patch files contain all of the settings for a particular sound, and have the extension &quot;.hspatch.json&quot;. You can save patches to your device using the Save Patch button.</p>
@@ -650,6 +656,21 @@ ${help.modules.levels.controls.master.html}`,
       master: {
         html: `<h3>Master Volume</h3>
 <p>Boosts or cuts the entire signal. Particularly useful when using Band Pass in the Filter section, as that can attenuate the signal quite a lot.</p>
+`,
+      },
+    },
+  },
+  keyboard: {
+    template: help => `<h2>Keyboard</h2>
+<p>The on-screen keyboard is playable on both touch devices and desktop computers, although it's obviously much more fun on a touch device, when it can be used more like a physical instrument. When an external MIDI keyboard is connected, it can be used normally with full touch sensitivity, and the sustain pedal works as expected. On iOS devices, the on-screen keyboard is touch sensitive based on the size of the touch area, so pressing harder gives quite usable expressiveness. When used on a desktop computer, the velocity is based on the vertical position of the cursor on the key, top of the key is soft, bottom of the key is loud.</p>
+<p>The number of keys defaults to a comfortable range for on-screen use, but other common configurations can be selected using the preset buttons to the right. The number and range of keys is also fully customisable using the Keyboard Adjuster. The location of middle C is marked in yellow, and the numbers on the C keys indicate the other octave positions.</p>
+<p>The keyboard settings are independent of patch data and are not saved.</p>
+
+${help.modules.keyboard.controls.adjuster.html}`,
+    controls: {
+      adjuster: {
+        html: `<h3>Keyboard Adjuster</h3>
+<p>The octave range of the keyboard can be adjusted by dragging the central white area of the Keyboard Adjuster left or right. The number of keys shown can be chaged by dragging the grey areas either side left or right.</p>
 `,
       },
     },

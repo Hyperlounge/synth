@@ -1,5 +1,11 @@
 {module: header}
 
+{control: library}
+
+### Current Patch and Patch Selector
+
+This shows the name of the current patch, and clicking on gives access to a built in library of preset patches.
+
 {control: loadPatch}
 
 ### Load Patch
@@ -465,5 +471,23 @@ Boosts or cuts the high frequencies.
 ### Master Volume
 
 Boosts or cuts the entire signal. Particularly useful when using Band Pass in the Filter section, as that can attenuate the signal quite a lot.
+
+{end-module}
+
+{module: keyboard}
+
+## Keyboard
+
+The on-screen keyboard is playable on both touch devices and desktop computers, although it's obviously much more fun on a touch device, when it can be used more like a physical instrument. When an external MIDI keyboard is connected, it can be used normally with full touch sensitivity, and the sustain pedal works as expected. On iOS devices, the on-screen keyboard is touch sensitive based on the size of the touch area, so pressing harder gives quite usable expressiveness. When used on a desktop computer, the velocity is based on the vertical position of the cursor on the key, top of the key is soft, bottom of the key is loud.
+
+The number of keys defaults to a comfortable range for on-screen use, but other common configurations can be selected using the preset buttons to the right. The number and range of keys is also fully customisable using the Keyboard Adjuster. The location of middle C is marked in yellow, and the numbers on the C keys indicate the other octave positions.
+
+The keyboard settings are independent of patch data and are not saved.
+
+{control: adjuster}
+
+### Keyboard Adjuster
+
+The octave range of the keyboard can be adjusted by dragging the central white area of the Keyboard Adjuster left or right. The number of keys shown can be chaged by dragging the grey areas either side left or right.
 
 {end-module}

@@ -12,6 +12,8 @@ const template = data => `
         id="keyboard-adjuster"
         bottom-note="${data.bottomNote}"
         top-note="${data.topNote}"
+        data-module="keyboard"
+        data-control="adjuster"
     > </keyboard-adjuster>
     <span>Keys:</span>
     <button class="keyboard-range" value="88">88</button>

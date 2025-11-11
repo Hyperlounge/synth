@@ -21,6 +21,8 @@ export default class KeyboardAdjuster extends HTMLElement {
         bottomNote: PropTypes.number.default(36).observed,
         topNote: PropTypes.number.default(96).observed,
         middleCColor: PropTypes.string.default('yellow'),
+        dataModule: PropTypes.string,
+        dataControl: PropTypes.string,
     }
 
     static template = data => {
