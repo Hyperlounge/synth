@@ -167,10 +167,10 @@ export default class PolySynth extends ModularSynth {
                     const controlName = target.getAttribute('parameter-name') || target.getAttribute('data-control') || undefined;
                     const helpContent = getHelp(moduleName, controlName);
                     if (helpContent) {
-                        target.classList.toggle('help-active', true);
                         new HelpPopup(helpContent, {target}).then(() => {
                             target.classList.toggle('help-active', false);
                         });
+                        setTimeout(() => target.classList.toggle('help-active', true), 1);
                     }
                 }
             } else if (elementToBehaveNormally.id === 'help-mode') {
