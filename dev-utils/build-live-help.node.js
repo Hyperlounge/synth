@@ -62,9 +62,11 @@ doc += `
 
 function getHelpHtml(moduleName, controlName) {
     if (controlName === undefined) {
-        return help.modules[moduleName].template(help);
+        const moduleData = help.modules[moduleName];
+        return moduleData ? moduleData.template(help) : undefined;
     } else {
-        return help.modules[moduleName].controls[controlName].html;
+        const controlData = help.modules[moduleName].controls[controlName];
+        return controlData ? controlData.html : undefined;
     }
 }
 

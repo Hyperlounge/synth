@@ -1,3 +1,51 @@
+{module: header}
+
+{control: loadPatch}
+
+### Load Patch
+
+Allows you to load a patch from your device. Patch files contain all of the settings for a particular sound, and have the extension ".hspatch.json". You can save patches to your device using the Save Patch button.
+
+{control: savePatch}
+
+### Save Patch
+
+Allows you to save the current settings to your device as a patch file. Patch files contain all of the settings for a particular sound, and have the extension ".hspatch.json". You can load patches from your device using the Load Patch button.
+
+{control: sharePatch}
+
+### Share Patch
+
+Creates a url for you to share which encapsulates the current settings, so a friend can experience the cool sound you just made.
+
+{control: c4Tone}
+
+### Middle C
+
+Plays a middle C refence tone which is useful when you are creating sounds using the Cross-Mod control in Oscillator 2. This can skew the frequency of the note a lot, and you will need to fiddle with the Semitones and Fine Tune controls in the Oscillators to bring it back. The note marked in yellow on the keyboard with a figure 4, should be in tune with this reference tone.
+
+{end-module}
+
+{module: expressionControls}
+
+## Expression Controls
+
+These controls are designed for use during performance, their positions are not saved in patches.
+
+{control: pitchBend}
+
+### Pitch Bend
+
+Drag up or down to increase or decrease the pitch of the note by two semitones. If you release the control, it will snap back to the true note.
+
+{control: modWheel}
+
+### Modulation Wheel
+
+This control can be used to control how much of the LFO signal is used to modulate the sound. See Mod Wheel control in the LFO, the Modulation controls in the Oscillators, and the Modulation control in the Filter for details on how this can be configured to affect the sound.
+
+{end-module}
+
 {module: lfo}
 
 ## LFO (Low Frequency Oscillator)

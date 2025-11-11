@@ -1,4 +1,52 @@
 const help = {modules: {
+  header: {
+    template: help => `
+${help.modules.header.controls.loadPatch.html}
+${help.modules.header.controls.savePatch.html}
+${help.modules.header.controls.sharePatch.html}
+${help.modules.header.controls.c4Tone.html}`,
+    controls: {
+      loadPatch: {
+        html: `<h3>Load Patch</h3>
+<p>Allows you to load a patch from your device. Patch files contain all of the settings for a particular sound, and have the extension &quot;.hspatch.json&quot;. You can save patches to your device using the Save Patch button.</p>
+`,
+      },
+      savePatch: {
+        html: `<h3>Save Patch</h3>
+<p>Allows you to save the current settings to your device as a patch file. Patch files contain all of the settings for a particular sound, and have the extension &quot;.hspatch.json&quot;. You can load patches from your device using the Load Patch button.</p>
+`,
+      },
+      sharePatch: {
+        html: `<h3>Share Patch</h3>
+<p>Creates a url for you to share which encapsulates the current settings, so a friend can experience the cool sound you just made.</p>
+`,
+      },
+      c4Tone: {
+        html: `<h3>Middle C</h3>
+<p>Plays a middle C refence tone which is useful when you are creating sounds using the Cross-Mod control in Oscillator 2. This can skew the frequency of the note a lot, and you will need to fiddle with the Semitones and Fine Tune controls in the Oscillators to bring it back. The note marked in yellow on the keyboard with a figure 4, should be in tune with this reference tone.</p>
+`,
+      },
+    },
+  },
+  expressionControls: {
+    template: help => `<h2>Expression Controls</h2>
+<p>These controls are designed for use during performance, their positions are not saved in patches.</p>
+
+${help.modules.expressionControls.controls.pitchBend.html}
+${help.modules.expressionControls.controls.modWheel.html}`,
+    controls: {
+      pitchBend: {
+        html: `<h3>Pitch Bend</h3>
+<p>Drag up or down to increase or decrease the pitch of the note by two semitones. If you release the control, it will snap back to the true note.</p>
+`,
+      },
+      modWheel: {
+        html: `<h3>Modulation Wheel</h3>
+<p>This control can be used to control how much of the LFO signal is used to modulate the sound. See Mod Wheel control in the LFO, the Modulation controls in the Oscillators, and the Modulation control in the Filter for details on how this can be configured to affect the sound.</p>
+`,
+      },
+    },
+  },
   lfo: {
     template: help => `<h2>LFO (Low Frequency Oscillator)</h2>
 <p>Used optionally to modulate the Oscillators’ frequencies and the cut-off frequency of the Filter, to create vibrato effects or slow sweeping timbre changes. The Mod Wheel (left) can be used to adjust the amount of modulation, and a fixed amount can be set which can be made to come in gradually after a delay when a note is played, adding an expressive quality. Further expressiveness can be added by making this delay shorter the harder you press the note.</p>
@@ -472,9 +520,11 @@ ${help.modules.global.controls.envelopeStretch.html}`,
 
 function getHelpHtml(moduleName, controlName) {
     if (controlName === undefined) {
-        return help.modules[moduleName].template(help);
+        const moduleData = help.modules[moduleName];
+        return moduleData ? moduleData.template(help) : undefined;
     } else {
-        return help.modules[moduleName].controls[controlName].html;
+        const controlData = help.modules[moduleName].controls[controlName];
+        return controlData ? controlData.html : undefined;
     }
 }
 

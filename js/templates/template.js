@@ -14,14 +14,14 @@ import levelsTemplate from './levelsTemplate.js';
 const template = () => `
 <div class="synth">
     <div class="header">
-        <span id="preset-name"></span> <input id="load-patch-input" type="file" accept=".json," style="display: none"></input><button id="load-patch">Load patch</button> <button id="save-patch">Save patch</button> <button id="share-patch">Share patch</button>
+        <span id="preset-name" data-module="header" data-control="library"></span> <input id="load-patch-input" type="file" accept=".json," style="display: none"></input><button id="load-patch" data-module="header" data-control="loadPatch">Load patch</button> <button id="save-patch" data-module="header" data-control="savePatch">Save patch</button> <button id="share-patch" data-module="header" data-control="sharePatch">Share patch</button>
         <toggle-switch id="show-effects" format="horizontal" on-text="EFFECTS" off-text="EFFECTS"></toggle-switch>
         <toggle-switch id="help-mode" format="horizontal" on-text="HELP MODE" off-text="HELP-MODE"></toggle-switch>
-        <toggle-switch id="reference-tone" format="horizontal" on-text="MIDDLE C" off-text="MIDDLE C"></toggle-switch>
+        <toggle-switch id="reference-tone" format="horizontal" on-text="MIDDLE C" off-text="MIDDLE C" data-module="header" data-control="c4Tone"></toggle-switch>
         <toggle-switch id="power" format="horizontal" cap-color="orangered" checked>Power: </toggle-switch>
     </div>
     <div class="controls">
-        <div class="expression-controls">
+        <div class="expression-controls" data-module="expressionControls">
             <div class="panel">
                 <h2>&nbsp;</h2>
                 <div id="controllers">${controllersTemplate}</div>
@@ -58,9 +58,9 @@ const template = () => `
             </div>           
         </div>
     </div>
-    <div class="panel keyboard">
+    <div class="panel keyboard" data-module="keyboard">
     </div>
-    <div class="overlay effects-rack">
+    <div class="overlay effects-rack" data-module="effectsRack">
         ${phaserTemplate}
         ${delayTemplate}
         ${reverbTemplate}

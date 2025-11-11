@@ -11,7 +11,9 @@ export default class ModWheel extends HTMLElement {
         minValue: PropTypes.number.default(0),
         maxValue: PropTypes.number.default(1),
         snapBack: PropTypes.bool.default(false),
-    }
+        dataModule: PropTypes.string,
+        dataControl: PropTypes.string,
+   }
 
     static template = data => `
 <style>

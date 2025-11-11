@@ -8,6 +8,8 @@ export default class AbstractComponent extends HTMLElement {
         style: PropTypes.string,
         moduleId: PropTypes.string,
         parameterName: PropTypes.string,
+        dataModule: PropTypes.string,
+        dataControl: PropTypes.string,
     }
 
     constructor() {
