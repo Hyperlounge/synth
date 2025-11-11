@@ -4,19 +4,19 @@
 
 ### Current Patch and Patch Selector
 
-This shows the name of the current patch, and clicking on gives access to a built in library of preset patches.
+This shows the name of the current patch,  click on it to access to a built in library of preset patches.
 
 {control: loadPatch}
 
 ### Load Patch
 
-Allows you to load a patch from your device. Patch files contain all of the settings for a particular sound, and have the extension ".hspatch.json". You can save patches to your device using the Save Patch button.
+Use it to load a patch from your device. Patch files contain all of the settings for a particular sound, and have the extension ".hspatch.json". You can save patches to your device using the Save Patch button.
 
 {control: savePatch}
 
 ### Save Patch
 
-Allows you to save the current settings to your device as a patch file. Patch files contain all of the settings for a particular sound, and have the extension ".hspatch.json". You can load patches from your device using the Load Patch button.
+Use it to save the current settings to your device as a patch file. Patch files contain all of the settings for a particular sound, and have the extension ".hspatch.json". You can load patches from your device using the Load Patch button.
 
 {control: sharePatch}
 
@@ -28,7 +28,7 @@ Creates a url for you to share which encapsulates the current settings, so a fri
 
 ### Middle C
 
-Plays a middle C refence tone which is useful when you are creating sounds using the Cross-Mod control in Oscillator 2. This can skew the frequency of the note a lot, and you will need to fiddle with the Semitones and Fine Tune controls in the Oscillators to bring it back. The note marked in yellow on the keyboard with a figure 4, should be in tune with this reference tone.
+Plays a middle C refence tone which is useful when you are creating sounds using the Cross-Mod control in Oscillator 2. This can skew the frequency of the note considerably, and you will need to fiddle with the Semitones and Fine Tune controls in the Oscillators to bring it back. The note marked in yellow on the keyboard with a figure 4 in it should be in tune with this reference tone.
 
 {end-module}
 
@@ -36,19 +36,19 @@ Plays a middle C refence tone which is useful when you are creating sounds using
 
 ## Expression Controls
 
-These controls are designed for use during performance, their positions are not saved in patches.
+These controls are designed for use while playing to add expression to your performance, their positions are not saved in patches.
 
 {control: pitchBend}
 
 ### Pitch Bend
 
-Drag up or down to increase or decrease the pitch of the note by two semitones. If you release the control, it will snap back to the true note.
+Drag up or down to increase or decrease the pitch of the note by two semitones. If you release the control, it will snap back to the original note.
 
 {control: modWheel}
 
 ### Modulation Wheel
 
-This control can be used to control how much of the LFO signal is used to modulate the sound. See Mod Wheel control in the LFO, the Modulation controls in the Oscillators, and the Modulation control in the Filter for details on how this can be configured to affect the sound.
+Use this to control how much of the LFO signal is used to modulate the sound. See the Mod Wheel control in the LFO section, the Modulation controls in the Oscillator sections, and the Modulation control in the Filter section for details on how this can be configured to affect the sound.
 
 {end-module}
 
@@ -56,9 +56,9 @@ This control can be used to control how much of the LFO signal is used to modula
 
 ## LFO (Low Frequency Oscillator)
 
-Used optionally to modulate the Oscillators’ frequencies and the cut-off frequency of the Filter, to create vibrato effects or slow sweeping timbre changes. The Mod Wheel (left) can be used to adjust the amount of modulation, and a fixed amount can be set which can be made to come in gradually after a delay when a note is played, adding an expressive quality. Further expressiveness can be added by making this delay shorter the harder you press the note.
+Used to modulate the Oscillators’ frequencies and the cut-off frequency of the Filter, to create vibrato effects or slow sweeping timbre changes. The Mod Wheel (left) can be used to adjust the amount of modulation, and a fixed amount can be set which can be made to come in gradually after a delay when a note is played, adding an expressive quality. Further expressiveness can be added by making this delay shorter the harder you press the note.
 
-Noise can be used to modulate, which gives ragged or glitchy effects, especially with brown noise set by the Global>Noise selector.
+White, pink or brown noise can be used to modulate, which gives ragged or glitchy effects, especially with brown noise set by the Noise selector in the Global section.
 
 {control: waveform}
 
@@ -74,7 +74,7 @@ The type of signal used for modulation.
 | ![Ramp-down](../media/svg/reverse-saw.svg)           | Ramp-down sawtooth                                                                         |
 | ![Square wave](../media/svg/square-wave.svg)         | Square wave                                                                                |
 | ![Sample and hold](../media/svg/sample-and-hold.svg) | Sample and hold (random stepped wave)                                                      |
-| ![Noise](../media/svg/noise.svg)                     | Noise, type determined by Global>Noise selector (note the Rate control has no effect here) |
+| ![Noise](../media/svg/noise.svg)                     | Noise, type determined by Noise selector in the Global section (note the Rate control has no effect here) |
 
 {control: frequency}
 
