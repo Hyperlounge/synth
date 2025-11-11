@@ -1,4 +1,4 @@
-const help = {
+const help = {modules: {
   lfo: {
     template: help => `<h2>LFO (Low Frequency Oscillator)</h2>
 <p>Used optionally to modulate the Oscillators’ frequencies and the cut-off frequency of the Filter, to create vibrato effects or slow sweeping timbre changes. The Mod Wheel (left) can be used to adjust the amount of modulation, and a fixed amount can be set which can be made to come in gradually after a delay when a note is played, adding an expressive quality. Further expressiveness can be added by making this delay shorter the harder you press the note.</p>
@@ -468,13 +468,13 @@ ${help.modules.global.controls.envelopeStretch.html}`,
       },
     },
   },
-};
+}};
 
 function getHelpHtml(moduleName, controlName) {
     if (controlName === undefined) {
-        return help.module[moduleName].template(help);
+        return help.modules[moduleName].template(help);
     } else {
-        return help.module[moduleName].controls[controlName].html;
+        return help.modules[moduleName].controls[controlName].html;
     }
 }
 

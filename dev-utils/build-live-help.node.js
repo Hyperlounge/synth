@@ -40,7 +40,7 @@ sourceFile.match(/\{module: *.*?\}.*?\{end-module\}/sg).forEach(match => {
     (modules[moduleName] || (modules[moduleName] = {controls: {}})).template = template;
 });
 
-let doc = `const help = {`;
+let doc = `const help = {modules: {`;
 Object.keys(modules).forEach(moduleName => {
     const module = modules[moduleName];
     doc += `\n  ${moduleName}: {`
@@ -58,13 +58,13 @@ Object.keys(modules).forEach(moduleName => {
 });
 
 doc += `
-};
+}};
 
 function getHelpHtml(moduleName, controlName) {
     if (controlName === undefined) {
-        return help.module[moduleName].template(help);
+        return help.modules[moduleName].template(help);
     } else {
-        return help.module[moduleName].controls[controlName].html;
+        return help.modules[moduleName].controls[controlName].html;
     }
 }
 

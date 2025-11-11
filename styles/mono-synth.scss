@@ -15,12 +15,20 @@ html, body {
   -webkit-user-select: none !important;
 }
 
+.help-active {
+  outline: 2px solid red;
+}
+
 .modal {
   z-index: 999999;
 }
 
 #synth {
   height: 100%;
+
+  &.disable-pointer-events {
+    pointer-events: none;
+  }
 }
 
 .synth {
@@ -46,7 +54,7 @@ html, body {
   align-items: center;
   gap: 0.5em;
 
-  #reference-tone {
+  #power {
     margin-left: auto;
   }
 

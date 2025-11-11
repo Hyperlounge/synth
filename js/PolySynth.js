@@ -3,6 +3,8 @@ import template from './templates/template.js';
 import Dialog from './misc/Dialog.js';
 import Library from './Library.js';
 import LibraryView from './LibraryView.js';
+import getHelp from './misc/getHelp.js';
+import HelpPopup from './misc/HelpPopup.js';
 
 const initialPatch = {"global":{"totalVoices":1,"legato":true,"envelopeStretch":false,"name":"Too High!","bank":"Basses"},"controllerHelper":{"pitchBendMax":200,"modulationMax":100},"voiceAllocator":{"numberOfVoices":0,"glideTime":0.019857606383389993,"glideType":"always"},"osc1":{"waveform":"sawtooth","range":-1,"tune":0,"fineTune":2,"modAmount":100,"crossModAmount":0},"osc2":{"waveform":"triangle","range":-2,"tune":0,"fineTune":-1,"modAmount":100,"crossModAmount":0},"oscLevel1":{"level":0.066},"oscLevel2":{"level":0.048},"noiseLevel1":{"level":0},"amplifier":{},"loudnessEnvelope":{"attackSeconds":0,"decaySeconds":0,"sustainLevel":1,"releaseSeconds":0,"velocityAmount":0.5,"expression":0},"filter":{"type":"lowpass","rolloff":12,"frequency":69.35183155248555,"resonance":6.2,"modAmount":0,"keyboardFollowAmount":1,"envelopeAmount":4900},"filterEnvelope":{"attackSeconds":0.05830307435355809,"decaySeconds":0.5348507922869201,"sustainLevel":0.51,"releaseSeconds":0,"velocityAmount":0.56,"expression":0},"lfo":{"waveform":"triangle","frequency":5.495408738576245,"fixedAmount":0,"modWheelAmount":0.1962675373859285,"delay":0,"expression":0},"noise":{"type":"white"},"delay":{"power":false,"mix":0.5,"time":0.1,"feedback":0.5,"spread":0},"reverb":{"power":true,"mix":0.5,"type":"small","highPass":0},"levels":{"power":true,"bass":0,"treble":0.22281692032865363,"master":0.5},"phaser":{"power":false,"mix":0.4363380227632418,"rate":0.14136569937713214,"depth":0.05570423008216342,"resonance":0.3885915398356732,"delay":0.031830988618379095},"softKeyboard":{}};
 
@@ -107,7 +109,8 @@ export default class PolySynth extends ModularSynth {
         document.getElementById('mod-wheel').addEventListener('input', evt => {
             this._controllerHelper._onModWheel(evt.target.value);
         });
-        document.getElementById('show-effects').addEventListener('change', this.onShowEffectsChange)
+        document.getElementById('show-effects').addEventListener('change', this.onShowEffectsChange);
+        document.getElementById('help-mode').addEventListener('change', this.onHelpModeChange);
         document.getElementById('reference-tone').addEventListener('change', this.onReferenceToneChange);
         document.getElementById('power').addEventListener('change', this.onPowerSwitchChange);
         this._root.addEventListener('drop', evt => this.dropHandler(evt));
@@ -128,6 +131,81 @@ export default class PolySynth extends ModularSynth {
 
     onShowEffectsChange = evt => {
         document.querySelector('.effects-rack').classList.toggle('show', evt.target.value);
+    }
+
+    onHelpModeChange = evt => {
+        const helpModeOn = evt.target.value;
+
+        const startHelpMode = () => {
+            this._clickDetector = document.createElement('div');
+            document.body.appendChild(this._clickDetector);
+            this._clickDetector.style = 'position: absolute; width: 100%; height: 100%; z-index: 90000; cursor: help !important';
+            this._clickDetector.addEventListener('mousedown', clickHandler);
+        }
+
+        const endHelpMode = () => {
+            this._clickDetector.removeEventListener('mousedown', clickHandler);
+            this._clickDetector.remove();
+            this._clickDetector = undefined;
+        }
+
+        const clickHandler = evt => {
+            const elementList = Array.from(document.elementsFromPoint(evt.clientX, evt.clientY));
+            const elementToBehaveNormally = elementList.find(element => (element.id === 'help-mode' || element.id === 'show-effects'));
+            if (! elementToBehaveNormally) {
+                evt.preventDefault();
+                evt.stopImmediatePropagation();
+                const target = elementList.find(element => {
+                    const moduleName = element.getAttribute('module-id') || element.getAttribute('data-module') || undefined;
+                    return !!moduleName;
+                });
+                if (target) {
+                    const moduleName = target.getAttribute('module-id') || target.getAttribute('data-module');
+                    const controlName = target.getAttribute('parameter-name') || target.getAttribute('data-control') || undefined;
+                    const helpContent = getHelp(moduleName, controlName);
+                    if (helpContent) {
+                        target.classList.toggle('help-active', true);
+                        new HelpPopup(helpContent, {target}).then(() => {
+                            target.classList.toggle('help-active', false);
+                        });
+                    }
+                }
+            } else if (elementToBehaveNormally.id === 'help-mode') {
+                elementToBehaveNormally.value = false;
+                endHelpMode();
+            } else if (elementToBehaveNormally.id === 'show-effects') {
+                elementToBehaveNormally.value = !elementToBehaveNormally.value;
+                elementToBehaveNormally.dispatchChangeEvent();
+            }
+            
+        }
+
+        if (helpModeOn) {
+            startHelpMode();
+        } else {
+            endHelpMode();
+        }
+
+        /*
+        const clickHandler = evt => {
+            const target = evt.currentTarget;
+            const moduleName = target.getAttribute('module-id') || target.getAttribute('data-module') || undefined;
+            const controlName = target.getAttribute('parameter-name') || undefined;
+            target.classList.toggle('help-active', true);
+            moduleName && new HelpPopup(getHelp(moduleName, controlName)).then(() => {
+                target.classList.toggle('help-active', false);
+            });
+            evt.preventDefault();
+            evt.stopPropagation();
+        };
+        Array.from(document.querySelectorAll('*[module-id][parameter-name], *[data-module]')).forEach(element => {
+            if (helpModeOn) {
+                element.addEventListener('click', clickHandler);
+            } else {
+                element.removeEventListener('click', clickHandler);
+            }
+        });
+        */
     }
 
     onPowerSwitchChange = evt => {

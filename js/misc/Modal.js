@@ -15,14 +15,13 @@ export default class Modal {
         const width = toDimension(options.width, '60%');
         const maxWidth = toDimension(options.maxWidth, '700px');
         this.id = ++Modal.serialNumber;
-        const temp = document.createElement('div');
-        temp.innerHTML = Modal.modalTemplate({
+        this._elem = document.createElement('div');
+        this._elem.innerHTML = Modal.modalTemplate({
             id: this.id,
             width,
             maxWidth,
             contentHTML,
         });
-        this._elem = temp.firstChild;
         const root = options.root || document.body;
         root.append(this._elem);
     }
@@ -42,9 +41,9 @@ export default class Modal {
     static serialNumber = 0;
 
     static modalTemplate = data => {
-        const styles = {
-            modal:
-                `
+        return `
+        <style>
+            .modal {
                 position: fixed;
                 top: 0; 
                 left: 0; 
@@ -52,15 +51,13 @@ export default class Modal {
                 height: 100%; 
                 background-color: rgba(0,0,0,0.3);
                 pointer-events: none;
-                `,
-            modalMask:
-                `
+            }
+            .modal-mask {
                 width: 100%; 
                 height: 100%;
                 pointer-events: all;
-                `,
-            modalContent:
-                `
+            }
+            .modal-content {
                 position: absolute; 
                 top: 50%; 
                 left: 50%; 
@@ -68,11 +65,11 @@ export default class Modal {
                 max-width: ${data.maxWidth}; 
                 transform: translate(-50%, -50%);
                 pointer-events: all;
-                `,
-        };
-        return `<div class="modal" style="${styles.modal}" id="modal-${data.id}">
-            <div class="modal-mask" style="${styles.modalMask}"></div>
-            <div class="modal-content" style="${styles.modalContent}">${data.contentHTML}</div>
+            }
+        </style>
+        <div class="modal" id="modal-${data.id}">
+            <div class="modal-mask"></div>
+            <div class="modal-content">${data.contentHTML}</div>
         </div>`;
     }
 }
