@@ -2,11 +2,16 @@ import Modal from './Modal.js';
 
 export default class HelpPopup extends Modal {
     constructor(contentHTML, options = {}) {
+        if (HelpPopup.currentPopup) {
+            HelpPopup.currentPopup.close();
+        }
         const dialogHTML = HelpPopup.dialogTemplate({
             contentHTML
         });
         options.maxWidth || (options.maxWidth = Math.sqrt(contentHTML.replace(/<.*?>/sg, '').length)*30);
         super(dialogHTML, options);
+        this.elem.querySelector('.modal-mask').remove();
+        this.elem.querySelector('.modal').style = 'background: transparent';
         const modalContent = this.elem.querySelector('.modal-content');
         let modalRect = modalContent.getBoundingClientRect();
         const targetRect = options.target.getBoundingClientRect();
@@ -41,23 +46,33 @@ export default class HelpPopup extends Modal {
         }
         setStyles();
 
+        HelpPopup.currentPopup = this;
+
         return new Promise(resolve => {
             this.elem.querySelector('.hl-help-popup button.hl-help-close-button').addEventListener('click', evt => {
+                HelpPopup.currentPopup = undefined;
                 this.remove();
                 resolve();
             });
         });
     }
 
+    close() {
+        this.elem.querySelector('.hl-help-popup button.hl-help-close-button').click();
+    }
+
+    static currentPopup = undefined;
+
     static dialogTemplate = data => {
         return `
         <style>
             .hl-help-popup {
                 height: 100%;
-                background-color: white;
+                background-color: lightgreen;
                 padding: 0;
                 overflow: auto;
                 border-radius: 0.5em;
+                box-shadow: 0 5px 10px black;
             }
             .hl-help-content {
                 padding: 1em;

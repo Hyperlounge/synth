@@ -147,6 +147,9 @@ export default class PolySynth extends ModularSynth {
             this._clickDetector.removeEventListener('mousedown', clickHandler);
             this._clickDetector.remove();
             this._clickDetector = undefined;
+            if (HelpPopup.currentPopup) {
+                HelpPopup.currentPopup.close();
+            }
         }
 
         const clickHandler = evt => {
