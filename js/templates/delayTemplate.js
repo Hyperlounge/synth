@@ -2,7 +2,7 @@ import '../components/RotaryKnob.js';
 import '../components/ToggleSwitch.js';
 
 const delayTemplate = `
-<div class="effect-group">
+<div class="effect-group" data-module="delay">
     <div class="vertical-group">
         <toggle-switch module-id="delay" parameter-name="power" style="font-weight: bold">DELAY</toggle-switch>
     </div>

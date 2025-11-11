@@ -2,7 +2,7 @@ import '../components/RotaryKnob.js';
 import '../components/ToggleSwitch.js';
 
 const phaserTemplate = `
-<div class="effect-group">
+<div class="effect-group" data-module="phaser">
     <div class="vertical-group">
         <toggle-switch module-id="phaser" parameter-name="power" style="font-weight: bold">PHASER</toggle-switch>
     </div>

@@ -516,15 +516,153 @@ ${help.modules.global.controls.envelopeStretch.html}`,
       },
     },
   },
+  phaser: {
+    template: help => `<h2>Phaser Effect</h2>
+<p>The phaser gives the sound depth by adding in the original signal inverted and delayed by a variable amount. The variable amount is controlled by a sine wave low frequency oscillator, adjusted using the Rate and Depth controls.</p>
+
+${help.modules.phaser.controls.mix.html}
+${help.modules.phaser.controls.rate.html}
+${help.modules.phaser.controls.depth.html}
+${help.modules.phaser.controls.resonance.html}
+${help.modules.phaser.controls.delay.html}`,
+    controls: {
+      mix: {
+        html: `<h3>Mix</h3>
+<p>Controls the mix between the un-processed and processed signals.</p>
+`,
+      },
+      rate: {
+        html: `<h3>Rate</h3>
+<p>The speed of the low frequency oscillator that controls the delay.</p>
+`,
+      },
+      depth: {
+        html: `<h3>Depth</h3>
+<p>The strength of the low frequency oscillator sine wave, larger values gives more extreme results.</p>
+`,
+      },
+      resonance: {
+        html: `<h3>Feedback</h3>
+<p>Controls the amount of the processed signal that is fed back into the input, high values can give truly bonkers results!</p>
+`,
+      },
+      delay: {
+        html: `<h3>Delay</h3>
+<p>Controls how much additional delay is applied to the processed singnal. With this set to zero, the processed signal exactly cancels the un-processed signal, creating classic &quot;wind tunnel&quot; effects. For the maximum effect, set the Mix to half way (double tap it).</p>
+`,
+      },
+    },
+  },
+  delay: {
+    template: help => `<h2>Delay Effect</h2>
+<p>The Delay Effect records the input signal and plays it back in real time after a delay, creating echo effects. You can feed some of the delayed signal back into the input to create a repeated echo decaying over time. You can create stereo ping-pong echos with the Spread control.</p>
+
+${help.modules.delay.controls.mix.html}
+${help.modules.delay.controls.time.html}
+${help.modules.delay.controls.feedback.html}
+${help.modules.delay.controls.spread.html}`,
+    controls: {
+      mix: {
+        html: `<h3>Mix</h3>
+<p>Controls the mix between the un-processed and processed signals.</p>
+`,
+      },
+      time: {
+        html: `<h3>Time</h3>
+<p>Sets the delay time between echoes.</p>
+`,
+      },
+      feedback: {
+        html: `<h3>Feedback</h3>
+<p>Sets the amount of delayed signal to feed back into the input, giving repeated echoes. Maximum value gives 100% feedback which will never decay, use with caution!</p>
+`,
+      },
+      spread: {
+        html: `<h3>Spread</h3>
+<p>When at the centre position, the echo is monophonic. When turned to the left, the first echo is panned to the left, the second to the right, then back again and so on. When turned to the right, the first echo is on the right.</p>
+`,
+      },
+    },
+  },
+  reverb: {
+    template: help => `<h2>Reverb Effect</h2>
+<p>This applies a stereo reverb effect to the signal with four different room size simulations.</p>
+
+${help.modules.reverb.controls.mix.html}
+${help.modules.reverb.controls.type.html}`,
+    controls: {
+      mix: {
+        html: `<h3>Mix</h3>
+<p>Controls the mix between the un-processed and processed signals.</p>
+`,
+      },
+      type: {
+        html: `<h3>Room Size</h3>
+<p>Sets the quality of the reverb</p>
+<table>
+<thead>
+<tr>
+<th>option</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SMALL</td>
+<td>Subtle effect, just adds a bit of presence</td>
+</tr>
+<tr>
+<td>MEDIUM</td>
+<td>Adds more depth, like a living room</td>
+</tr>
+<tr>
+<td>LARGE</td>
+<td>Sounds like a large hall</td>
+</tr>
+<tr>
+<td>HUGE</td>
+<td>More like a cathedral</td>
+</tr>
+</tbody>
+</table>
+`,
+      },
+    },
+  },
+  levels: {
+    template: help => `<h2>Levels Panel</h2>
+<p>Control over the tone and master volume of the signal.</p>
+
+${help.modules.levels.controls.bass.html}
+${help.modules.levels.controls.treble.html}
+${help.modules.levels.controls.master.html}`,
+    controls: {
+      bass: {
+        html: `<h3>Bass</h3>
+<p>Boosts or cuts the low frequencies.</p>
+`,
+      },
+      treble: {
+        html: `<h3>Treble</h3>
+<p>Boosts or cuts the high frequencies.</p>
+`,
+      },
+      master: {
+        html: `<h3>Master Volume</h3>
+<p>Boosts or cuts the entire signal. Particularly useful when using Band Pass in the Filter section, as that can attenuate the signal quite a lot.</p>
+`,
+      },
+    },
+  },
 }};
 
 function getHelpHtml(moduleName, controlName) {
+    const moduleData = help.modules[moduleName];
+    const controlData = help.modules[moduleName].controls[controlName];
     if (controlName === undefined) {
-        const moduleData = help.modules[moduleName];
         return moduleData ? moduleData.template(help) : undefined;
     } else {
-        const controlData = help.modules[moduleName].controls[controlName];
-        return controlData ? controlData.html : undefined;
+        return controlData ? controlData.html : (moduleData ? moduleData.template(help) : undefined);
     }
 }
 

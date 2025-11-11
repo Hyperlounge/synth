@@ -157,7 +157,7 @@ export default class PolySynth extends ModularSynth {
                 evt.stopImmediatePropagation();
                 const target = elementList.find(element => {
                     const moduleName = element.getAttribute('module-id') || element.getAttribute('data-module') || undefined;
-                    return !!moduleName;
+                    return !!moduleName && element.getAttribute('parameter-name') !== 'power';
                 });
                 if (target) {
                     const moduleName = target.getAttribute('module-id') || target.getAttribute('data-module');

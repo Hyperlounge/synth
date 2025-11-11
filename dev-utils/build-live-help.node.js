@@ -61,12 +61,12 @@ doc += `
 }};
 
 function getHelpHtml(moduleName, controlName) {
+    const moduleData = help.modules[moduleName];
+    const controlData = help.modules[moduleName].controls[controlName];
     if (controlName === undefined) {
-        const moduleData = help.modules[moduleName];
         return moduleData ? moduleData.template(help) : undefined;
     } else {
-        const controlData = help.modules[moduleName].controls[controlName];
-        return controlData ? controlData.html : undefined;
+        return controlData ? controlData.html : (moduleData ? moduleData.template(help) : undefined);
     }
 }
 

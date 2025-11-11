@@ -2,7 +2,7 @@ import '../components/RotaryKnob.js';
 import '../components/ToggleSwitch.js';
 
 const levelsTemplate = `
-<div class="effect-group">
+<div class="effect-group" data-module="levels">
     <div class="vertical-group">
         <toggle-switch module-id="levels" parameter-name="power" style="font-weight: bold">LEVELS</toggle-switch>
     </div>

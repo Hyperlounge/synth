@@ -3,7 +3,7 @@ import '../components/ToggleSwitch.js';
 import '../components/RotarySwitch.js';
 
 const reverbTemplate = `
-<div class="effect-group">
+<div class="effect-group" data-module="reverb">
     <div class="vertical-group">
         <toggle-switch module-id="reverb" parameter-name="power" style="font-weight: bold">REVERB</toggle-switch>
     </div>

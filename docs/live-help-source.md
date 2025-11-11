@@ -344,3 +344,126 @@ Glide can be used with more than one voice, with unpredictable but sometimes ple
 Natural instruments like pianos have a long decay on low notes and a shorter decay on high notes. Turning Envelope Stretch on simulates this behaviour.
 
 {end-module}
+
+{module: phaser}
+
+## Phaser Effect
+
+The phaser gives the sound depth by adding in the original signal inverted and delayed by a variable amount. The variable amount is controlled by a sine wave low frequency oscillator, adjusted using the Rate and Depth controls.
+
+{control: mix}
+
+### Mix
+
+Controls the mix between the un-processed and processed signals.
+
+{control: rate}
+
+### Rate
+
+The speed of the low frequency oscillator that controls the delay.
+
+{control: depth}
+
+### Depth
+
+The strength of the low frequency oscillator sine wave, larger values gives more extreme results.
+
+{control: resonance}
+
+### Feedback
+
+Controls the amount of the processed signal that is fed back into the input, high values can give truly bonkers results!
+
+{control: delay}
+
+### Delay
+
+Controls how much additional delay is applied to the processed singnal. With this set to zero, the processed signal exactly cancels the un-processed signal, creating classic "wind tunnel" effects. For the maximum effect, set the Mix to half way (double tap it).
+
+{end-module}
+
+{module: delay}
+
+## Delay Effect
+
+The Delay Effect records the input signal and plays it back in real time after a delay, creating echo effects. You can feed some of the delayed signal back into the input to create a repeated echo decaying over time. You can create stereo ping-pong echos with the Spread control.
+
+{control: mix}
+
+### Mix
+
+Controls the mix between the un-processed and processed signals.
+
+{control: time}
+
+### Time
+
+Sets the delay time between echoes.
+
+{control: feedback}
+
+### Feedback
+
+Sets the amount of delayed signal to feed back into the input, giving repeated echoes. Maximum value gives 100% feedback which will never decay, use with caution!
+
+{control: spread}
+
+### Spread
+
+When at the centre position, the echo is monophonic. When turned to the left, the first echo is panned to the left, the second to the right, then back again and so on. When turned to the right, the first echo is on the right.
+
+{end-module}
+
+{module: reverb}
+
+## Reverb Effect
+
+This applies a stereo reverb effect to the signal with four different room size simulations.
+
+{control: mix}
+
+### Mix
+
+Controls the mix between the un-processed and processed signals.
+
+{control: type}
+
+### Room Size
+
+Sets the quality of the reverb
+
+| option | description                                |
+| ------ | ------------------------------------------ |
+| SMALL  | Subtle effect, just adds a bit of presence |
+| MEDIUM | Adds more depth, like a living room        |
+| LARGE  | Sounds like a large hall                   |
+| HUGE   | More like a cathedral                      |
+
+{end-module}
+
+{module: levels}
+
+## Levels Panel
+
+Control over the tone and master volume of the signal.
+
+{control: bass}
+
+### Bass
+
+Boosts or cuts the low frequencies.
+
+{control: treble}
+
+### Treble
+
+Boosts or cuts the high frequencies.
+
+{control: master}
+
+### Master Volume
+
+Boosts or cuts the entire signal. Particularly useful when using Band Pass in the Filter section, as that can attenuate the signal quite a lot.
+
+{end-module}
