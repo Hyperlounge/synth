@@ -71,8 +71,13 @@ export default class HelpPopup extends Modal {
             .hl-help-popup thead {
                 display: none;
             }
+            .hl-help-popup td {
+                vertical-align: top;
+            }
             .hl-help-popup td:first-child {
-                min-width: 1em;
+                font-weight: bold;
+                min-width: 2em;
+                padding-right: 1em;
             }
         </style>
         <div class="hl-help-popup">
