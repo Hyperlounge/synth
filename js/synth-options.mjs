@@ -20,8 +20,8 @@ const launch = (mousePointer) => {
 let mousePointer = false;
 
 const moveHandler = evt => {
+    alert(evt.touches);
     mousePointer = true;
-    alert('mouse');
     document.body.removeEventListener('mousemove', moveHandler);
 }
 document.body.addEventListener('mousemove', moveHandler);
