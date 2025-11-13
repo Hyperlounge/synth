@@ -2,6 +2,7 @@ import AudioModule from './AudioModule.js';
 import MidiEvent from '../events/MidiEvent.js';
 import '../components/KeyboardAdjuster.js';
 import '../components/CycleSwitch.js';
+import ModWheel from '../components/ModWheel.js';
 
 function mapRange(a, b, func) {
     return Array.from(Array(b - a + 1)).map((item, index) => func(index + a));
@@ -21,7 +22,7 @@ const template = data => `
     <button class="keyboard-range" value="61">61</button>
     <button class="keyboard-range" value="49">49</button>
     <button class="keyboard-range" value="default">Reset</button>
-    <cycle-switch id="keyboard-velocity" data-module="keyboard" data-control="velocity" format="horizontal" title="">
+    <cycle-switch module-id="transient" parameter-name="velocityType" format="horizontal" title="">
         ${data.isTouchDevice ? `<option value="touch" ${data.velocity === 'touch' ? 'selected' : ''}>TOUCH</option>` : ''}
         <option value="position" ${data.velocity === 'position' ? 'selected' : ''}>POS&apos;N</option>
         <option value="100" ${data.velocity === '100' ? 'selected' : ''}>MAX</option>
@@ -59,9 +60,8 @@ export default class SoftKeyboardModule extends AudioModule {
         super._initialise()
         this._isTouchDevice = !this._options.mousePointer;
         this._normalRadius = this._options.normalTouchRadiusX;
-        this._state.set({
-            velocity: this._isTouchDevice ? 'touch' : 'position',
-            isTouchDevice: this._isTouchDevice,
+        this._patch.set({
+            velocityType: this._isTouchDevice ? 'touch' : 'position',
         });
         this._downKeys = [];
         this._currentNote = undefined;
@@ -87,47 +87,58 @@ export default class SoftKeyboardModule extends AudioModule {
         this._eventBus.addEventListener(MidiEvent.type, evt => this._onMidiEvent(evt));
 
         document.getElementById('keyboard-adjuster').addEventListener('input', evt => {
-            this._state.set({
+            this._patch.set({
                 bottomNote: evt.target.bottomNote,
                 topNote: evt.target.topNote,
             });
             this._update();
         });
 
-        document.getElementById('keyboard-velocity').addEventListener('change', evt => {
-            this._state.set({
-                velocity: evt.target.value,
-            });
-        });
+        this._masterVolume = new GainNode(this._audioContext, {gain: 1});
     }
 
-    get _initialState() {
+    get _initialPatch() {
         console.log(this._isTouchDevice);
         return {
-            velocity: '70',
+            velocityType: '70',
             bottomNote: 45,
             topNote: 84,
-            isTouchDevice: false,
+            masterVolume: 1,
         }
     }
 
     _render() {
-        document.querySelector('.keyboard').innerHTML = template(this._state.attributes);
+        document.querySelector('.keyboard').innerHTML = template(Object.assign({isTouchDevice: this._isTouchDevice}, this._patch.attributes));
+    }
+
+    _onPatchChange(evt) {
+        super._onPatchChange(evt);
+        this._update();
     }
 
     _update() {
-        document.querySelector('.keyboard-keys').innerHTML = keyBoardTemplate(this._state.attributes);
-        const adjuster = document.getElementById('keyboard-adjuster');
-        adjuster.bottomNote = this._state.get('bottomNote');
-        adjuster.topNote = this._state.get('topNote');
+        if (this._patch.hasChanged('bottomNote') || this._patch.hasChanged('topNote')) {
+            document.querySelector('.keyboard-keys').innerHTML = keyBoardTemplate(this._patch.attributes);
+            const adjuster = document.getElementById('keyboard-adjuster');
+            adjuster.bottomNote = this._patch.get('bottomNote');
+            adjuster.topNote = this._patch.get('topNote');
+        }
+
+        if (this._patch.hasChanged('masterVolume')) {
+            this._masterVolume.gain.setTargetAtTime(this._patch.get('masterVolume'), this._now, this._minimumTimeConstant);
+        }
+
+        //TODO: act upon controllers changing
+
+        //TODO: strip transient from patch
     }
 
     _onKeyboardRangeClick(evt) {
-        const { bottomNote, topNote } = this._state.attributes;
+        const { bottomNote, topNote } = this._patch.attributes;
         switch (evt.target.value) {
             case 'transpose-down':
                 if (bottomNote > 21) {
-                    this._state.set({
+                    this._patch.set({
                         bottomNote: bottomNote - 12,
                         topNote: topNote - 12,
                     });
@@ -135,7 +146,7 @@ export default class SoftKeyboardModule extends AudioModule {
                 break;
             case 'transpose-up':
                 if (topNote < 108) {
-                    this._state.set({
+                    this._patch.set({
                         bottomNote: bottomNote + 12,
                         topNote: topNote + 12,
                     });
@@ -143,7 +154,7 @@ export default class SoftKeyboardModule extends AudioModule {
                 break;
             case 'fewer-octaves':
                 if (topNote - bottomNote > 24) {
-                    this._state.set({
+                    this._patch.set({
                         topNote: topNote - 12,
                     });
                 }
@@ -156,38 +167,38 @@ export default class SoftKeyboardModule extends AudioModule {
                         newBottom -= 12;
                         newTop -= 12;
                     }
-                    this._state.set({
+                    this._patch.set({
                         topNote: newTop,
                         bottomNote: newBottom,
                     });
                 }
                 break;
             case '88':
-                this._state.set({
+                this._patch.set({
                     topNote: 108,
                     bottomNote: 21,
                 });
                 break;
             case '76':
-                this._state.set({
+                this._patch.set({
                     topNote: 103,
                     bottomNote: 28,
                 });
                 break;
             case '61':
-                this._state.set({
+                this._patch.set({
                     topNote: 96,
                     bottomNote: 36,
                 });
                 break;
             case '49':
-                this._state.set({
+                this._patch.set({
                     topNote: 84,
                     bottomNote: 36,
                 });
                 break;
             case 'default':
-                this._state.set(this._initialState);
+                this._patch.set(this._initialState);
                 break;
         }
         this._update();
@@ -208,7 +219,8 @@ export default class SoftKeyboardModule extends AudioModule {
         evt.preventDefault();
         const key = evt.target;
         if (key.classList.contains('key')) {
-            const velocity = this.state.velocity === 'position' ? Math.floor(128*evt.offsetY/key.offsetHeight) : Math.floor(parseInt(this.state.velocity)*1.28);
+            const velocityType = this._patch.get('velocityType');
+            const velocity = velocityType === 'position' ? Math.floor(128*evt.offsetY/key.offsetHeight) : Math.floor(parseInt(velocityType)*1.28);
             const note = Number(key.getAttribute('data-note'));
             this._eventBus.dispatchEvent(new MidiEvent(MidiEvent.NOTE_ON, note, velocity));
             this._currentNote = note;
@@ -222,7 +234,8 @@ export default class SoftKeyboardModule extends AudioModule {
         if (key.classList.contains('key')) {
             const note = Number(key.getAttribute('data-note'));
             if (note !== this._currentNote) {
-                const velocity = this.state.velocity === 'position' ? Math.floor(128*evt.offsetY/key.offsetHeight) : Math.floor(parseInt(this.state.velocity)*1.28);
+                const velocityType = this._patch.get('velocityType');
+                const velocity = velocityType === 'position' ? Math.floor(128*evt.offsetY/key.offsetHeight) : Math.floor(parseInt(velocityType)*1.28);
                 this._eventBus.dispatchEvent(new MidiEvent(MidiEvent.NOTE_ON, note, velocity));
                 this._eventBus.dispatchEvent(new MidiEvent(MidiEvent.NOTE_OFF, this._currentNote, 70));
                 this._currentNote = note;
@@ -237,7 +250,7 @@ export default class SoftKeyboardModule extends AudioModule {
 
     _onKeyMouseUp = evt => {
         if (this._currentNote) {
-            this._eventBus.dispatchEvent(new MidiEvent(MidiEvent.NOTE_OFF, this._currentNote, this._state.get('velocity')));
+            this._eventBus.dispatchEvent(new MidiEvent(MidiEvent.NOTE_OFF, this._currentNote, 70));
             delete this._currentNote;
             document.body.removeEventListener('mousemove', this._onKeyMouseMove);
             document.body.removeEventListener('mouseup', this._onKeyMouseUp);
@@ -256,7 +269,8 @@ export default class SoftKeyboardModule extends AudioModule {
                     notesTouched.push(note);
                 }
                 let pressure;
-                switch (this.state.velocity) {
+                const velocityType = this._patch.get('velocityType');
+                switch (velocityType) {
                     case 'touch':
                         pressure = Math.min(128, Math.max(0, Math.floor(70 * touch.radiusX / this._normalRadius)));
                         break;
@@ -265,7 +279,7 @@ export default class SoftKeyboardModule extends AudioModule {
                         pressure = Math.min(128, Math.max(0, Math.floor(128*(touch.clientY - rect.top)/rect.height)));
                         break;
                     default:
-                        pressure = Math.min(128, Math.floor(parseInt(this.state.velocity) * 1.28));
+                        pressure = Math.min(128, Math.floor(parseInt(velocityType) * 1.28));
                         break;
                 }
                 pressures[note] = pressure;
@@ -280,5 +294,13 @@ export default class SoftKeyboardModule extends AudioModule {
             this._eventBus.dispatchEvent(new MidiEvent(MidiEvent.NOTE_OFF, note, 70));
         });
         this._notesTouched = notesTouched;
+    }
+
+    get audioIn() {
+        return this._masterVolume;
+    }
+
+    get audioOut() {
+        return this._masterVolume;
     }
 }

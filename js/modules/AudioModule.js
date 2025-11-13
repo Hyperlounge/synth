@@ -76,8 +76,4 @@ export default class AudioModule extends EventTarget {
     get globalPatch() {
         return this._globalPatch.attributes;
     }
-
-    get state() {
-        return this._state.attributes;
-    }
 }

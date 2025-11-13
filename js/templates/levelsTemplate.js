@@ -8,7 +8,7 @@ const levelsTemplate = `
     </div>
     <rotary-knob module-id="levels" parameter-name="bass" value="0" min-value="-1" scale-min="-5" scale-max="5" minimal>Bass</rotary-knob>
     <rotary-knob module-id="levels" parameter-name="treble" value="0" min-value="-1" scale-min="-5" scale-max="5" minimal>Treble</rotary-knob>
-    <rotary-knob module-id="levels" parameter-name="master" value="0.5">Master Volume</rotary-knob>
+    <rotary-knob module-id="levels" parameter-name="master" value="0.5">Patch Volume</rotary-knob>
 </div>
 `;
 export default levelsTemplate;

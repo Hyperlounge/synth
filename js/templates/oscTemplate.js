@@ -1,6 +1,5 @@
 import '../components/RotaryKnob.js';
 import '../components/RotarySwitch.js';
-import '../components/VerticalSlider.js';
 
 const SVG = './media/svg';
 
@@ -42,10 +41,17 @@ const oscTemplate = number => `
     <rotary-knob module-id="osc${number}" parameter-name="fineTune" min-value="-50" max-value="50" scale-min="-0.5" scale-max="0.5" scale-step="0.1" minimal>Fine Tune</rotary-knob>
     </div>
     <div class="vertical-group">
-    <rotary-knob module-id="osc${number}" parameter-name="modAmount" min-value="-100" max-value="100" scale-min="-5" scale-max="5" scale-step="1" minimal>Modulation</rotary-knob>
-    ${number === 2 ? `<rotary-knob module-id="osc${number}" parameter-name="crossModAmount" min-value="0" max-value="2500" scale-min="0" scale-max="10" scale-step="1">Cross-Mod</rotary-knob>` : `<rotary-knob module-id="noiseLevel1" parameter-name="level" min-value="0" max-value="0.1" scale-min="0" scale-max="10" scale-step="1">Noise</rotary-knob>`}
+        <rotary-knob module-id="osc${number}" parameter-name="modAmount" min-value="-100" max-value="100" scale-min="-5" scale-max="5" scale-step="1" minimal>Modulation</rotary-knob>
+        ${number === 2 ? `<rotary-knob module-id="osc${number}" parameter-name="crossModAmount" min-value="0" max-value="2500" scale-min="0" scale-max="10" scale-step="1">Cross-Mod</rotary-knob>` : `<rotary-knob module-id="noiseLevel1" parameter-name="level" min-value="0" max-value="0.1" scale-min="0" scale-max="10" scale-step="1">Noise</rotary-knob>`}
     </div>
-    <vertical-slider module-id="oscLevel${number}" parameter-name="level" value="0.05" max-value="0.1" scale-min="0" scale-max="10" scale-step="1">Level</vertical-slider>
+    <div class="vertical-group">
+        <rotary-knob module-id="oscLevel${number}" parameter-name="level" value="0.05" max-value="0.1" scale-min="0" scale-max="10" scale-step="1">Level</rotary-knob>
+        ${number === 2 ? '' : `<cycle-switch module-id="noise" parameter-name="type" title="Noise Type">
+            <option value="white" selected>WHITE</option>
+            <option value="pink">PINK</option>
+            <option value="brown">BROWN</option>
+        </cycle-switch>`}
+    </div>
 </div>
 `;
 

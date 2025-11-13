@@ -49,7 +49,7 @@ export default class PolySynth extends ModularSynth {
 
     createModules() {
         this.createMidiModule();
-        this.createSoftKeyboardModule(undefined, this._options);
+        this._transientSettings = this.createSoftKeyboardModule('transient', this._options);
         this._controllerHelper = this.createControllerHelperModule('controllerHelper');
         this._voiceAllocator = this.createVoiceAllocatorModule('voiceAllocator');
         this._osc1 = this.createPolyOscillatorModule('osc1');
@@ -93,7 +93,8 @@ export default class PolySynth extends ModularSynth {
         this._phaserEffect.audioOut.connect(this._delayEffect.audioIn);
         this._delayEffect.audioOut.connect(this._reverbEffect.audioIn);
         this._reverbEffect.audioOut.connect(this._levelsEffect.audioIn);
-        this._levelsEffect.audioOut.connect(this.audioContext.destination);
+        this._levelsEffect.audioOut.connect(this._transientSettings.audioIn);
+        this._transientSettings.audioOut.connect(this.audioContext.destination);
     }
 
     addEventListeners() {
@@ -395,6 +396,7 @@ export default class PolySynth extends ModularSynth {
 
     sharePatch() {
         this.getPatchChanges().then(changes => {
+            delete changes.transient;
             const { name, bank } = this.globalPatch.attributes;
             const url = location.origin + location.pathname + '?preset=' + encodeURIComponent(name) + '&bank=' + encodeURIComponent(bank) + '&changes=' + encodeURIComponent(JSON.stringify(changes));
             new Dialog(`
@@ -435,7 +437,10 @@ export default class PolySynth extends ModularSynth {
                 const bank = contentElement.querySelector('[name="patch-bank"]').value || 'Misc';
                 this.globalPatch.set({name, bank});
                 const element = document.createElement('a');
-                element.setAttribute('href', 'data:application/json,' + encodeURIComponent(JSON.stringify(this.patch)));
+                const patch = this.patch;
+                delete patch.transient;
+
+                element.setAttribute('href', 'data:application/json,' + encodeURIComponent(JSON.stringify(patch)));
                 element.setAttribute('download', `${bank}- ${name}.hspatch.json`);
 
                 element.style.display = 'none';
