@@ -256,6 +256,7 @@ export default class SoftKeyboardModule extends AudioModule {
                 if (!notesTouched.includes(note)) {
                     notesTouched.push(note);
                 }
+                alert(this._normalRadius);
                 pressures[note] = touch.radiusX / this._normalRadius;
             }
         });
