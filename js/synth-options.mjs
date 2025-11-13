@@ -21,10 +21,10 @@ let mousePointer = false;
 
 const moveHandler = evt => {
     alert(evt.touches);
-    mousePointer = true;
-    document.body.removeEventListener('mousemove', moveHandler);
+    mousePointer = false;
+    document.body.removeEventListener('touchmove', moveHandler);
 }
-document.body.addEventListener('mousemove', moveHandler);
+document.body.addEventListener('touchmove', moveHandler);
 
 document.getElementById('launch-button').onclick = evt => {
     launch(mousePointer);
