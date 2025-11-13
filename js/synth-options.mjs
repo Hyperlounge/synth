@@ -20,6 +20,7 @@ const launch = (mousePointer) => {
 let mousePointer = true;
 
 const moveHandler = evt => {
+    alert('radiusX=' + evt.touches[0].radiusX + ', force=' + evt.touches[0].force);
     mousePointer = false;
     document.body.removeEventListener('touchstart', moveHandler);
 }
