@@ -1,6 +1,7 @@
 import AudioModule from './AudioModule.js';
 import MidiEvent from '../events/MidiEvent.js';
 import '../components/KeyboardAdjuster.js';
+import '../components/CycleSwitch.js';
 
 function mapRange(a, b, func) {
     return Array.from(Array(b - a + 1)).map((item, index) => func(index + a));
@@ -20,6 +21,14 @@ const template = data => `
     <button class="keyboard-range" value="61">61</button>
     <button class="keyboard-range" value="49">49</button>
     <button class="keyboard-range" value="default">Reset</button>
+    <cycle-switch id="keyboard-velocity" data-module="keyboard" data-control="velocity" format="horizontal" title="">
+        ${data.isTouchDevice ? `<option value="touch" ${data.velocity === 'touch' ? 'selected' : ''}>TOUCH</option>` : ''}
+        <option value="position" ${data.velocity === 'position' ? 'selected' : ''}>POS&apos;N</option>
+        <option value="100" ${data.velocity === '100' ? 'selected' : ''}>MAX</option>
+        <option value="70" ${data.velocity === '70' ? 'selected' : ''}>70%</option>
+        <option value="50" ${data.velocity === '50' ? 'selected' : ''}>50%</option>
+        <option value="30" ${data.velocity === '30' ? 'selected' : ''}>30%</option>
+    </cycle-switch>
 </div>
 <div class="keyboard-keys">${keyBoardTemplate(data)}</div>
 `;
@@ -50,12 +59,9 @@ export default class SoftKeyboardModule extends AudioModule {
         super._initialise()
         this._downKeys = [];
         this._currentNote = undefined;
+        this._isTouchDevice = !this._options.mousePointer;
 
         this._render();
-
-        this._isTouchDevice = (('ontouchstart' in window) ||
-                (navigator.maxTouchPoints > 0) ||
-                (navigator.msMaxTouchPoints > 0));
 
         this._keyboard = document.querySelector('.keyboard-keys');
         if (this._isTouchDevice) {
@@ -75,11 +81,17 @@ export default class SoftKeyboardModule extends AudioModule {
 
         this._eventBus.addEventListener(MidiEvent.type, evt => this._onMidiEvent(evt));
 
-        const adjuster = document.getElementById('keyboard-adjuster');
-        adjuster.addEventListener('input', evt => {
+        document.getElementById('keyboard-adjuster').addEventListener('input', evt => {
             this._state.set({
-                bottomNote: adjuster.bottomNote,
-                topNote: adjuster.topNote,
+                bottomNote: evt.target.bottomNote,
+                topNote: evt.target.topNote,
+            });
+            this._update();
+        });
+
+        document.getElementById('keyboard-velocity').addEventListener('change', evt => {
+            this._state.set({
+                velocity: evt.target.value,
             });
             this._update();
         });
@@ -87,9 +99,10 @@ export default class SoftKeyboardModule extends AudioModule {
 
     get _initialState() {
         return {
-            velocity: 70,
+            velocity: this._isTouchDevice ? 'touch' : '70',
             bottomNote: 45,
             topNote: 84,
+            isTouchDevice: this._isTouchDevice,
         }
     }
 
@@ -190,7 +203,7 @@ export default class SoftKeyboardModule extends AudioModule {
         evt.preventDefault();
         const key = evt.target;
         if (key.classList.contains('key')) {
-            const velocity = Math.floor(128*evt.offsetY/key.offsetHeight);
+            const velocity = this.state.velocity === 'position' ? Math.floor(128*evt.offsetY/key.offsetHeight) : Math.floor(parseInt(this.state.velocity)*1.28);
             const note = Number(key.getAttribute('data-note'));
             this._eventBus.dispatchEvent(new MidiEvent(MidiEvent.NOTE_ON, note, velocity));
             this._currentNote = note;
@@ -204,12 +217,13 @@ export default class SoftKeyboardModule extends AudioModule {
         if (key.classList.contains('key')) {
             const note = Number(key.getAttribute('data-note'));
             if (note !== this._currentNote) {
-                this._eventBus.dispatchEvent(new MidiEvent(MidiEvent.NOTE_ON, note, this._state.get('velocity')));
-                this._eventBus.dispatchEvent(new MidiEvent(MidiEvent.NOTE_OFF, this._currentNote, this._state.get('velocity')));
+                const velocity = this.state.velocity === 'position' ? Math.floor(128*evt.offsetY/key.offsetHeight) : Math.floor(parseInt(this.state.velocity)*1.28);
+                this._eventBus.dispatchEvent(new MidiEvent(MidiEvent.NOTE_ON, note, velocity));
+                this._eventBus.dispatchEvent(new MidiEvent(MidiEvent.NOTE_OFF, this._currentNote, 70));
                 this._currentNote = note;
             }
         } else {
-            this._eventBus.dispatchEvent(new MidiEvent(MidiEvent.NOTE_OFF, this._currentNote, this._state.get('velocity')));
+            this._eventBus.dispatchEvent(new MidiEvent(MidiEvent.NOTE_OFF, this._currentNote, 70));
             delete this._currentNote;
             document.body.removeEventListener('mousemove', this._onKeyMouseMove);
             document.body.removeEventListener('mouseup', this._onKeyMouseUp);

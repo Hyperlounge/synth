@@ -24,8 +24,9 @@ const banks = [
 ];
 
 export default class PolySynth extends ModularSynth {
-    constructor(elementId) {
+    constructor(elementId, options = {}) {
         super();
+        this._options = options;
         this._root = document.getElementById(elementId);
 
         this._render();
@@ -48,7 +49,7 @@ export default class PolySynth extends ModularSynth {
 
     createModules() {
         this.createMidiModule();
-        this.createSoftKeyboardModule();
+        this.createSoftKeyboardModule(undefined, this._options);
         this._controllerHelper = this.createControllerHelperModule('controllerHelper');
         this._voiceAllocator = this.createVoiceAllocatorModule('voiceAllocator');
         this._osc1 = this.createPolyOscillatorModule('osc1');

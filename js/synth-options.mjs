@@ -1,6 +1,6 @@
 import PolySynth from './PolySynth.js';
 
-const launch = () => {
+const launch = (mousePointer) => {
     document.body.innerHTML = `
 <style>
     #synth {
@@ -14,9 +14,17 @@ const launch = () => {
 <div id="synth">
 </div>
     `;
-    new PolySynth('synth');
+    new PolySynth('synth', {mousePointer});
 };
 
+let mousePointer = false;
+
+const moveHandler = evt => {
+    mousePointer = true;
+    document.body.removeEventListener('mousemove', moveHandler);
+}
+document.body.addEventListener('mousemove', moveHandler);
+
 document.getElementById('launch-button').onclick = evt => {
-    launch();
+    launch(mousePointer);
 }

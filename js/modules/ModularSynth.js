@@ -83,7 +83,7 @@ export default class ModularSynth extends EventTarget {
 
     _moduleCreator(Type) {
         return (patchId, options) => {
-            const module = new Type(this.audioContext, this.eventBus, this.globalPatch, this.options);
+            const module = new Type(this.audioContext, this.eventBus, this.globalPatch, options);
             if (patchId) {
                 this._patch.set({[patchId]: module._patch});
                 if (this._controlsPendingBindings.length > 0) {
