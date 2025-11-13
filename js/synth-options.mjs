@@ -27,5 +27,6 @@ const moveHandler = evt => {
 document.body.addEventListener('touchstart', moveHandler);
 
 document.getElementById('launch-button').onclick = evt => {
+    alert(mousePointer);
     launch(mousePointer);
 }
