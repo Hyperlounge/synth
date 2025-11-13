@@ -57,9 +57,13 @@ const keyBoardTemplate = data => `
 export default class SoftKeyboardModule extends AudioModule {
     _initialise() {
         super._initialise()
+        this._isTouchDevice = !this._options.mousePointer;
+        this._state.set({
+            velocity: this._isTouchDevice ? 'touch' : '70',
+            isTouchDevice: this._isTouchDevice,
+        });
         this._downKeys = [];
         this._currentNote = undefined;
-        this._isTouchDevice = !this._options.mousePointer;
 
         this._render();
 
@@ -98,11 +102,12 @@ export default class SoftKeyboardModule extends AudioModule {
     }
 
     get _initialState() {
+        console.log(this._isTouchDevice);
         return {
-            velocity: this._isTouchDevice ? 'touch' : '70',
+            velocity: '70',
             bottomNote: 45,
             topNote: 84,
-            isTouchDevice: this._isTouchDevice,
+            isTouchDevice: false,
         }
     }
 
