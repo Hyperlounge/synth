@@ -17,16 +17,14 @@ const launch = (mousePointer) => {
     new PolySynth('synth', {mousePointer});
 };
 
-let mousePointer = false;
+let mousePointer = true;
 
 const moveHandler = evt => {
-    alert(evt.touches);
     mousePointer = false;
     document.body.removeEventListener('touchstart', moveHandler);
 }
 document.body.addEventListener('touchstart', moveHandler);
 
 document.getElementById('launch-button').onclick = evt => {
-    alert(mousePointer);
     launch(mousePointer);
 }
