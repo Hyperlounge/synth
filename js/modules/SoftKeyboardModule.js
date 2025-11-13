@@ -58,6 +58,7 @@ export default class SoftKeyboardModule extends AudioModule {
     _initialise() {
         super._initialise()
         this._isTouchDevice = !this._options.mousePointer;
+        this._normalRadius = this._options.normalTouchRadiusX;
         this._state.set({
             velocity: this._isTouchDevice ? 'touch' : '70',
             isTouchDevice: this._isTouchDevice,
@@ -255,7 +256,7 @@ export default class SoftKeyboardModule extends AudioModule {
                 if (!notesTouched.includes(note)) {
                     notesTouched.push(note);
                 }
-                pressures[note] = touch.radiusX / 20;
+                pressures[note] = touch.radiusX / this._normalRadius;
             }
         });
         // any notes newly in the array trigger a keyDown

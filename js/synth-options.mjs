@@ -1,6 +1,6 @@
 import PolySynth from './PolySynth.js';
 
-const launch = (mousePointer) => {
+const launch = (options) => {
     document.body.innerHTML = `
 <style>
     #synth {
@@ -14,18 +14,19 @@ const launch = (mousePointer) => {
 <div id="synth">
 </div>
     `;
-    new PolySynth('synth', {mousePointer});
+    new PolySynth('synth', options);
 };
 
 let mousePointer = true;
+let normalTouchRadiusX = 20;
 
 const moveHandler = evt => {
-    alert('radiusX=' + evt.touches[0].radiusX + ', force=' + evt.touches[0].force);
     mousePointer = false;
+    normalTouchRadiusX = evt.touches[0].radiusX;
     document.body.removeEventListener('touchstart', moveHandler);
 }
 document.body.addEventListener('touchstart', moveHandler);
 
 document.getElementById('launch-button').onclick = evt => {
-    launch(mousePointer);
+    launch({mousePointer, normalTouchRadiusX});
 }
