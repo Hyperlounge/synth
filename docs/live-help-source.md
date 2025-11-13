@@ -496,4 +496,21 @@ The keyboard settings are independent of patch data and are not saved.
 
 The octave range of the keyboard can be adjusted by dragging the central white area of the Keyboard Adjuster left or right. The number of keys shown can be chaged by dragging the grey areas either side left or right.
 
+{control: velocity}
+
+### Velocity Mode
+
+Selects how the velocity of a key-press is determined when using the on-screen keyboard. When using an external keyboard, this has no effect and the actual velocity is used.
+
+| Option | Description
+| --- | ---
+| TOUCH | (On touch devices only) the size of the touch point is used, the harder the touch, the bigger the radius.
+| POS'N | The vertical position touched or clicked on the key is used, the bottom of the key is maximum velocity.
+| MAX | The velocity is fixed at the maximum value.
+| 70% | The velocity is fixed at 70 percent of the maximum value.
+| 50% | ...you get the gist...
+| 30% | ...you got it!
+
+Different touch devices have different sensitivities, so if you're on a touch device the size of a normal touch was detected when you clicked the big button to launch this thing (clever, eh?). Just don't hit it too hard or you'll mess up the calculation.
+
 {end-module}

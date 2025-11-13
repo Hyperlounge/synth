@@ -688,11 +688,52 @@ ${help.modules.levels.controls.master.html}`,
 <p>The number of keys defaults to a comfortable range for on-screen use, but other common configurations can be selected using the preset buttons to the right. The number and range of keys is also fully customisable using the Keyboard Adjuster. The location of middle C is marked in yellow, and the numbers on the C keys indicate the other octave positions.</p>
 <p>The keyboard settings are independent of patch data and are not saved.</p>
 
-${help.modules.keyboard.controls.adjuster.html}`,
+${help.modules.keyboard.controls.adjuster.html}
+${help.modules.keyboard.controls.velocity.html}`,
     controls: {
       adjuster: {
         html: `<h3>Keyboard Adjuster</h3>
 <p>The octave range of the keyboard can be adjusted by dragging the central white area of the Keyboard Adjuster left or right. The number of keys shown can be chaged by dragging the grey areas either side left or right.</p>
+`,
+      },
+      velocity: {
+        html: `<h3>Velocity Mode</h3>
+<p>Selects how the velocity of a key-press is determined when using the on-screen keyboard. When using an external keyboard, this has no effect and the actual velocity is used.</p>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TOUCH</td>
+<td>(On touch devices only) the size of the touch point is used, the harder the touch, the bigger the radius.</td>
+</tr>
+<tr>
+<td>POS'N</td>
+<td>The vertical position touched or clicked on the key is used, the bottom of the key is maximum velocity.</td>
+</tr>
+<tr>
+<td>MAX</td>
+<td>The velocity is fixed at the maximum value.</td>
+</tr>
+<tr>
+<td>70%</td>
+<td>The velocity is fixed at 70 percent of the maximum value.</td>
+</tr>
+<tr>
+<td>50%</td>
+<td>...you get the gist...</td>
+</tr>
+<tr>
+<td>30%</td>
+<td>...you got it!</td>
+</tr>
+</tbody>
+</table>
+<p>Different touch devices have different sensitivities, so if you're on a touch device the size of a normal touch was detected when you clicked the big button to launch this thing (clever, eh?). Just don't hit it too hard or you'll mess up the calculation.</p>
 `,
       },
     },
