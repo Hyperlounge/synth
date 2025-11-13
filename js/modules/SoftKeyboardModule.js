@@ -98,7 +98,6 @@ export default class SoftKeyboardModule extends AudioModule {
             this._state.set({
                 velocity: evt.target.value,
             });
-            this._update();
         });
     }
 
@@ -259,13 +258,14 @@ export default class SoftKeyboardModule extends AudioModule {
                 let pressure;
                 switch (this.state.velocity) {
                     case 'touch':
-                        pressure = touch.radiusX / this._normalRadius;
+                        pressure = Math.min(128, Math.max(0, Math.floor(70 * touch.radiusX / this._normalRadius)));
                         break;
                     case 'position':
-                        pressure = Math.floor(128*touch.offsetY/key.offsetHeight)
+                        const rect = key.getBoundingClientRect();
+                        pressure = Math.min(128, Math.max(0, Math.floor(128*(touch.clientY - rect.top)/rect.height)));
                         break;
                     default:
-                        pressure = Math.floor(parseInt(this.state.velocity) * 1.28);
+                        pressure = Math.min(128, Math.floor(parseInt(this.state.velocity) * 1.28));
                         break;
                 }
                 pressures[note] = pressure;
@@ -273,7 +273,7 @@ export default class SoftKeyboardModule extends AudioModule {
         });
         // any notes newly in the array trigger a keyDown
         notesTouched.filter(note => !this._notesTouched.includes(note)).forEach(note => {
-            this._eventBus.dispatchEvent(new MidiEvent(MidiEvent.NOTE_ON, note, 70 * pressures[note]));
+            this._eventBus.dispatchEvent(new MidiEvent(MidiEvent.NOTE_ON, note, pressures[note]));
         });
         // any notes now missing trigger a keyUp
         this._notesTouched.filter(note => !notesTouched.includes(note)).forEach(note => {
