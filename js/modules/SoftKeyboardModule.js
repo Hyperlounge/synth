@@ -256,17 +256,28 @@ export default class SoftKeyboardModule extends AudioModule {
                 if (!notesTouched.includes(note)) {
                     notesTouched.push(note);
                 }
-                alert(this._normalRadius);
-                pressures[note] = touch.radiusX / this._normalRadius;
+                let pressure;
+                switch (this.state.velocity) {
+                    case 'touch':
+                        pressure = touch.radiusX / this._normalRadius;
+                        break;
+                    case 'position':
+                        pressure = Math.floor(128*touch.offsetY/key.offsetHeight)
+                        break;
+                    default:
+                        pressure = Math.floor(parseInt(this.state.velocity) * 1.28);
+                        break;
+                }
+                pressures[note] = pressure;
             }
         });
         // any notes newly in the array trigger a keyDown
         notesTouched.filter(note => !this._notesTouched.includes(note)).forEach(note => {
-            this._eventBus.dispatchEvent(new MidiEvent(MidiEvent.NOTE_ON, note, this._state.get('velocity') * pressures[note]));
+            this._eventBus.dispatchEvent(new MidiEvent(MidiEvent.NOTE_ON, note, 70 * pressures[note]));
         });
         // any notes now missing trigger a keyUp
         this._notesTouched.filter(note => !notesTouched.includes(note)).forEach(note => {
-            this._eventBus.dispatchEvent(new MidiEvent(MidiEvent.NOTE_OFF, note, this._state.get('velocity')));
+            this._eventBus.dispatchEvent(new MidiEvent(MidiEvent.NOTE_OFF, note, 70));
         });
         this._notesTouched = notesTouched;
     }
