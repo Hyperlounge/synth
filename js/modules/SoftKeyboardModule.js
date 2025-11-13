@@ -60,7 +60,7 @@ export default class SoftKeyboardModule extends AudioModule {
         this._isTouchDevice = !this._options.mousePointer;
         this._normalRadius = this._options.normalTouchRadiusX;
         this._state.set({
-            velocity: this._isTouchDevice ? 'touch' : '70',
+            velocity: this._isTouchDevice ? 'touch' : 'position',
             isTouchDevice: this._isTouchDevice,
         });
         this._downKeys = [];
