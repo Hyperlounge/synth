@@ -151,9 +151,9 @@ export default class PolySynth extends ModularSynth {
         if (!this._resumePending && this.audioContext.state === 'interrupted') {
             this._resumePending = true;
             const resumeScreen = document.createElement('div');
-            resumeScreen.style = 'position: fixed; z-index: 999999; width: 100%; height: 100%; background: rgba(0,0,0,0.5); font-family: sans-serif; font-size: 50px; font-weight: bold; color: white';
+            resumeScreen.style = 'position: fixed; z-index: 999999; display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; background: rgba(0,0,0,0.5)';
             document.body.append(resumeScreen);
-            resumeScreen.innerHTML = "CLICK TO RESUME";
+            resumeScreen.innerHTML = '<div style="display: inline-block; font-family: sans-serif; font-size: 50px; font-weight: bold; color: white">CLICK TO RESUME</div>';
             const handler = evt => {
                 resumeScreen.removeEventListener('mousedown', handler);
                 resumeScreen.remove();
@@ -162,11 +162,9 @@ export default class PolySynth extends ModularSynth {
             }
             resumeScreen.addEventListener('mousedown', handler);
         } else if (this.audioContext.state !== 'running' && !this._resumePending) {
-            new Dialog(`Resuming. Event: ${sourceEventType}, state: ${this.audioContext.state}`);
             this._resumePending = true;
             this.audioContext.resume().then(() => {
                 delete this._resumePending;
-                new Dialog(`Audio context resumed. Event: ${sourceEventType}, state: ${this.audioContext.state}`);
             }, () => {
                 delete this._resumePending;
                 new Dialog(`failed to resume audio context, try again? Event: ${sourceEventType}, state: ${this.audioContext.state}`, {optionLabels: ["OK", "Cancel"]}).then(data => {
