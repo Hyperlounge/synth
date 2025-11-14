@@ -158,7 +158,7 @@ export default class PolySynth extends ModularSynth {
                 delete this._resumePending;
                 new Dialog(`failed to resume audio context, try again? Event: ${sourceEventType}, state: ${this.audioContext.state}`, {optionLabels: ["OK", "Cancel"]}).then(data => {
                     if (data.option === 0) {
-                        this.resumeApp();
+                        this.resumeApp(sourceEventType);
                     }
                 });
             });
