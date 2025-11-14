@@ -147,31 +147,30 @@ export default class PolySynth extends ModularSynth {
         }
     }
 
+    manuallyResume() {
+        this._resumePending = true;
+        const resumeScreen = document.createElement('div');
+        resumeScreen.style = 'position: fixed; z-index: 999999; display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; background: rgba(0,0,0,0.5)';
+        document.body.append(resumeScreen);
+        resumeScreen.innerHTML = '<div style="display: inline-block; font-family: sans-serif; font-size: 50px; font-weight: bold; color: white">CLICK TO RESUME</div>';
+        const handler = evt => {
+            resumeScreen.removeEventListener('mousedown', handler);
+            resumeScreen.remove();
+            this.audioContext.resume();
+            delete this._resumePending;
+        }
+        resumeScreen.addEventListener('mousedown', handler);
+    }
+
     resumeApp(sourceEventType) {
         if (!this._resumePending && this.audioContext.state === 'interrupted') {
-            this._resumePending = true;
-            const resumeScreen = document.createElement('div');
-            resumeScreen.style = 'position: fixed; z-index: 999999; display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; background: rgba(0,0,0,0.5)';
-            document.body.append(resumeScreen);
-            resumeScreen.innerHTML = '<div style="display: inline-block; font-family: sans-serif; font-size: 50px; font-weight: bold; color: white">CLICK TO RESUME</div>';
-            const handler = evt => {
-                resumeScreen.removeEventListener('mousedown', handler);
-                resumeScreen.remove();
-                this.audioContext.resume();
-                delete this._resumePending;
-            }
-            resumeScreen.addEventListener('mousedown', handler);
+            this.manuallyResume();
         } else if (this.audioContext.state !== 'running' && !this._resumePending) {
             this._resumePending = true;
             this.audioContext.resume().then(() => {
                 delete this._resumePending;
             }, () => {
-                delete this._resumePending;
-                new Dialog(`failed to resume audio context, try again? Event: ${sourceEventType}, state: ${this.audioContext.state}`, {optionLabels: ["OK", "Cancel"]}).then(data => {
-                    if (data.option === 0) {
-                        this.resumeApp(sourceEventType);
-                    }
-                });
+                this.manuallyResume();;
             });
         }
     }
