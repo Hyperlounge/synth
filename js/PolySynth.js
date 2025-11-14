@@ -149,6 +149,7 @@ export default class PolySynth extends ModularSynth {
 
     resumeApp() {
         if (this.audioContext.state !== 'running' && !this._resumePending) {
+            new Dialog('Resuming');
             this._resumePending = true;
             this.audioContext.resume().then(() => {
                 delete this._resumePending;
