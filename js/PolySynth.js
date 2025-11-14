@@ -148,10 +148,10 @@ export default class PolySynth extends ModularSynth {
     }
 
     resumeApp(sourceEventType) {
-        if (this.audioContext.state === 'interrupted') {
+        if (!this._resumePending && this.audioContext.state === 'interrupted') {
             this._resumePending = true;
             const resumeScreen = document.createElement('div');
-            resumeScreen.style = 'position: fixed; z-index: 999999; width: 100%; height: 100%; background: rgba(0,0,0,0.5); font-family: sans-serif: font-size: 50px; font-weight: bold; color: white';
+            resumeScreen.style = 'position: fixed; z-index: 999999; width: 100%; height: 100%; background: rgba(0,0,0,0.5); font-family: sans-serif; font-size: 50px; font-weight: bold; color: white';
             document.body.append(resumeScreen);
             resumeScreen.innerHTML = "CLICK TO RESUME";
             const handler = evt => {
