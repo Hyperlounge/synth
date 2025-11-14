@@ -136,19 +136,23 @@ export default class PolySynth extends ModularSynth {
 
     suspendApp() {
         this.savePatch();
-        this.audioContext.suspend();
+        if (this.audioContext.state === 'running') {
+            this.audioContext.suspend();
+        }
     }
 
     resumeApp() {
-        this.audioContext.resume().then(() => {
-            new Dialog('Audio context resumed');
-        }, () => {
-            new Dialog('failed to resume audio context, try again?', {optionLabels: ["OK", "Cancel"]}).then(data => {
-                if (data.option === 0) {
-                    this.resumeApp();
-                }
+        if (this.audioContext.state !== 'running') {
+            this.audioContext.resume().then(() => {
+                new Dialog('Audio context resumed');
+            }, () => {
+                new Dialog('failed to resume audio context, try again?', {optionLabels: ["OK", "Cancel"]}).then(data => {
+                    if (data.option === 0) {
+                        this.resumeApp();
+                    }
+                });
             });
-        });
+        }
     }
 
     onUnload = evt => {
