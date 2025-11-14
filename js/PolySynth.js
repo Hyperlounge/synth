@@ -148,6 +148,7 @@ export default class PolySynth extends ModularSynth {
     }
 
     resumeApp() {
+        /*
         if (this.audioContext.state !== 'running' && !this._resumePending) {
             new Dialog('Resuming');
             this._resumePending = true;
@@ -163,6 +164,7 @@ export default class PolySynth extends ModularSynth {
                 });
             });
         }
+            */
     }
 
     onUnload = evt => {
