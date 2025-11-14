@@ -122,6 +122,7 @@ export default class PolySynth extends ModularSynth {
         });
         window.addEventListener('unload', this.onUnload);
         window.addEventListener('pagehide', this.onPageHide);
+        window.addEventListener('pageshow', this.onPageShow);
         window.addEventListener('blur', this.onBlur);
         window.addEventListener('focus', this.onFocus);
         document.addEventListener('visibilitychange', this.onVisibilityChange);
@@ -133,29 +134,40 @@ export default class PolySynth extends ModularSynth {
         });
     }
 
-    onUnload = evt => {
-        this.savePatch();
-    }
-
-    onPageHide = evt => {
-        this.savePatch();
-    }
-
-    onBlur = evt => {
+    suspendApp() {
         this.savePatch();
         this.audioContext.suspend();
     }
 
+    resumeApp() {
+        this.audioContext.resume(); 
+    }
+
+    onUnload = evt => {
+        this.suspendApp();
+    }
+
+    onPageHide = evt => {
+        this.suspendApp();
+    }
+
+    onPageShow = evt => {
+        this.resumeApp(); 
+    }
+
+    onBlur = evt => {
+        this.suspendApp();
+    }
+
     onFocus = evt => {
-        this.audioContext.resume();        
+        this.resumeApp(); 
     }    
 
     onVisibilityChange = evt => {
         if (document.visibilityState === "hidden") {
-            this.savePatch();
-            this.audioContext.suspend();
+            this.suspendApp();
         } else {
-            this.audioContext.resume();
+            this.resumeApp(); 
         }
     }
 
@@ -251,9 +263,9 @@ export default class PolySynth extends ModularSynth {
             }, 500);
         }
         if (evt.target.value) {
-            this.audioContext.resume();
+            this.resumeApp();
         } else {
-            this.audioContext.suspend();
+            this.suspendApp();
         }
     }
 
