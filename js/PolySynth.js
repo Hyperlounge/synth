@@ -166,7 +166,7 @@ export default class PolySynth extends ModularSynth {
     }    
 
     onVisibilityChange = evt => {
-        alert(evt.type, document.visibilityState);
+        alert(`${evt.type}, ${document.visibilityState}`);
         if (document.visibilityState === "hidden") {
             this.suspendApp();
         } else {
