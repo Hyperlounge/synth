@@ -152,6 +152,7 @@ export default class PolySynth extends ModularSynth {
     }
 
     onPageShow = evt => {
+        console.log(evt.type);
         this.resumeApp(); 
     }
 
@@ -160,10 +161,12 @@ export default class PolySynth extends ModularSynth {
     }
 
     onFocus = evt => {
+        console.log(evt.type);
         this.resumeApp(); 
     }    
 
     onVisibilityChange = evt => {
+        console.log(evt.type);
         if (document.visibilityState === "hidden") {
             this.suspendApp();
         } else {
@@ -230,27 +233,6 @@ export default class PolySynth extends ModularSynth {
         } else {
             endHelpMode();
         }
-
-        /*
-        const clickHandler = evt => {
-            const target = evt.currentTarget;
-            const moduleName = target.getAttribute('module-id') || target.getAttribute('data-module') || undefined;
-            const controlName = target.getAttribute('parameter-name') || undefined;
-            target.classList.toggle('help-active', true);
-            moduleName && new HelpPopup(getHelp(moduleName, controlName)).then(() => {
-                target.classList.toggle('help-active', false);
-            });
-            evt.preventDefault();
-            evt.stopPropagation();
-        };
-        Array.from(document.querySelectorAll('*[module-id][parameter-name], *[data-module]')).forEach(element => {
-            if (helpModeOn) {
-                element.addEventListener('click', clickHandler);
-            } else {
-                element.removeEventListener('click', clickHandler);
-            }
-        });
-        */
     }
 
     onPowerSwitchChange = evt => {
