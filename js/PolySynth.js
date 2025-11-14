@@ -149,14 +149,14 @@ export default class PolySynth extends ModularSynth {
 
     resumeApp(sourceEventType) {
         if (this.audioContext.state !== 'running' && !this._resumePending) {
-            new Dialog(`Resuming. Event: ${sourceEventType}`);
+            new Dialog(`Resuming. Event: ${sourceEventType}, state: ${this.audioContext.state}`);
             this._resumePending = true;
             this.audioContext.resume().then(() => {
                 delete this._resumePending;
-                new Dialog(`Audio context resumed. Event: ${sourceEventType}`);
+                new Dialog(`Audio context resumed. Event: ${sourceEventType}, state: ${this.audioContext.state}`);
             }, () => {
                 delete this._resumePending;
-                new Dialog(`failed to resume audio context, try again? Event: ${sourceEventType}`, {optionLabels: ["OK", "Cancel"]}).then(data => {
+                new Dialog(`failed to resume audio context, try again? Event: ${sourceEventType}, state: ${this.audioContext.state}`, {optionLabels: ["OK", "Cancel"]}).then(data => {
                     if (data.option === 0) {
                         this.resumeApp();
                     }
