@@ -152,7 +152,6 @@ export default class PolySynth extends ModularSynth {
     }
 
     onPageShow = evt => {
-        alert(evt.type);
         this.resumeApp(); 
     }
 
@@ -161,12 +160,10 @@ export default class PolySynth extends ModularSynth {
     }
 
     onFocus = evt => {
-        alert(evt.type);
         this.resumeApp(); 
     }    
 
     onVisibilityChange = evt => {
-        alert(`${evt.type}, ${document.visibilityState}`);
         if (document.visibilityState === "hidden") {
             this.suspendApp();
         } else {
