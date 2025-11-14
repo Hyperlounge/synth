@@ -166,30 +166,30 @@ export default class PolySynth extends ModularSynth {
     }
 
     onUnload = evt => {
-        this.suspendApp();
+        this.suspendApp(evt.type);
     }
 
     onPageHide = evt => {
-        this.suspendApp();
+        this.suspendApp(evt.type);
     }
 
     onPageShow = evt => {
-        this.resumeApp(); 
+        this.resumeApp(evt.type); 
     }
 
     onBlur = evt => {
-        this.suspendApp();
+        this.suspendApp(evt.type);
     }
 
     onFocus = evt => {
-        this.resumeApp(); 
+        this.resumeApp(evt.type); 
     }    
 
     onVisibilityChange = evt => {
         if (document.visibilityState === "hidden") {
-            this.suspendApp();
+            this.suspendApp(evt.type);
         } else {
-            this.resumeApp(); 
+            this.resumeApp(evt.type); 
         }
     }
 
