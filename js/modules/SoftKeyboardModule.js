@@ -98,7 +98,6 @@ export default class SoftKeyboardModule extends AudioModule {
     }
 
     get _initialPatch() {
-        console.log(this._isTouchDevice);
         return {
             velocityType: '70',
             bottomNote: 45,
@@ -127,10 +126,6 @@ export default class SoftKeyboardModule extends AudioModule {
         if (this._patch.hasChanged('masterVolume')) {
             this._masterVolume.gain.setTargetAtTime(this._patch.get('masterVolume'), this._now, this._minimumTimeConstant);
         }
-
-        //TODO: act upon controllers changing
-
-        //TODO: strip transient from patch
     }
 
     _onKeyboardRangeClick(evt) {

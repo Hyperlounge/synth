@@ -120,15 +120,43 @@ export default class PolySynth extends ModularSynth {
         this.globalPatch.addEventListener('change', () => {
             document.getElementById('preset-name').innerHTML = this.globalPatch.get('name');
         });
-        window.addEventListener('unload', () => {
-            this.savePatch();
-        });
+        window.addEventListener('unload', this.onUnload);
+        window.addEventListener('pagehide', this.onPageHide);
+        window.addEventListener('blur', this.onBlur);
+        window.addEventListener('focus', this.onFocus);
+        document.addEventListener('visibilitychange', this.onVisibilityChange);
         this.eventBus.addEventListener('modwheel', evt => {
             document.getElementById('mod-wheel').value = evt.detail.midiValue;
         });
         this.eventBus.addEventListener('pitchbend', evt => {
             document.getElementById('pitch-bend').value = evt.detail.midiValue - 64;
         });
+    }
+
+    onUnload = evt => {
+        this.savePatch();
+    }
+
+    onPageHide = evt => {
+        this.savePatch();
+    }
+
+    onBlur = evt => {
+        this.savePatch();
+        this.audioContext.suspend();
+    }
+
+    onFocus = evt => {
+        this.audioContext.resume();        
+    }    
+
+    onVisibilityChange = evt => {
+        if (document.visibilityState === "hidden") {
+            this.savePatch();
+            this.audioContext.suspend();
+        } else {
+            this.audioContext.resume();
+        }
     }
 
     onShowEffectsChange = evt => {
