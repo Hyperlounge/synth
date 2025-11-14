@@ -142,6 +142,7 @@ export default class PolySynth extends ModularSynth {
     }
 
     resumeApp() {
+        new Dialog('Audio context state = ' + this.audioContext.state);
         if (this.audioContext.state !== 'running') {
             this.audioContext.resume().then(() => {
                 new Dialog('Audio context resumed');
