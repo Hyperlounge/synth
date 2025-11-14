@@ -1,7 +1,7 @@
 import Modal from './Modal.js';
 
 export default class Dialog extends Modal {
-    constructor(contentHTML, options) {
+    constructor(contentHTML, options = {}) {
         const dialogHTML = Dialog.dialogTemplate({
             contentHTML,
             title: options.title || '',
