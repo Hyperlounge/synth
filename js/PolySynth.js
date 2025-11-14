@@ -162,7 +162,7 @@ export default class PolySynth extends ModularSynth {
         resumeScreen.addEventListener('mousedown', handler);
     }
 
-    resumeApp(sourceEventType) {
+    resumeApp() {
         if (!this._resumePending && this.audioContext.state === 'interrupted') {
             this.manuallyResume();
         } else if (this.audioContext.state !== 'running' && !this._resumePending) {
@@ -170,7 +170,7 @@ export default class PolySynth extends ModularSynth {
             this.audioContext.resume().then(() => {
                 delete this._resumePending;
             }, () => {
-                this.manuallyResume();;
+                this.manuallyResume();
             });
         }
     }
