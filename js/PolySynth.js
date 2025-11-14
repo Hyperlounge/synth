@@ -264,9 +264,10 @@ export default class PolySynth extends ModularSynth {
             }, 500);
         }
         if (evt.target.value) {
-            this.resumeApp();
+            this.audioContext.resume();
         } else {
-            this.suspendApp();
+            this.audioContext.suspend();
+            this.savePatch();
         }
     }
 
