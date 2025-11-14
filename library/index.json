@@ -86,9 +86,9 @@
       "fileName": "Brass- Trumpet section.hspatch.json"
     },
     {
-      "name": "Bell piano",
+      "name": "Bell Piano",
       "bank": "Keys",
-      "fileName": "Keys- Bell piano.hspatch.json"
+      "fileName": "Keys- Bell Piano.hspatch.json"
     },
     {
       "name": "Bright Piano",
@@ -156,14 +156,14 @@
       "fileName": "Leads- Bendy Bell.hspatch.json"
     },
     {
-      "name": "Cat- Fight",
+      "name": "Cat-Fight",
       "bank": "Leads",
-      "fileName": "Leads- Cat- Fight.hspatch.json"
+      "fileName": "Leads- Cat-Fight.hspatch.json"
     },
     {
-      "name": "Genius of Love",
+      "name": "Genius Of Love",
       "bank": "Leads",
-      "fileName": "Leads- Genius of Love.hspatch.json"
+      "fileName": "Leads- Genius Of Love.hspatch.json"
     },
     {
       "name": "Hose Me Down!",
@@ -196,9 +196,14 @@
       "fileName": "Pads- Bell Pad.hspatch.json"
     },
     {
-      "name": "Big sweep",
+      "name": "Bendy Pad",
       "bank": "Pads",
-      "fileName": "Pads- Big sweep.hspatch.json"
+      "fileName": "Pads- Bendy Pad.hspatch.json"
+    },
+    {
+      "name": "Big Sweep",
+      "bank": "Pads",
+      "fileName": "Pads- Big Sweep.hspatch.json"
     },
     {
       "name": "Bowed Pad",
@@ -229,11 +234,6 @@
       "name": "S and H pad",
       "bank": "Pads",
       "fileName": "Pads- S and H pad.hspatch.json"
-    },
-    {
-      "name": "bendy pad",
-      "bank": "Pads",
-      "fileName": "Pads- bendy pad.hspatch.json"
     },
     {
       "name": "Bell Tower",
@@ -291,9 +291,9 @@
       "fileName": "Percussion- Toms.hspatch.json"
     },
     {
-      "name": "Vibra-prone",
+      "name": "Vibra-Prone",
       "bank": "Percussion",
-      "fileName": "Percussion- Vibra-prone.hspatch.json"
+      "fileName": "Percussion- Vibra-Prone.hspatch.json"
     },
     {
       "name": "Xylophobia",
@@ -306,9 +306,9 @@
       "fileName": "Strings- Cello.hspatch.json"
     },
     {
-      "name": "In the mood for viola",
+      "name": "In The Mood For Viola",
       "bank": "Strings",
-      "fileName": "Strings- In the mood for viola.hspatch.json"
+      "fileName": "Strings- In The Mood For Viola.hspatch.json"
     },
     {
       "name": "String Voice",
@@ -351,9 +351,9 @@
       "fileName": "Woodwind- So Many Flutes!.hspatch.json"
     },
     {
-      "name": "Wind harp",
+      "name": "Wind Harp",
       "bank": "Woodwind",
-      "fileName": "Woodwind- Wind harp.hspatch.json"
+      "fileName": "Woodwind- Wind Harp.hspatch.json"
     }
   ]
 }
