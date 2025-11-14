@@ -140,7 +140,8 @@ export default class PolySynth extends ModularSynth {
     }
 
     resumeApp() {
-        setTimeout(() => this.audioContext.resume(), 10); 
+        this.audioContext.resume();
+        alert(this.audioContext.state);
     }
 
     onUnload = evt => {
