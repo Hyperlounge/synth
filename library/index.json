@@ -16,6 +16,11 @@
       "fileName": "Basses- Double Bass.hspatch.json"
     },
     {
+      "name": "Fretless",
+      "bank": "Basses",
+      "fileName": "Basses- Fretless.hspatch.json"
+    },
+    {
       "name": "Full Bass",
       "bank": "Basses",
       "fileName": "Basses- Full Bass.hspatch.json"
@@ -31,9 +36,19 @@
       "fileName": "Basses- Ice Crawl.hspatch.json"
     },
     {
+      "name": "Liquid Bass",
+      "bank": "Basses",
+      "fileName": "Basses- Liquid Bass.hspatch.json"
+    },
+    {
       "name": "Stab Bass",
       "bank": "Basses",
       "fileName": "Basses- Stab Bass.hspatch.json"
+    },
+    {
+      "name": "Synth Bass",
+      "bank": "Basses",
+      "fileName": "Basses- Synth Bass.hspatch.json"
     },
     {
       "name": "Too High!",
@@ -126,6 +141,11 @@
       "fileName": "Keys- Squeezebox.hspatch.json"
     },
     {
+      "name": "Theatre Organ",
+      "bank": "Keys",
+      "fileName": "Keys- Theatre Organ.hspatch.json"
+    },
+    {
       "name": "Wurly",
       "bank": "Keys",
       "fileName": "Keys- Wurly.hspatch.json"
@@ -216,6 +236,11 @@
       "fileName": "Pads- bendy pad.hspatch.json"
     },
     {
+      "name": "Bell Tower",
+      "bank": "Percussion",
+      "fileName": "Percussion- Bell Tower.hspatch.json"
+    },
+    {
       "name": "Bellissimo!",
       "bank": "Percussion",
       "fileName": "Percussion- Bellissimo!.hspatch.json"
@@ -231,6 +256,11 @@
       "fileName": "Percussion- Chirpz.hspatch.json"
     },
     {
+      "name": "Kalimba",
+      "bank": "Percussion",
+      "fileName": "Percussion- Kalimba.hspatch.json"
+    },
+    {
       "name": "Marimba",
       "bank": "Percussion",
       "fileName": "Percussion- Marimba.hspatch.json"
@@ -239,6 +269,11 @@
       "name": "Marimboid",
       "bank": "Percussion",
       "fileName": "Percussion- Marimboid.hspatch.json"
+    },
+    {
+      "name": "Steel Drum",
+      "bank": "Percussion",
+      "fileName": "Percussion- Steel Drum.hspatch.json"
     },
     {
       "name": "The Bells!",
