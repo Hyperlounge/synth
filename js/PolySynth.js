@@ -134,7 +134,7 @@ export default class PolySynth extends ModularSynth {
         });
     }
 
-    suspendApp() {
+    suspendApp(sourceEventType) {
         if (this.audioContext.state === 'running' && !this._suspendPending) {
             this.savePatch();
             this._suspendPending = true;
@@ -142,29 +142,27 @@ export default class PolySynth extends ModularSynth {
                 delete this._suspendPending;
             }, () => {
                 delete this._suspendPending;
-                new Dialog('Failed to suspend the audio context.');
+                new Dialog(`Failed to suspend the audio context. Event: ${sourceEventType}`);
             });
         }
     }
 
-    resumeApp() {
-        /*
+    resumeApp(sourceEventType) {
         if (this.audioContext.state !== 'running' && !this._resumePending) {
-            new Dialog('Resuming');
+            new Dialog(`Resuming. Event: ${sourceEventType}`);
             this._resumePending = true;
             this.audioContext.resume().then(() => {
                 delete this._resumePending;
-                new Dialog('Audio context resumed');
+                new Dialog(`Audio context resumed. Event: ${sourceEventType}`);
             }, () => {
                 delete this._resumePending;
-                new Dialog('failed to resume audio context, try again?', {optionLabels: ["OK", "Cancel"]}).then(data => {
+                new Dialog(`failed to resume audio context, try again? Event: ${sourceEventType}`, {optionLabels: ["OK", "Cancel"]}).then(data => {
                     if (data.option === 0) {
                         this.resumeApp();
                     }
                 });
             });
         }
-            */
     }
 
     onUnload = evt => {
