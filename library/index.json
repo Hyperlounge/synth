@@ -191,6 +191,11 @@
       "fileName": "Leads- Welcome to the Machine.hspatch.json"
     },
     {
+      "name": "All’s Swell",
+      "bank": "Pads",
+      "fileName": "Pads- All’s Swell.hspatch.json"
+    },
+    {
       "name": "Bell Pad",
       "bank": "Pads",
       "fileName": "Pads- Bell Pad.hspatch.json"
