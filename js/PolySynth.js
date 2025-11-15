@@ -23,6 +23,26 @@ const banks = [
     'Prototypes'
 ];
 
+function getMobileOperatingSystem() {
+    var userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+    // Windows Phone must come first because its UA also contains "Android"
+    if (/windows phone/i.test(userAgent)) {
+        return "Windows Phone";
+    }
+
+    if (/android/i.test(userAgent)) {
+        return "Android";
+    }
+
+    // iOS detection from: http://stackoverflow.com/a/9039885/177710
+    if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+        return "iOS";
+    }
+
+    return "unknown";
+}
+
 export default class PolySynth extends ModularSynth {
     constructor(elementId, options = {}) {
         super();
@@ -152,8 +172,8 @@ export default class PolySynth extends ModularSynth {
         const resumeScreen = document.createElement('div');
         resumeScreen.style = 'position: fixed; z-index: 999999; display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; background: rgba(0,0,0,0.5)';
         document.body.append(resumeScreen);
-        //resumeScreen.innerHTML = `<div style="display: inline-block; font-family: sans-serif; font-size: 50px; font-weight: bold; color: white">CLICK TO RESUME</div>`;
-        resumeScreen.innerHTML = `<div style="display: inline-block; font-family: sans-serif; font-size: 30px; font-weight: bold; color: white">${inPromise ? 'IN PROMISE, ' : ''}${sourceEventType}</div>`;
+        resumeScreen.innerHTML = `<div style="display: inline-block; font-family: sans-serif; font-size: 50px; font-weight: bold; color: white">CLICK TO RESUME</div>`;
+        //resumeScreen.innerHTML = `<div style="display: inline-block; font-family: sans-serif; font-size: 30px; font-weight: bold; color: white">${inPromise ? 'IN PROMISE, ' : ''}${sourceEventType}</div>`;
         const handler = evt => {
             resumeScreen.removeEventListener('mousedown', handler);
             resumeScreen.remove();
@@ -165,17 +185,15 @@ export default class PolySynth extends ModularSynth {
 
     resumeApp(sourceEventType) {
         if (!this._resumePending) {
-            if (this.audioContext.state === 'interrupted') {
+            if (this.audioContext.state === 'interrupted' || getMobileOperatingSystem() === 'iOS') {
                 this.manuallyResume(sourceEventType);
             } else if (this.audioContext.state !== 'running') {
                 this._resumePending = true;
-                setTimeout(() => {
-                    this.audioContext.resume().then(() => {
-                        delete this._resumePending;
-                    }, () => {
-                        this.manuallyResume(sourceEventType, true);
-                    });
-                }, 10);
+                this.audioContext.resume().then(() => {
+                    delete this._resumePending;
+                }, () => {
+                    this.manuallyResume(sourceEventType, true);
+                });
             }
         }
     }
