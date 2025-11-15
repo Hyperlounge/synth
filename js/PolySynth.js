@@ -147,12 +147,13 @@ export default class PolySynth extends ModularSynth {
         }
     }
 
-    manuallyResume(inPromise) {
+    manuallyResume(sourceEventType, inPromise) {
         this._resumePending = true;
         const resumeScreen = document.createElement('div');
         resumeScreen.style = 'position: fixed; z-index: 999999; display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; background: rgba(0,0,0,0.5)';
         document.body.append(resumeScreen);
-        resumeScreen.innerHTML = `<div style="display: inline-block; font-family: sans-serif; font-size: 50px; font-weight: bold; color: white">${inPromise ? 'PROMISE' : 'CLICK TO RESUME'}</div>`;
+        //resumeScreen.innerHTML = `<div style="display: inline-block; font-family: sans-serif; font-size: 50px; font-weight: bold; color: white">CLICK TO RESUME</div>`;
+        resumeScreen.innerHTML = `<div style="display: inline-block; font-family: sans-serif; font-size: 30px; font-weight: bold; color: white">${inPromise ? 'IN PROMISE, ' : ''}${sourceEventType}</div>`;
         const handler = evt => {
             resumeScreen.removeEventListener('mousedown', handler);
             resumeScreen.remove();
@@ -162,15 +163,15 @@ export default class PolySynth extends ModularSynth {
         resumeScreen.addEventListener('mousedown', handler);
     }
 
-    resumeApp() {
+    resumeApp(sourceEventType) {
         if (!this._resumePending && this.audioContext.state === 'interrupted') {
-            this.manuallyResume();
+            this.manuallyResume(sourceEventType);
         } else if (this.audioContext.state !== 'running' && !this._resumePending) {
             this._resumePending = true;
             this.audioContext.resume().then(() => {
                 delete this._resumePending;
             }, () => {
-                this.manuallyResume(true);
+                this.manuallyResume(sourceEventType, true);
             });
         }
     }
