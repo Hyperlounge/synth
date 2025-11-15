@@ -184,15 +184,15 @@ export default class PolySynth extends ModularSynth {
     }
 
     resumeApp(sourceEventType) {
-        if (!this._resumePending) {
+        if (!this._resumePending && this.audioContext.state !== 'running') {
             if (this.audioContext.state === 'interrupted' || getMobileOperatingSystem() === 'iOS') {
-                this.manuallyResume(sourceEventType);
-            } else if (this.audioContext.state !== 'running') {
+                this.manuallyResume(sourceEventType + ", " + getMobileOperatingSystem());
+            } else {
                 this._resumePending = true;
                 this.audioContext.resume().then(() => {
                     delete this._resumePending;
                 }, () => {
-                    this.manuallyResume(sourceEventType, true);
+                    this.manuallyResume(sourceEventType + ", " + getMobileOperatingSystem(), true);
                 });
             }
         }

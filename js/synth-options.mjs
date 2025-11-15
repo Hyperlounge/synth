@@ -20,13 +20,16 @@ const launch = (options) => {
 let mousePointer = true;
 let normalTouchRadiusX = 20;
 
-const moveHandler = evt => {
+const launchButton = document.getElementById('launch-button');
+
+const touchHandler = evt => {
     mousePointer = false;
     normalTouchRadiusX = evt.touches[0].radiusX;
-    document.body.removeEventListener('touchstart', moveHandler);
+    launchButton.removeEventListener('touchstart', touchHandler);
+    launchButton.click();
 }
-document.body.addEventListener('touchstart', moveHandler);
+launchButton.addEventListener('touchstart', touchHandler);
 
-document.getElementById('launch-button').onclick = evt => {
+launchButton.onclick = evt => {
     launch({mousePointer, normalTouchRadiusX});
 }
