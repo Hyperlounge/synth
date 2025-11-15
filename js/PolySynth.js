@@ -189,11 +189,11 @@ export default class PolySynth extends ModularSynth {
     }
 
     onBlur = evt => {
-        this.suspendApp(evt.type);
+        //this.suspendApp(evt.type);
     }
 
     onFocus = evt => {
-        this.resumeApp(evt.type); 
+        //this.resumeApp(evt.type); 
     }    
 
     onVisibilityChange = evt => {
