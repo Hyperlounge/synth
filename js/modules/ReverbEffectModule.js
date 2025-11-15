@@ -8,13 +8,13 @@ export default class ReverbEffectModule extends AudioModule {
         this._isFirstUpdate = true;
 
         fetchAndCacheBuffers(context, [
-            'media/irs/small.ogg',
-            'media/irs/medium.ogg',
-            'media/irs/large.ogg',
-            'media/irs/huge.ogg',
+            'media/irs/small.mp3',
+            'media/irs/medium.mp3',
+            'media/irs/large.mp3',
+            'media/irs/huge.mp3',
         ]).then(cache => {
             cache.forEach(entry => {
-                this._buffers[entry.path.replace(/^.*\/(\w+)\.ogg$/, '$1')] = entry.buffer;
+                this._buffers[entry.path.replace(/^.*\/(\w+)\.mp3$/, '$1')] = entry.buffer;
             });
             this._update();
         });
