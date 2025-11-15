@@ -147,12 +147,12 @@ export default class PolySynth extends ModularSynth {
         }
     }
 
-    manuallyResume() {
+    manuallyResume(inPromise) {
         this._resumePending = true;
         const resumeScreen = document.createElement('div');
         resumeScreen.style = 'position: fixed; z-index: 999999; display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; background: rgba(0,0,0,0.5)';
         document.body.append(resumeScreen);
-        resumeScreen.innerHTML = '<div style="display: inline-block; font-family: sans-serif; font-size: 50px; font-weight: bold; color: white">CLICK TO RESUME</div>';
+        resumeScreen.innerHTML = `<div style="display: inline-block; font-family: sans-serif; font-size: 50px; font-weight: bold; color: white">${inPromise ? 'PROMISE' : 'CLICK TO RESUME'}</div>`;
         const handler = evt => {
             resumeScreen.removeEventListener('mousedown', handler);
             resumeScreen.remove();
@@ -170,7 +170,7 @@ export default class PolySynth extends ModularSynth {
             this.audioContext.resume().then(() => {
                 delete this._resumePending;
             }, () => {
-                this.manuallyResume();
+                this.manuallyResume(true);
             });
         }
     }
