@@ -23,26 +23,17 @@ const banks = [
     'Prototypes'
 ];
 
-function getMobileOperatingSystem() {
-    var userAgent = navigator.userAgent || navigator.vendor || window.opera;
-
-    new Dialog(`userAgent: ${userAgent}`)
-
-    // Windows Phone must come first because its UA also contains "Android"
-    if (/windows phone/i.test(userAgent)) {
-        return "Windows Phone";
-    }
-
-    if (/android/i.test(userAgent)) {
-        return "Android";
-    }
-
-    // iOS detection from: http://stackoverflow.com/a/9039885/177710
-    if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-        return "iOS";
-    }
-
-    return "unknown";
+function iOS() {
+  return [
+    'iPad Simulator',
+    'iPhone Simulator',
+    'iPod Simulator',
+    'iPad',
+    'iPhone',
+    'iPod'
+  ].includes(navigator.platform)
+  // iPad on iOS 13 detection
+  || (navigator.userAgent.includes("Mac") && "ontouchend" in document)
 }
 
 export default class PolySynth extends ModularSynth {
@@ -187,14 +178,14 @@ export default class PolySynth extends ModularSynth {
 
     resumeApp(sourceEventType) {
         if (!this._resumePending && this.audioContext.state !== 'running') {
-            if (this.audioContext.state === 'interrupted' || getMobileOperatingSystem() === 'iOS') {
-                this.manuallyResume(sourceEventType + ", " + getMobileOperatingSystem());
+            if (this.audioContext.state === 'interrupted' || iOS()) {
+                this.manuallyResume(sourceEventType);
             } else {
                 this._resumePending = true;
                 this.audioContext.resume().then(() => {
                     delete this._resumePending;
                 }, () => {
-                    this.manuallyResume(sourceEventType + ", " + getMobileOperatingSystem(), true);
+                    this.manuallyResume(sourceEventType, true);
                 });
             }
         }
