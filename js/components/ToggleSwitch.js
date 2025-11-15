@@ -39,8 +39,7 @@ export default class ToggleSwitch extends AbstractComponent {
         border: 4px solid black;
         border-radius: 4px;
         font-weight: bold;
-        letter-spacing: 1px;
-        padding: 1px;
+        padding: 1px 0.5em;
         background: linear-gradient(to right, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), ${data.capColor};
         margin-bottom: 0.3em;
     }

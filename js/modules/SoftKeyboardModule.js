@@ -17,7 +17,6 @@ const template = data => `
         data-module="keyboard"
         data-control="adjuster"
     > </keyboard-adjuster>
-    <span>Keys:</span>
     <button class="keyboard-range" value="88">88</button>
     <button class="keyboard-range" value="61">61</button>
     <button class="keyboard-range" value="49">49</button>

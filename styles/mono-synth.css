@@ -40,10 +40,13 @@ html, body {
   background: black;
 }
 .synth button, .synth select {
-  border: 1px solid black;
-  border-radius: 0.5em;
+  border: 3px solid black;
+  border-radius: 4px;
   padding: 0.2em 1em;
-  color: black;
+  background-color: black;
+  background-image: linear-gradient(#666666, black);
+  font-weight: bold;
+  color: #cccccc;
 }
 
 .header {
@@ -51,7 +54,6 @@ html, body {
   text-align: left;
   padding: 3px 10px;
   display: flex;
-  align-items: center;
   gap: 0.5em;
 }
 .header #power {
@@ -60,27 +62,23 @@ html, body {
 .header #preset-name {
   display: inline-block;
   border: 1px solid gray;
-  width: 200px;
-  padding: 3px;
+  border-radius: 4px;
+  width: 250px;
+  padding: 0 0.5em;
   font-size: 130%;
+  line-height: 23px;
+  height: 25px;
+  background-color: white;
+  box-shadow: inset rgba(0, 0, 0, 0.8) 0 2px 5px;
+}
+.header #preset-name::after {
+  float: right;
+  content: "⌄";
+  font-size: 150%;
+  transform: translateY(-25%);
 }
 .header #preset-name:empty::before {
   content: "Preset name";
-}
-.header .recorder button#record {
-  color: red;
-}
-.header .recorder button#record::before {
-  content: "record";
-}
-.header .recorder button#record.stop::before {
-  content: "stop";
-}
-.header .recorder button#play::before {
-  content: "play";
-}
-.header .recorder button#play.stop::before {
-  content: "stop";
 }
 
 .library-root {
@@ -88,7 +86,8 @@ html, body {
   position: absolute;
   background: silver;
   padding: 10px;
-  border: 1px solid gray;
+  border: 0;
+  box-shadow: black 0 3px 10px;
   border-radius: 0 10px 10px 10px;
   font-size: 150%;
   z-index: 1000;
@@ -106,6 +105,7 @@ html, body {
 }
 .library-root .library .banks div {
   padding: 3px 6px;
+  border-radius: 5px 0 0 5px;
 }
 .library-root .library .banks div.selected {
   background: white;
@@ -115,6 +115,7 @@ html, body {
   flex-direction: column;
   flex-wrap: wrap;
   background: white;
+  border-radius: 0 5px 5px 0;
 }
 .library-root .library .presets div {
   padding: 3px 6px;

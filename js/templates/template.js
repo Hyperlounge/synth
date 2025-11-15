@@ -17,7 +17,7 @@ const template = () => `
         <span id="preset-name" data-module="header" data-control="library"></span> <input id="load-patch-input" type="file" accept=".json," style="display: none"></input><button id="load-patch" data-module="header" data-control="loadPatch">Load patch</button> <button id="save-patch" data-module="header" data-control="savePatch">Save patch</button> <button id="share-patch" data-module="header" data-control="sharePatch">Share patch</button>
         <toggle-switch id="show-effects" format="horizontal" on-text="EFFECTS" off-text="EFFECTS"></toggle-switch>
         <toggle-switch id="reference-tone" format="horizontal" on-text="MIDDLE C" off-text="MIDDLE C" data-module="header" data-control="c4Tone"></toggle-switch>
-        <toggle-switch id="help-mode" format="horizontal" on-text="HELP MODE" off-text="HELP-MODE" cap-color="lightgreen"></toggle-switch>
+        <toggle-switch id="help-mode" format="horizontal" on-text="HELP MODE" off-text="HELP MODE" cap-color="lightgreen"></toggle-switch>
         <toggle-switch id="power" format="horizontal" cap-color="orangered" checked>Power: </toggle-switch>
     </div>
     <div class="controls">
