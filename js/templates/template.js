@@ -18,7 +18,7 @@ const template = () => `
         <toggle-switch id="show-effects" format="horizontal" on-text="EFFECTS" off-text="EFFECTS"></toggle-switch>
         <toggle-switch id="reference-tone" format="horizontal" on-text="MIDDLE C" off-text="MIDDLE C" data-module="header" data-control="c4Tone"></toggle-switch>
         <toggle-switch id="help-mode" format="horizontal" on-text="HELP MODE" off-text="HELP MODE" cap-color="lightgreen"></toggle-switch>
-        <toggle-switch id="power" format="horizontal" cap-color="orangered" checked>Power: </toggle-switch>
+        <toggle-switch id="power" format="horizontal" cap-color="orangered" on-text="POWER" off-text="POWER" checked></toggle-switch>
     </div>
     <div class="controls">
         <div class="expression-controls" data-module="expressionControls">
