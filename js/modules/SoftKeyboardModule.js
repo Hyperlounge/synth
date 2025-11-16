@@ -192,7 +192,10 @@ export default class SoftKeyboardModule extends AudioModule {
                 });
                 break;
             case 'default':
-                this._patch.set(this._initialState);
+                this._patch.set({
+                    topNote: this._initialPatch.topNote,
+                    bottomNote: this._initialPatch.bottomNote,
+                });
                 break;
         }
         this._update();

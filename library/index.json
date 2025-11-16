@@ -151,6 +151,11 @@
       "fileName": "Keys- Wurly.hspatch.json"
     },
     {
+      "name": "Autobahn",
+      "bank": "Leads",
+      "fileName": "Leads- Autobahn.hspatch.json"
+    },
+    {
       "name": "Bendy Bell",
       "bank": "Leads",
       "fileName": "Leads- Bendy Bell.hspatch.json"
