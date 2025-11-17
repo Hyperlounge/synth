@@ -1,16 +1,15 @@
 import '../components/RotaryKnob.js';
 import '../components/RotarySwitch.js';
-
-const SVG = './media/svg';
+import getSvgUsingHref from '../misc/getSvgUsingHref.js';
 
 const oscTemplate = number => `
 <div class="control-group">
     <div class="vertical-group">
     <rotary-switch module-id="osc${number}" parameter-name="waveform" title="Waveform" labels="right">
-        <option value="sine"><img alt="sine" src="${SVG}/sine-wave.svg"/></option>
-        <option value="triangle" selected><img alt="triangle" src="${SVG}/triangle.svg"/></option>
-        <option value="sawtooth"><img alt="sawtooth" src="${SVG}/saw-tooth.svg"/></option>
-        <option value="square"><img alt="square" src="${SVG}/square-wave.svg"/></option>   
+        <option value="sine">${getSvgUsingHref('sine-wave')}</option>
+        <option value="triangle" selected>${getSvgUsingHref('triangle')}</option>
+        <option value="sawtooth">${getSvgUsingHref('saw-tooth')}</option>
+        <option value="square">${getSvgUsingHref('square-wave')}</option>   
     </rotary-switch>
     <rotary-switch module-id="osc${number}" parameter-name="range" numeric title="Range" labels="right">
         <option value="2">2</option>

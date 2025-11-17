@@ -15,7 +15,7 @@ export default class VerticalSlider extends AbstractComponent {
         maxValue: PropTypes.number.default(1),
         logarithmic: PropTypes.bool.default(false),
         units: PropTypes.string.default(''),
-        capColor: PropTypes.string.default('yellow').observed,
+        capColor: PropTypes.string.default(this.themeColors.normal).observed,
     }
 
     static template = data => `
@@ -28,6 +28,7 @@ export default class VerticalSlider extends AbstractComponent {
         position: relative;
     }
     .title {
+        color: ${data.foregroundColor};
         text-align: center;
         margin-bottom: 0.5em;
     }
@@ -72,9 +73,10 @@ export default class VerticalSlider extends AbstractComponent {
         width: 4px;
         height: 1px;
         left: 38px;
-        background-color: black;
+        background-color: ${data.foregroundColor};
     }
     .label {
+        color: ${data.foregroundColor};
         position: absolute;
         left: 44px;
         font-size: 80%;
@@ -120,6 +122,7 @@ export default class VerticalSlider extends AbstractComponent {
         const data = {
             ...this._props,
             title: this._title,
+            foregroundColor: getComputedStyle(this).getPropertyValue('color'),
         }
 
         this._initialValue = data.value;

@@ -79,9 +79,12 @@ export default class HelpPopup extends Modal {
             }
             .hl-help-close-button {
                 position: absolute;
-                top: 1em;
-                right: 1em;
+                top: 0.3em;
+                right: 0.3em;
                 border: 0;
+                color: black;
+                font-size: 150%;
+                background: transparent;
             }
             .hl-help-popup thead {
                 display: none;

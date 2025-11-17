@@ -1,18 +1,18 @@
 import '../components/RotaryKnob.js';
 import '../components/RotarySwitch.js';
-const SVG = './media/svg';
+import getSvgUsingHref from '../misc/getSvgUsingHref.js';
 
 const lfoTemplate = `
 <div class="control-group">
     <div class="vertical-group">
         <rotary-switch module-id="lfo" parameter-name="waveform" title="Waveform">
-            <option value="sine"><img alt="sine" src="${SVG}/sine-wave.svg"/></option>
-            <option value="triangle" selected><img alt="triangle" src="${SVG}/triangle.svg"/></option>
-            <option value="sawtooth"><img alt="sawtooth" src="${SVG}/saw-tooth.svg"/></option>
-            <option value="inverse-sawtooth"><img alt="reverse sawtooth" src="${SVG}/reverse-saw.svg"/></option>
-            <option value="square"><img alt="square" src="${SVG}/square-wave.svg"/></option>
-            <option value="sample-hold"><img alt="sample and hold" src="${SVG}/sample-and-hold.svg"/></option>
-            <option value="noise"><img alt="noise" src="${SVG}/noise.svg"/></option>
+            <option value="sine">${getSvgUsingHref('sine-wave')}</option>
+            <option value="triangle" selected>${getSvgUsingHref('triangle')}</option>
+            <option value="sawtooth">${getSvgUsingHref('saw-tooth')}</option>
+            <option value="inverse-sawtooth">${getSvgUsingHref('reverse-saw')}</option>
+            <option value="square">${getSvgUsingHref('square-wave')}</option>
+            <option value="sample-hold">${getSvgUsingHref('sample-and-hold')}</option>
+            <option value="noise">${getSvgUsingHref('noise')}</option>
         </rotary-switch>
         <rotary-knob module-id="lfo" parameter-name="frequency" value="6" logarithmic min-value="0.1" max-value="100">Rate</rotary-knob>
     </div>

@@ -17,7 +17,7 @@ export default class RotaryKnob extends AbstractComponent {
         maxValue: PropTypes.number.default(1),
         logarithmic: PropTypes.bool.default(false),
         units: PropTypes.string.default(''),
-        capColor: PropTypes.string.default('yellow').observed,
+        capColor: PropTypes.string.default(this.themeColors.normal).observed,
     }
 
     static template = data => `
@@ -30,9 +30,12 @@ export default class RotaryKnob extends AbstractComponent {
         position: relative;
     }
     .title {
+        color: ${data.foregroundColor};
         text-align: center;
     }
     .rotor {
+        position: relative;
+        z-index: 2;
         width: 40px;
         height: 40px;
         border: 4px solid black;
@@ -51,9 +54,10 @@ export default class RotaryKnob extends AbstractComponent {
         display: inline-block;
         width: 1px;
         height: 4px;
-        background-color: black;
+        background-color: ${data.foregroundColor};
     }
     .label {
+        color: ${data.foregroundColor};
         font-size: 80%;
         transform: translate(-50%, -50%);
     }
@@ -95,6 +99,7 @@ export default class RotaryKnob extends AbstractComponent {
         const data = {
             ...this._props,
             title: this._title,
+            foregroundColor: getComputedStyle(this).getPropertyValue('color'),
         }
 
         this._initialValue = data.value;

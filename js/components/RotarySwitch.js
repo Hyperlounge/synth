@@ -11,7 +11,7 @@ const LABELS_AROUND = 'around';
 export default class RotarySwitch extends AbstractComponent {
     static propTypes = {
         ...AbstractComponent.propTypes,
-        capColor: PropTypes.string.default('yellow').observed,
+        capColor: PropTypes.string.default(this.themeColors.normal).observed,
         title: PropTypes.string.default('Title').observed,
         labels: PropTypes.string.lookup([LABELS_LEFT, LABELS_RIGHT, LABELS_AROUND]).default(LABELS_AROUND),
         numeric: PropTypes.bool.default(false),
@@ -27,9 +27,12 @@ export default class RotarySwitch extends AbstractComponent {
         position: relative;
     }
     .title {
+        color: ${data.foregroundColor};
         text-align: center;
     }
     .rotor {
+        position: relative;
+        z-index: 2;
         width: 40px;
         height: 40px;
         border: 4px solid black;
@@ -48,14 +51,16 @@ export default class RotarySwitch extends AbstractComponent {
         display: inline-block;
         width: 1px;
         height: 4px;
-        background-color: black;
+        background-color: ${data.foregroundColor};
     }
     .label {
+        color: ${data.foregroundColor};
         font-size: 80%;
     }
-    .label img {
+    .label img, .label svg {
         width: 10px;
         height: 10px;
+        fill: ${data.foregroundColor};
     }
 </style>
 <div class="rotary-switch">
@@ -92,7 +97,9 @@ export default class RotarySwitch extends AbstractComponent {
 
         const data = {
             ...this._props,
+            foregroundColor: getComputedStyle(this).getPropertyValue('color'),
         }
+
         this._root.innerHTML = RotarySwitch.template(data);
         this._drawScale();
         this._updateView();

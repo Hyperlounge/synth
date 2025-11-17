@@ -79,4 +79,10 @@ export default class AbstractComponent extends HTMLElement {
         }
     }
 
+    static themeColors = {
+        bright: 'yellow',
+        normal: 'rgba(213, 213, 0, 1)',
+        dark: 'rgb(124, 124, 1)',
+    }
+
 }

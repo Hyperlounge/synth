@@ -7,7 +7,7 @@ export default class ToggleSwitch extends AbstractComponent {
     static propTypes = {
         ...AbstractComponent.propTypes,
         checked: PropTypes.bool.default(false).observed,
-        capColor: PropTypes.string.default('yellow').observed,
+        capColor: PropTypes.string.default(this.themeColors.bright).observed,
         format: PropTypes.string.lookup(['vertical', 'horizontal']).default('vertical'),
         onText: PropTypes.string.default('ON'),
         offText: PropTypes.string.default('OFF'),
@@ -39,6 +39,7 @@ export default class ToggleSwitch extends AbstractComponent {
         border: 4px solid black;
         border-radius: 4px;
         font-weight: bold;
+        color: black;
         padding: 1px 0.5em;
         background: linear-gradient(to right, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), ${data.capColor};
         margin-bottom: 0.3em;

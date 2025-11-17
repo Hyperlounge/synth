@@ -6,7 +6,7 @@ import AbstractComponent from './AbstractComponent.js';
 export default class CycleSwitch extends AbstractComponent {
     static propTypes = {
         ...AbstractComponent.propTypes,
-        capColor: PropTypes.string.default('yellow').observed,
+        capColor: PropTypes.string.default(this.themeColors.normal).observed,
         title: PropTypes.string.default('Title').observed,
         format: PropTypes.string.lookup(['vertical', 'horizontal']).default('vertical'),
         numeric: PropTypes.bool.default(false),
@@ -37,6 +37,7 @@ export default class CycleSwitch extends AbstractComponent {
         border: 4px solid black;
         border-radius: 4px;
         font-weight: bold;
+        color: black;
         padding: 1px;
         background: ${data.capColor};
         margin-bottom: 0.55em;
