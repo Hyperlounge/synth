@@ -3,6 +3,7 @@ import MidiEvent from '../events/MidiEvent.js';
 import '../components/KeyboardAdjuster.js';
 import '../components/CycleSwitch.js';
 import ModWheel from '../components/ModWheel.js';
+import getThemeProps from '../misc/getThemeProps.js';
 
 function mapRange(a, b, func) {
     return Array.from(Array(b - a + 1)).map((item, index) => func(index + a));

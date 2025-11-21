@@ -1,4 +1,17 @@
+
 html, body {
+  --theme-bright-color: rgb(254, 119, 137);
+  --theme-normal-color: rgb(220, 62, 83);
+  --theme-dark-color: rgb(134, 39, 52);
+  --theme-bg-color: #333333;
+  --theme-panel-bg-color: #444444;
+  --theme-panel-text-color: #cccccc;
+  --theme-effects-bg-color: #777777;
+  --theme-effects-panel-bg-color: #aaaaaa;
+  --theme-effects-panel-text-color: black;
+  --theme-help-bg-color: lightgreen;
+  --theme-help-text-color: black;
+  --theme-help-outline-color: lime;
   width: 100%;
   height: 100%;
   padding: 0;
@@ -36,7 +49,7 @@ html, body {
   height: 100%;
   flex-direction: column;
   justify-items: start;
-  background: black;
+  background: var(--theme-bg-color);
 
   button, select {
     border: 3px solid black;
@@ -185,10 +198,11 @@ html, body {
   display: flex;
   flex-direction: column;
   margin: 2px;
-  background: #444444;
-  color: #cccccc;
-  border: 1px solid gray;
-  padding: 0;
+  background: var(--theme-panel-bg-color);
+  color: var(--theme-panel-text-color);
+  border: 0;
+  box-shadow: inset 0 1px rgba(255,255,255,0.3), inset 0 -1px rgba(0,0,0,0.7);
+  padding: 1px;
   border-radius: 10px;
   flex-grow: 1;
 
@@ -303,7 +317,7 @@ html, body {
        &.with-label {
          color: #222222;
          &.middle-c {
-           background-image: linear-gradient(to top, transparent, transparent 80%, yellow);
+           background-image: linear-gradient(to top, transparent, transparent 80%, var(--theme-normal-color));
          }
        }
 
@@ -380,11 +394,13 @@ html, body {
   display: flex;
   flex-direction: column;
   margin: 2px;
-  background: black;
+  background: var(--theme-effects-bg-color);
+  color: var(--theme-effects-panel-text-color);
   padding: 6px;
   border-radius: 16px;
   flex-grow: 1;
-  box-shadow: 0px 10px 30px;
+  box-shadow: 0px 10px 30px, inset 0 1px rgba(255,255,255,0.3), inset 0 -1px rgba(0,0,0,0.7);
+
   visibility: hidden;
 
   &.show {
@@ -394,8 +410,9 @@ html, body {
   .effect-group {
     display: flex;
     flex-direction: row;
-    background: silver;
+    background: var(--theme-effects-panel-bg-color);
     border-radius: 10px;
+    box-shadow: inset 0 1px rgba(255,255,255,0.3), inset 0 -1px rgba(0,0,0,0.7);
     margin: 2px;
     padding: 0 10px;
     align-items: center;
@@ -404,7 +421,6 @@ html, body {
       display: flex;
       flex-direction: column;
       justify-content: center;
-      border-right: 1px solid gray;
       width: 80px;
       height: 100px;
     }

@@ -2,6 +2,7 @@
 import PropTypes from './helpers/PropTypes.js';
 import addTwiddling from './helpers/addTwiddling.js';
 import AbstractComponent from './AbstractComponent.js';
+import getThemeProps from '../misc/getThemeProps.js';
 
 export default class VerticalSlider extends AbstractComponent {
     static propTypes = {
@@ -15,7 +16,7 @@ export default class VerticalSlider extends AbstractComponent {
         maxValue: PropTypes.number.default(1),
         logarithmic: PropTypes.bool.default(false),
         units: PropTypes.string.default(''),
-        capColor: PropTypes.string.default(this.themeColors.normal).observed,
+        capColor: PropTypes.string.default(getThemeProps('normal-color')).observed,
     }
 
     static template = data => `

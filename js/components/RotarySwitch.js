@@ -2,6 +2,7 @@
 import PropTypes from './helpers/PropTypes.js';
 import addTwiddling from './helpers/addTwiddling.js';
 import AbstractComponent from './AbstractComponent.js';
+import getThemeProps from '../misc/getThemeProps.js';
 
 const LABELS_LEFT = 'left';
 const LABELS_RIGHT = 'right';
@@ -11,7 +12,7 @@ const LABELS_AROUND = 'around';
 export default class RotarySwitch extends AbstractComponent {
     static propTypes = {
         ...AbstractComponent.propTypes,
-        capColor: PropTypes.string.default(this.themeColors.normal).observed,
+        capColor: PropTypes.string.default(getThemeProps('normal-color')).observed,
         title: PropTypes.string.default('Title').observed,
         labels: PropTypes.string.lookup([LABELS_LEFT, LABELS_RIGHT, LABELS_AROUND]).default(LABELS_AROUND),
         numeric: PropTypes.bool.default(false),
@@ -30,7 +31,7 @@ export default class RotarySwitch extends AbstractComponent {
         color: ${data.foregroundColor};
         text-align: center;
     }
-    .rotor {
+    .rotor-container {
         position: relative;
         z-index: 2;
         width: 40px;
@@ -40,6 +41,13 @@ export default class RotarySwitch extends AbstractComponent {
         background-color: ${data.capColor};
         text-align: center;
         margin: 1.5em;
+        box-shadow: 0 10px 10px rgba(0,0,0,0.3), inset 0 2px 3px rgba(0,0,0,0.4);
+    }
+    .rotor {
+        position: relative;
+        z-index: 2;
+        width: 40px;
+        height: 40px;
     }
     .indicator {
         display: inline-block;
@@ -66,8 +74,10 @@ export default class RotarySwitch extends AbstractComponent {
 <div class="rotary-switch">
     <div class="title">${data.title}</div>
     
-    <div class="rotor">
-        <div class="indicator"></div>
+    <div class="rotor-container">
+        <div class="rotor">
+            <div class="indicator"></div>
+        </div>
     </div>
 </div>
     `
@@ -112,7 +122,7 @@ export default class RotarySwitch extends AbstractComponent {
     }
 
     _drawScale() {
-        const rotor = this._root.querySelector('.rotor');
+        const rotor = this._root.querySelector('.rotor-container');
         const rotorRadius = rotor.offsetWidth / 2;
         const rotorCenter = {
             x: rotor.offsetLeft + rotorRadius,

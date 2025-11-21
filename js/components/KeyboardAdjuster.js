@@ -1,6 +1,7 @@
 
 import PropTypes from './helpers/PropTypes.js';
 import addTwiddling from './helpers/addTwiddling.js';
+import getThemeProps from '../misc/getThemeProps.js';
 
 const KEYBOARD_SVG = '<svg width="100%" height="100%" viewBox="0 0 182 114" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;"><rect x="0" y="0" width="181.417" height="113.386" style="fill:transparent;"/><path d="M31.181,0l-15.388,0l0,67.019c0,2.123 1.724,3.847 3.847,3.847l7.694,0c2.123,0 3.847,-1.724 3.847,-3.847l0,-67.019Z"/><path d="M61.874,0l-15.388,0l0,67.019c0,2.123 1.724,3.847 3.847,3.847l7.694,0c2.123,0 3.847,-1.724 3.847,-3.847l0,-67.019Z"/><path d="M107.431,0l-15.388,0l0,67.019c0,2.123 1.724,3.847 3.847,3.847l7.694,0c2.123,0 3.847,-1.724 3.847,-3.847l0,-67.019Z"/><path d="M137.278,0l-15.388,0l-0,67.019c-0,2.123 1.724,3.847 3.847,3.847l7.694,0c2.123,0 3.847,-1.724 3.847,-3.847l-0,-67.019Z"/><path d="M167.154,0l-15.388,0l0,67.019c0,2.123 1.724,3.847 3.847,3.847l7.694,0c2.123,0 3.847,-1.724 3.847,-3.847l0,-67.019Z"/></svg>'
 
@@ -20,7 +21,7 @@ export default class KeyboardAdjuster extends HTMLElement {
         maxNote: PropTypes.number.default(108),
         bottomNote: PropTypes.number.default(36).observed,
         topNote: PropTypes.number.default(96).observed,
-        middleCColor: PropTypes.string.default('yellow'),
+        middleCColor: PropTypes.string.default(getThemeProps('normal-color')),
         dataModule: PropTypes.string,
         dataControl: PropTypes.string,
     }

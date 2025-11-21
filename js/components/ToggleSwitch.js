@@ -2,12 +2,13 @@
 import PropTypes from './helpers/PropTypes.js';
 import addTwiddling from './helpers/addTwiddling.js';
 import AbstractComponent from './AbstractComponent.js';
+import getThemeProps from '../misc/getThemeProps.js';
 
 export default class ToggleSwitch extends AbstractComponent {
     static propTypes = {
         ...AbstractComponent.propTypes,
         checked: PropTypes.bool.default(false).observed,
-        capColor: PropTypes.string.default(this.themeColors.bright).observed,
+        capColor: PropTypes.string.default(getThemeProps('bright-color')).observed,
         format: PropTypes.string.lookup(['vertical', 'horizontal']).default('vertical'),
         onText: PropTypes.string.default('ON'),
         offText: PropTypes.string.default('OFF'),
@@ -30,6 +31,10 @@ export default class ToggleSwitch extends AbstractComponent {
     .title {
         text-align: center;
         margin-bottom: 0.2em;
+        color: ${data.foregroundColor};
+    }
+    .title:empty {
+        display: none;
     }
     .switch {
         position: relative;
@@ -43,6 +48,7 @@ export default class ToggleSwitch extends AbstractComponent {
         padding: 1px 0.5em;
         background: linear-gradient(to right, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), ${data.capColor};
         margin-bottom: 0.3em;
+        box-shadow: 0 3px 3px rgba(0,0,0,0.4);
     }
     .toggle-switch.horizontal .title {
         margin: 0;
@@ -55,7 +61,8 @@ export default class ToggleSwitch extends AbstractComponent {
         content: '${data.offText}';
     }
     .switch.checked {
-        background: ${data.capColor};
+        background: radial-gradient(transparent, transparent, rgba(0, 0, 0, 0.3)), ${data.capColor};
+        box-shadow: 0 1px 1px rgba(0,0,0,0.4);
     }
     .switch.checked::before {
         content: '${data.onText}';
@@ -79,6 +86,7 @@ export default class ToggleSwitch extends AbstractComponent {
         const data = {
             ...this._props,
             title: this._title,
+            foregroundColor: getComputedStyle(this).getPropertyValue('color'),
         }
 
         this._root.innerHTML = ToggleSwitch.template(data);

@@ -2,11 +2,12 @@
 import PropTypes from './helpers/PropTypes.js';
 import addTwiddling from './helpers/addTwiddling.js';
 import AbstractComponent from './AbstractComponent.js';
+import getThemeProps from '../misc/getThemeProps.js';
 
 export default class CycleSwitch extends AbstractComponent {
     static propTypes = {
         ...AbstractComponent.propTypes,
-        capColor: PropTypes.string.default(this.themeColors.normal).observed,
+        capColor: PropTypes.string.default(getThemeProps('normal-color')).observed,
         title: PropTypes.string.default('Title').observed,
         format: PropTypes.string.lookup(['vertical', 'horizontal']).default('vertical'),
         numeric: PropTypes.bool.default(false),
@@ -28,6 +29,10 @@ export default class CycleSwitch extends AbstractComponent {
     .title {
         text-align: center;
         margin-bottom: 0.2em;
+        color: ${data.foregroundColor};
+    }
+    .title:empty {
+        display: none;
     }
     .switch {
         position: relative;
@@ -41,6 +46,7 @@ export default class CycleSwitch extends AbstractComponent {
         padding: 1px;
         background: ${data.capColor};
         margin-bottom: 0.55em;
+        box-shadow: 0 3px 3px rgba(0,0,0,0.4);
     }
     .cycle-switch.horizontal .title {
         margin: 0;
@@ -77,6 +83,7 @@ export default class CycleSwitch extends AbstractComponent {
         const data = {
             ...this._props,
             selectedLabel: this._options[this._selectedIndex].label,
+            foregroundColor: getComputedStyle(this).getPropertyValue('color'),
         }
 
         this._root.innerHTML = CycleSwitch.template(data);
