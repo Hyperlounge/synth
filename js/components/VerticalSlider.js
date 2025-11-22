@@ -53,10 +53,21 @@ export default class VerticalSlider extends AbstractComponent {
         width: 30px;
         height: 40px;
         border: 4px solid black;
+        border-width: 0 4px 0 4px;
         border-radius: 4px;
         left: 50%;
-        background-color: ${data.capColor};
+        background: linear-gradient(
+            rgba(255,255,255,0.5),  
+            rgba(255,255,255,0.5) 10%,
+            rgba(0,0,0,0.3) 11%,
+            rgba(0,0,0,0) 49%,
+            rgba(255,255,255,0) 10%,
+            rgba(255,255,255,0.3) 89%,
+            rgba(0,0,0,0.5) 90%,
+            rgba(0,0,0,0.5)
+        ), ${data.capColor};
         transform: translate(-50%, -50%);
+        box-shadow: 0 7px 7px rgba(0,0,0,0.4);
     }
     .indicator {
         position: absolute;
