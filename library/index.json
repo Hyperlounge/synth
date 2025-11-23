@@ -146,6 +146,11 @@
       "fileName": "Keys- Theatre Organ.hspatch.json"
     },
     {
+      "name": "Upright Piano",
+      "bank": "Keys",
+      "fileName": "Keys- Upright Piano.hspatch.json"
+    },
+    {
       "name": "Wurly",
       "bank": "Keys",
       "fileName": "Keys- Wurly.hspatch.json"
@@ -164,6 +169,11 @@
       "name": "Cat-Fight",
       "bank": "Leads",
       "fileName": "Leads- Cat-Fight.hspatch.json"
+    },
+    {
+      "name": "Crunchy",
+      "bank": "Leads",
+      "fileName": "Leads- Crunchy.hspatch.json"
     },
     {
       "name": "Genius Of Love",
@@ -309,6 +319,56 @@
       "name": "Xylophobia",
       "bank": "Percussion",
       "fileName": "Percussion- Xylophobia.hspatch.json"
+    },
+    {
+      "name": "Bass",
+      "bank": "Prototypes",
+      "fileName": "Prototypes- Bass.hspatch.json"
+    },
+    {
+      "name": "Brass Section",
+      "bank": "Prototypes",
+      "fileName": "Prototypes- Brass Section.hspatch.json"
+    },
+    {
+      "name": "Brass Solo",
+      "bank": "Prototypes",
+      "fileName": "Prototypes- Brass Solo.hspatch.json"
+    },
+    {
+      "name": "Lead",
+      "bank": "Prototypes",
+      "fileName": "Prototypes- Lead.hspatch.json"
+    },
+    {
+      "name": "Organ",
+      "bank": "Prototypes",
+      "fileName": "Prototypes- Organ.hspatch.json"
+    },
+    {
+      "name": "Pad",
+      "bank": "Prototypes",
+      "fileName": "Prototypes- Pad.hspatch.json"
+    },
+    {
+      "name": "Piano",
+      "bank": "Prototypes",
+      "fileName": "Prototypes- Piano.hspatch.json"
+    },
+    {
+      "name": "Strings Section",
+      "bank": "Prototypes",
+      "fileName": "Prototypes- Strings Section.hspatch.json"
+    },
+    {
+      "name": "Strings Solo",
+      "bank": "Prototypes",
+      "fileName": "Prototypes- Strings Solo.hspatch.json"
+    },
+    {
+      "name": "Big Strings Section",
+      "bank": "Strings",
+      "fileName": "Strings- Big Strings Section.hspatch.json"
     },
     {
       "name": "Cello",
