@@ -226,11 +226,22 @@ export default class PolySynth extends ModularSynth {
     onHelpModeChange = evt => {
         const helpModeOn = evt.target.value;
 
+        const showHelp = (target, moduleName, controlName) => {
+            const helpContent = getHelp(moduleName, controlName);
+            if (helpContent) {
+                new HelpPopup(helpContent, {target}).then(() => {
+                    target.classList.toggle('help-active', false);
+                });
+                setTimeout(() => target.classList.toggle('help-active', true), 1);
+            }
+        }
+
         const startHelpMode = () => {
             this._clickDetector = document.createElement('div');
             document.body.appendChild(this._clickDetector);
             this._clickDetector.style = 'position: absolute; width: 100%; height: 100%; z-index: 90000; cursor: help !important';
             this._clickDetector.addEventListener('mousedown', clickHandler);
+            showHelp(evt.target, 'header', 'helpMode');
         }
 
         const endHelpMode = () => {
@@ -255,13 +266,7 @@ export default class PolySynth extends ModularSynth {
                 if (target) {
                     const moduleName = target.getAttribute('module-id') || target.getAttribute('data-module');
                     const controlName = target.getAttribute('parameter-name') || target.getAttribute('data-control') || undefined;
-                    const helpContent = getHelp(moduleName, controlName);
-                    if (helpContent) {
-                        new HelpPopup(helpContent, {target}).then(() => {
-                            target.classList.toggle('help-active', false);
-                        });
-                        setTimeout(() => target.classList.toggle('help-active', true), 1);
-                    }
+                    showHelp(target, moduleName, controlName);
                 }
             } else if (elementToBehaveNormally.id === 'help-mode') {
                 elementToBehaveNormally.value = false;

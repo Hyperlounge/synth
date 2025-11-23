@@ -5,7 +5,8 @@ ${help.modules.header.controls.library.html}
 ${help.modules.header.controls.loadPatch.html}
 ${help.modules.header.controls.savePatch.html}
 ${help.modules.header.controls.sharePatch.html}
-${help.modules.header.controls.c4Tone.html}`,
+${help.modules.header.controls.c4Tone.html}
+${help.modules.header.controls.helpMode.html}`,
     controls: {
       library: {
         html: `<h3>Current Patch and Patch Selector</h3>
@@ -30,6 +31,11 @@ ${help.modules.header.controls.c4Tone.html}`,
       c4Tone: {
         html: `<h3>Middle C</h3>
 <p>Plays a middle C refence tone which is useful when you are creating sounds using the Cross-Mod control in Oscillator 2. This can skew the frequency of the note considerably, and you will need to fiddle with the Semitones and Fine Tune controls in the Oscillators to bring it back. The note marked in yellow on the keyboard with a figure 4 in it should be in tune with this reference tone.</p>
+`,
+      },
+      helpMode: {
+        html: `<h3>Help Mode</h3>
+<p>When Help Mode is on, click on any control or panel to get an explanation of its function. You can keep clicking on other items for more help, until Help Mode is turned off by clicking the HELP MODE button again.</p>
 `,
       },
     },
