@@ -11,61 +11,152 @@
     <meta name="viewport" content="width=1180">
     <script type="module" src="js/synth-options.mjs"></script>
     <style>
-        body .intro {
-            font-family: "Roboto Mono", monospace;
-            color: #DDDDDD;
+        html, body {
+            padding: 0;
+            margin: 0;
             width: 100%;
             height: 100%;
-            overflow: auto;
+        }
+        .intro {
+            font-size: larger;
+            color: black;
+            background-color: white;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
         }
         header {
-            font-size: larger;
             text-align: center;
             padding: 2em;
+            background-color: var(--theme-panel-bg-color);
+            color: var(--theme-panel-text-color);
         }
         header button {
             margin: 0.5em;
             padding: 1em;
-            background: #ff5050;
+            background: var(--theme-normal-color);
             color: black;
-            font-family: "Roboto Mono", monospace;
             font-size: 30px;
             font-weight: bold;
             border: 0;
             border-radius: 1em;
         }
-        article {
+        main {
             display: flex;
-            justify-content: center;
-            padding: 3em;
-            gap: 3em;
+            flex-direction: row;
+            gap: 0;
+            overflow: hidden;
         }
-        article section {
-            max-width: 400px;
+        article {
+            margin: auto;
+            padding: 2em;
+            overflow: auto;
+            height: 100%;
+            width: 100%;
+            flex-grow: 4;
+        }
+        article>div {
+            max-width: 800px;
+        }
+        nav {
+            padding: 2em;
+            overflow-x: hidden;
+            overflow-y: auto;
+            height: 100%;
+            flex-basis: content;
+            flex-grow: 1;
+        }
+        nav a {
+            white-space: nowrap;
+        }
+        @media (max-width: 600px) {
+            nav {
+                display: none;
+            }
         }
     </style>
 </head>
 <body>
 <div class="intro">
-<header>
-    <h1>Welcome to HyperSynth</h1>
-    <p>A fully functional polyphonic synthesiser<br/>written entirely in HTML and JavaScript!</p>
-    <button id="launch-button">Launch HyperSynth</button>
-</header>
-<article>
-    <section>
-        <h2>Touch devices</h2>
-        <p>
-            If you're using a tablet or phone, you can use the software multi-touch keyboard, it's even touch sensitive! You can adjust the size and range of the keyboard for playing comfort.
-        </p>
-    </section>
-    <section>
-        <h2>Desktop computers</h2>
-        <p>
-            If you have a MIDI keyboard, you can plug it in now and HyperSynth will automatically recognise it. Keyboard velocity, pitch bend, mod wheel and sustain pedal all work normally.
-        </p>
-    </section>
-</article>
+    <header>
+        <button id="launch-button">Launch HyperSynth</button>
+    </header>
+    <main>
+        <nav>
+
+        </nav>
+        <article>
+            <div id="content">
+        <h2 id="about-hypersynth">About HyperSynth</h2>
+
+        <p>HyperSynth is a fully functional polyphonic synthesiser, developed entirely in javascript and running in the browser. </p>
+
+        <h3 id="why-did-i-make-it">Why did I make it?</h3>
+
+        <p>HyperSynth was created as an experiment to investigate the Web Audio API, to learn about it and to see what it is capable of. As it turned out it was capable of a lot more than I expected, and I ended up with a very playable and enjoyable instrument, from which you can learn a lot about the principles of sound synthesis. </p>
+
+        <p>I offer it here for your pleasure, and hope you will explore the included preset patches. I encourage you to tinker with the settings to create and <a href="#saving-patches">save your own patches</a>. The controls may look very technical and daunting, but there is a help mode which you can use to get info on any control or section.</p>
+
+        <h3 id="privacy">Privacy</h3>
+
+        <p>No data about you is asked for or retained on any servers, the only thing that’s saved locally in your browser is the current state of the instrument, so you can pick up where you left off when you re-visit the site.</p>
+
+        <h2 id="getting-started">Getting started</h2>
+
+        <h3 id="system-requirements">System requirements</h3>
+
+        <p>Any modern device and browser will run it fine, although phones and tablets with limited memory may struggle with some of the more complex polyphonic patches (hint: reduce the number of voices or switch off effects if you hear drop-outs).</p>
+
+        <h3 id="touch-devices">Touch devices</h3>
+
+        <p>The on-screen keyboard can be used on all platforms, but touch devices give the best experience with full polyphony and touch sensitivity, please use the device in landscape mode for best results. The touch sensitivity is calibrated when you touch the button above to launch the instrument, so please don’t press it too hard, a normal to light touch is ideal. If your device is Android, you also may be able to use an external MIDI keyboard...</p>
+
+        <h3 id="external-midi-keyboards">External MIDI keyboards</h3>
+
+        <p>For desktop devices without touch screens, the best experience can be had if you have an external MIDI keyboard connected to your device. Connect the keyboard before launching HyperSynth, and the MIDI input device will be detected automatically (note: this doesn’t work in Safari on MacOS, or on any iOS devices as they don’t implement the web MIDI API).</p>
+
+        <p>When using an external keyboard, touch sensitivity, sustain pedal, pitch bend and modulation controls all work as they should.</p>
+
+        <h3 id="saving-patches">Saving patches</h3>
+
+        <p>When the “Save Patch” button is clicked, the current settings are saved as a file in your downloads folder, with a “.hspatch.json” extension. From here you can move them to where-ever you like, ready to be loaded again at any time. In the save dialog, you can choose a bank from a list, and give the patch a new name. All of the settings required to recreate your carefully crafted sound are saved, but the keyboard settings, modulation wheel position and master volume are not.</p>
+
+        <h3 id="loading-patches">Loading patches</h3>
+
+        <p>You can load your saved patches back in to HyperSynth in two ways:</p>
+
+        <ul>
+        <li>Click the “Load Patch” button to bring up a file dialog to browse to the patch file you want to load. If you saved it as “My Cool Sound” in the “Misc” bank, the file name will be <nobr>“Misc- My Cool Sound.hspatch.json”</nobr>.</li>
+        <li>If you are in an environment that allows multitasking windows, i.e. a laptop or an iPad with multitasking, you can drag and drop your patch file onto the browser window to load the patch.</li>
+        </ul>
+
+        <h3 id="sharing-patches">Sharing patches</h3>
+
+        <p>You can create a link containing all of the current settings for you to send to a friend, just click “Share Patch” and click “Copy to Clipboard”. You can then go to your app of choice and paste the link into a message. </p>
+            </div>
+        </article>
+    </main>
 </div>
+<script>
+    function createNav() {
+        const article = document.querySelector('article');
+        const nav = document.querySelector('nav');
+        Array.from(article.querySelectorAll('h2, h3')).forEach(headingElem => {
+            const headingId = headingElem.id;
+            const p = document.createElement('p');
+            const a = document.createElement('a');
+            a.setAttribute('href', `#${headingId}`);
+            a.innerHTML = headingElem.innerHTML;
+            p.append(a);
+            nav.append(p);
+        });
+    }
+
+    createNav();
+</script>
 </body>
 </html>
