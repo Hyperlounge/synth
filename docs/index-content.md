@@ -1,34 +1,76 @@
-## <a name=“about”></a>About HyperSynth
-HyperSynth is a fully functional musical instrument, developed entirely in javascript and running in the browser. 
+## About HyperSynth
+HyperSynth is a fully functional polyphonic synthesiser, developed entirely in javascript and running in the browser. 
 
-### <a name=“why”/>Why did I make it?
-HyperSynth was created as an experiment to investigate the Web Audio API, to learn about it and to see what it is capable of. As it turned out it was capable of a lot more than I expected, and I ended up with a very playable and enjoyable instrument, from which you can learn a lot about the principles of sound synthesis. 
+### What is it for?
+I guarantee you’ll have fun with this just playing it as an instrument, whether you’re a musician or just interested in electronic music. It’s also an educational tool for learning the principles of sound synthesis. 
 
-I offer it here for your pleasure, and hope you will explore the included preset patches. I encourage you to tinker with the settings to create and [save your own patches](#saving). The controls may look very technical and daunting, but there is a help mode which you can use to get info on any control or section.
+I offer it for your pleasure, and hope you’ll enjoy exploring the preset patches. I urge you to tinker with the settings to create and [save your own patches](#saving-patches). The controls may look very technical and daunting, but there is a help mode which you can use to get info on any control or section.
 
-### <a name=“privacy”/>Privacy
+### Why did I make it?
+Initially to learn about the [Web Audio API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API), and to see what it is capable of. I deliberately avoided using any javascript libraries, a I believe “roll-your-own” is the best way to learn stuff. As it turned out the API could be pushed a lot further than I expected, and I ended up with a very playable and capable instrument.
+
+### Privacy
 No data about you is asked for or retained on any servers, the only thing that’s saved locally in your browser is the current state of the instrument, so you can pick up where you left off when you re-visit the site.
 
-## <a name=“getting-started”/>Getting started
-### <a name=“system-requirements”/>System requirements
-Any modern device and browser will run it fine, although phones and tablets with limited memory may struggle with some of the more complex polyphonic patches (hint: reduce the number of voices or switch off effects if you hear drop-outs).
+## Getting started
+### System requirements
+Any modern device and browser will run it fine, although phones and tablets with limited memory may struggle with some of the more complex polyphonic patches (**hint**: reduce the number of voices or switch off effects if you hear drop-outs).
 
-### <a name=“touch-devices”/>Touch devices
-The on-screen keyboard can be used on all platforms, but touch devices give the best experience with full polyphony and touch sensitivity, please use the device in landscape mode for best results. The touch sensitivity is calibrated when you touch the button above to launch the instrument, so please don’t press it too hard, a normal to light touch is ideal. If your device is Android, you also may be able to use an external MIDI keyboard...
+### Touch devices
+The on-screen keyboard can be used on all platforms, but touch devices give the best experience with full polyphony and touch sensitivity, please use the device in landscape mode for best results. The touch sensitivity is calibrated when you touch the button above to launch the instrument, so please don’t press it too hard, a normal to light touch is ideal. 
 
-### <a name=“external-keyboards”/>External MIDI keyboards
-For desktop devices without touch screens, the best experience can be had if you have an external MIDI keyboard connected to your device. Connect the keyboard before launching HyperSynth, and the MIDI input device will be detected automatically (note: this doesn’t work in Safari on MacOS, or on any iOS devices as they don’t implement the web MIDI API).
+If your device is iOS 26 or above, you may want to turn multitasking off to avoid keyboard interaction being interpreted as multitasking gestures - go to Settings: Multitasking & Gestures and select the Full-Screen Apps option. You should have a control centre shortcut for this too.
+
+If your device is Android, you also may be able to use an external MIDI keyboard...
+
+### External MIDI keyboards
+For desktop devices without touch screens, the best experience can be had if you have an external MIDI keyboard connected to your device. Connect the keyboard before launching HyperSynth, and the MIDI input device will be detected automatically (**note**: this doesn’t work in Safari on MacOS, or on any iOS devices as they don’t implement the [Web MIDI API](https://developer.mozilla.org/en-US/docs/Web/API/Web_MIDI_API)).
 
 When using an external keyboard, touch sensitivity, sustain pedal, pitch bend and modulation controls all work as they should.
 
-### <a name=“saving”/>Saving patches
+### Saving patches
 When the “Save Patch” button is clicked, the current settings are saved as a file in your downloads folder, with a “.hspatch.json” extension. From here you can move them to where-ever you like, ready to be loaded again at any time. In the save dialog, you can choose a bank from a list, and give the patch a new name. All of the settings required to recreate your carefully crafted sound are saved, but the keyboard settings, modulation wheel position and master volume are not.
 
-### <a name=“loading”/>Loading patches
+### Loading patches
 You can load your saved patches back in to HyperSynth in two ways:
 
 - Click the “Load Patch” button to bring up a file dialog to browse to the patch file you want to load. If you saved it as “My Cool Sound” in the “Misc” bank, the file name will be <nobr>“Misc- My Cool Sound.hspatch.json”</nobr>. 
 - If you are in an environment that allows multitasking windows, i.e. a laptop or an iPad with multitasking, you can drag and drop your patch file onto the browser window to load the patch.
 
-### <a name=“sharing”/>Sharing patches
+### Sharing patches
 You can create a link containing all of the current settings for you to send to a friend, just click “Share Patch” and click “Copy to Clipboard”. You can then go to your app of choice and paste the link into a message. 
+
+## Basic principles
+### Oscillators
+These are the basic building blocks of the sound, HyperSynth has two oscillators for note generation, and one LFO (Low Frequency Oscillator) for modulation, to be explained later.
+
+The two main oscillators generate waveforms that create musical notes in response to the keyboard. The different types of waveform available create different timbres, from the soft pure tone of the sine wave to the harsh sawtooth, and the two oscillators can be combined in various ways to create more different characters of sound, by varying the frequency gap between them.
+
+### Filter
+The filter alters the tone of the sound produced by the oscillators. It allows some frequencies to pass and other frequencies are cut depending on the cut-off point. Adding resonance to the filter produces a boost at the cut-off point. There are three types:
+- **Low pass**, where the high frequencies are cut above the cut-off point.
+- **High pass**, where the low frequencies are cut below the cut-off point.
+- **Band pass**, where only frequencies at the cut-off point are passed.
+
+The cut-off point can be changed over time using the filter envelope, and also using the LFO. This can create classic wah or sweep effects.
+
+### Envelopes
+An envelope is a controlling signal that varies over time, it has four phases:
+- **Attack**, the signal rises linearly to a maximum level when a key is pressed.
+- **Decay**, the signal falls exponentially to the sustain level.
+- **Sustain**, the signal remains at this level until the key is released.
+- **Release**, when the key is released, the signal falls exponentially to zero.
+
+HyperSynth has two envelopes, the Amp Envelope controls the amplitude of the sound, i.e. the higher the envelope signal the higher the volume, and the Filter Envelope controls the cut-off of the filter, i.e. the higher the envelope signal the higher the frequency of the cut-off.
+
+Both envelopes can be made to respond to the velocity of the key press, i.e. the faster the key press the higher the values throughout the entire envelope profile. Using this, notes are louder and/or brighter when the key is pressed harder.
+
+### Modulation
+Modulation describes the process of altering the sound over time, by varying the pitch and/or timbre using a control signal created by the LFO (Low Frequency Oscillator). The control signal is usually a slow, regularly fluctuating waveform. This is used to create vibrato and wah effects amongst other special effects, and the strength of the control signal can be linked to a control on the synth called the Mod Wheel. The more you turn it up, the more effect you get.
+
+### Noise
+HyperSynth, like many synthesisers, has a noise generator, the output of which can be mixed with the sound, or used as a modulation source. This can create breathy or glitchy effects.
+
+### Monophony VS Polyphony
+Although HyperSynth is a polyphonic instrument, i.e. many different notes can be played at the same time, it can also be used in monophonic mode by turning the number of voices down to one. This is useful if you want to create a solo lead type of sound, and no chords are needed. You can set a Glide Time so that when you change note, the pitch glides smoothly to the next note rather than jumping instantly to it.
+
