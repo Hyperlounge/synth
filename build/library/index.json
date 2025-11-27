@@ -1,0 +1,429 @@
+{
+  "library": [
+    {
+      "name": "Big Bass",
+      "bank": "Basses",
+      "fileName": "Basses- Big Bass.hspatch.json"
+    },
+    {
+      "name": "Breezy Bass",
+      "bank": "Basses",
+      "fileName": "Basses- Breezy Bass.hspatch.json"
+    },
+    {
+      "name": "Double Bass",
+      "bank": "Basses",
+      "fileName": "Basses- Double Bass.hspatch.json"
+    },
+    {
+      "name": "Fretless",
+      "bank": "Basses",
+      "fileName": "Basses- Fretless.hspatch.json"
+    },
+    {
+      "name": "Full Bass",
+      "bank": "Basses",
+      "fileName": "Basses- Full Bass.hspatch.json"
+    },
+    {
+      "name": "Funky Bass",
+      "bank": "Basses",
+      "fileName": "Basses- Funky Bass.hspatch.json"
+    },
+    {
+      "name": "Ice Crawl",
+      "bank": "Basses",
+      "fileName": "Basses- Ice Crawl.hspatch.json"
+    },
+    {
+      "name": "Liquid Bass",
+      "bank": "Basses",
+      "fileName": "Basses- Liquid Bass.hspatch.json"
+    },
+    {
+      "name": "Stab Bass",
+      "bank": "Basses",
+      "fileName": "Basses- Stab Bass.hspatch.json"
+    },
+    {
+      "name": "Synth Bass",
+      "bank": "Basses",
+      "fileName": "Basses- Synth Bass.hspatch.json"
+    },
+    {
+      "name": "Too High!",
+      "bank": "Basses",
+      "fileName": "Basses- Too High!.hspatch.json"
+    },
+    {
+      "name": "Coronet",
+      "bank": "Brass",
+      "fileName": "Brass- Coronet.hspatch.json"
+    },
+    {
+      "name": "Fanfare",
+      "bank": "Brass",
+      "fileName": "Brass- Fanfare.hspatch.json"
+    },
+    {
+      "name": "Ragged Wah",
+      "bank": "Brass",
+      "fileName": "Brass- Ragged Wah.hspatch.json"
+    },
+    {
+      "name": "Soft Brass",
+      "bank": "Brass",
+      "fileName": "Brass- Soft Brass.hspatch.json"
+    },
+    {
+      "name": "Trombone",
+      "bank": "Brass",
+      "fileName": "Brass- Trombone.hspatch.json"
+    },
+    {
+      "name": "Trumpet Section",
+      "bank": "Brass",
+      "fileName": "Brass- Trumpet Section.hspatch.json"
+    },
+    {
+      "name": "Bell Piano",
+      "bank": "Keys",
+      "fileName": "Keys- Bell Piano.hspatch.json"
+    },
+    {
+      "name": "Bright Piano",
+      "bank": "Keys",
+      "fileName": "Keys- Bright Piano.hspatch.json"
+    },
+    {
+      "name": "Drawbars",
+      "bank": "Keys",
+      "fileName": "Keys- Drawbars.hspatch.json"
+    },
+    {
+      "name": "Grand",
+      "bank": "Keys",
+      "fileName": "Keys- Grand.hspatch.json"
+    },
+    {
+      "name": "Harmonium",
+      "bank": "Keys",
+      "fileName": "Keys- Harmonium.hspatch.json"
+    },
+    {
+      "name": "Harpsichord",
+      "bank": "Keys",
+      "fileName": "Keys- Harpsichord.hspatch.json"
+    },
+    {
+      "name": "Jazz Organ",
+      "bank": "Keys",
+      "fileName": "Keys- Jazz Organ.hspatch.json"
+    },
+    {
+      "name": "Mellow Piano",
+      "bank": "Keys",
+      "fileName": "Keys- Mellow Piano.hspatch.json"
+    },
+    {
+      "name": "Nasal",
+      "bank": "Keys",
+      "fileName": "Keys- Nasal.hspatch.json"
+    },
+    {
+      "name": "Res Piano",
+      "bank": "Keys",
+      "fileName": "Keys- Res Piano.hspatch.json"
+    },
+    {
+      "name": "Squeezebox",
+      "bank": "Keys",
+      "fileName": "Keys- Squeezebox.hspatch.json"
+    },
+    {
+      "name": "Theatre Organ",
+      "bank": "Keys",
+      "fileName": "Keys- Theatre Organ.hspatch.json"
+    },
+    {
+      "name": "Upright Piano",
+      "bank": "Keys",
+      "fileName": "Keys- Upright Piano.hspatch.json"
+    },
+    {
+      "name": "Wurly",
+      "bank": "Keys",
+      "fileName": "Keys- Wurly.hspatch.json"
+    },
+    {
+      "name": "Autobahn",
+      "bank": "Leads",
+      "fileName": "Leads- Autobahn.hspatch.json"
+    },
+    {
+      "name": "Bendy Bell",
+      "bank": "Leads",
+      "fileName": "Leads- Bendy Bell.hspatch.json"
+    },
+    {
+      "name": "Cat-Fight",
+      "bank": "Leads",
+      "fileName": "Leads- Cat-Fight.hspatch.json"
+    },
+    {
+      "name": "Crunchy",
+      "bank": "Leads",
+      "fileName": "Leads- Crunchy.hspatch.json"
+    },
+    {
+      "name": "Genius Of Love",
+      "bank": "Leads",
+      "fileName": "Leads- Genius Of Love.hspatch.json"
+    },
+    {
+      "name": "Hose Me Down!",
+      "bank": "Leads",
+      "fileName": "Leads- Hose Me Down!.hspatch.json"
+    },
+    {
+      "name": "Mod Goblins",
+      "bank": "Leads",
+      "fileName": "Leads- Mod Goblins.hspatch.json"
+    },
+    {
+      "name": "Pulsar",
+      "bank": "Leads",
+      "fileName": "Leads- Pulsar.hspatch.json"
+    },
+    {
+      "name": "Shine On!",
+      "bank": "Leads",
+      "fileName": "Leads- Shine On!.hspatch.json"
+    },
+    {
+      "name": "Welcome to the Machine",
+      "bank": "Leads",
+      "fileName": "Leads- Welcome to the Machine.hspatch.json"
+    },
+    {
+      "name": "All’s Swell",
+      "bank": "Pads",
+      "fileName": "Pads- All’s Swell.hspatch.json"
+    },
+    {
+      "name": "Bell Pad",
+      "bank": "Pads",
+      "fileName": "Pads- Bell Pad.hspatch.json"
+    },
+    {
+      "name": "Bendy Pad",
+      "bank": "Pads",
+      "fileName": "Pads- Bendy Pad.hspatch.json"
+    },
+    {
+      "name": "Big Sweep",
+      "bank": "Pads",
+      "fileName": "Pads- Big Sweep.hspatch.json"
+    },
+    {
+      "name": "Bowed Pad",
+      "bank": "Pads",
+      "fileName": "Pads- Bowed Pad.hspatch.json"
+    },
+    {
+      "name": "FM Pad",
+      "bank": "Pads",
+      "fileName": "Pads- FM Pad.hspatch.json"
+    },
+    {
+      "name": "Mass-ive",
+      "bank": "Pads",
+      "fileName": "Pads- Mass-ive.hspatch.json"
+    },
+    {
+      "name": "Phase Strings",
+      "bank": "Pads",
+      "fileName": "Pads- Phase Strings.hspatch.json"
+    },
+    {
+      "name": "Pretty Poly",
+      "bank": "Pads",
+      "fileName": "Pads- Pretty Poly.hspatch.json"
+    },
+    {
+      "name": "S and H pad",
+      "bank": "Pads",
+      "fileName": "Pads- S and H pad.hspatch.json"
+    },
+    {
+      "name": "Bell Tower",
+      "bank": "Percussion",
+      "fileName": "Percussion- Bell Tower.hspatch.json"
+    },
+    {
+      "name": "Bellissimo!",
+      "bank": "Percussion",
+      "fileName": "Percussion- Bellissimo!.hspatch.json"
+    },
+    {
+      "name": "Carnival",
+      "bank": "Percussion",
+      "fileName": "Percussion- Carnival.hspatch.json"
+    },
+    {
+      "name": "Chirpz",
+      "bank": "Percussion",
+      "fileName": "Percussion- Chirpz.hspatch.json"
+    },
+    {
+      "name": "Kalimba",
+      "bank": "Percussion",
+      "fileName": "Percussion- Kalimba.hspatch.json"
+    },
+    {
+      "name": "Marimba",
+      "bank": "Percussion",
+      "fileName": "Percussion- Marimba.hspatch.json"
+    },
+    {
+      "name": "Marimboid",
+      "bank": "Percussion",
+      "fileName": "Percussion- Marimboid.hspatch.json"
+    },
+    {
+      "name": "Steel Drum",
+      "bank": "Percussion",
+      "fileName": "Percussion- Steel Drum.hspatch.json"
+    },
+    {
+      "name": "The Bells!",
+      "bank": "Percussion",
+      "fileName": "Percussion- The Bells!.hspatch.json"
+    },
+    {
+      "name": "Timpani",
+      "bank": "Percussion",
+      "fileName": "Percussion- Timpani.hspatch.json"
+    },
+    {
+      "name": "Toms",
+      "bank": "Percussion",
+      "fileName": "Percussion- Toms.hspatch.json"
+    },
+    {
+      "name": "Vibra-Prone",
+      "bank": "Percussion",
+      "fileName": "Percussion- Vibra-Prone.hspatch.json"
+    },
+    {
+      "name": "Xylophobia",
+      "bank": "Percussion",
+      "fileName": "Percussion- Xylophobia.hspatch.json"
+    },
+    {
+      "name": "Bass",
+      "bank": "Prototypes",
+      "fileName": "Prototypes- Bass.hspatch.json"
+    },
+    {
+      "name": "Brass Section",
+      "bank": "Prototypes",
+      "fileName": "Prototypes- Brass Section.hspatch.json"
+    },
+    {
+      "name": "Brass Solo",
+      "bank": "Prototypes",
+      "fileName": "Prototypes- Brass Solo.hspatch.json"
+    },
+    {
+      "name": "Lead",
+      "bank": "Prototypes",
+      "fileName": "Prototypes- Lead.hspatch.json"
+    },
+    {
+      "name": "Organ",
+      "bank": "Prototypes",
+      "fileName": "Prototypes- Organ.hspatch.json"
+    },
+    {
+      "name": "Pad",
+      "bank": "Prototypes",
+      "fileName": "Prototypes- Pad.hspatch.json"
+    },
+    {
+      "name": "Piano",
+      "bank": "Prototypes",
+      "fileName": "Prototypes- Piano.hspatch.json"
+    },
+    {
+      "name": "Strings Section",
+      "bank": "Prototypes",
+      "fileName": "Prototypes- Strings Section.hspatch.json"
+    },
+    {
+      "name": "Strings Solo",
+      "bank": "Prototypes",
+      "fileName": "Prototypes- Strings Solo.hspatch.json"
+    },
+    {
+      "name": "Big Strings Section",
+      "bank": "Strings",
+      "fileName": "Strings- Big Strings Section.hspatch.json"
+    },
+    {
+      "name": "Cello",
+      "bank": "Strings",
+      "fileName": "Strings- Cello.hspatch.json"
+    },
+    {
+      "name": "In The Mood For Viola",
+      "bank": "Strings",
+      "fileName": "Strings- In The Mood For Viola.hspatch.json"
+    },
+    {
+      "name": "String Voice",
+      "bank": "Strings",
+      "fileName": "Strings- String Voice.hspatch.json"
+    },
+    {
+      "name": "Stringy Thing",
+      "bank": "Strings",
+      "fileName": "Strings- Stringy Thing.hspatch.json"
+    },
+    {
+      "name": "Swell Strings",
+      "bank": "Strings",
+      "fileName": "Strings- Swell Strings.hspatch.json"
+    },
+    {
+      "name": "Viola",
+      "bank": "Strings",
+      "fileName": "Strings- Viola.hspatch.json"
+    },
+    {
+      "name": "Violin",
+      "bank": "Strings",
+      "fileName": "Strings- Violin.hspatch.json"
+    },
+    {
+      "name": "Flute Solo",
+      "bank": "Woodwind",
+      "fileName": "Woodwind- Flute Solo.hspatch.json"
+    },
+    {
+      "name": "Flutilicious",
+      "bank": "Woodwind",
+      "fileName": "Woodwind- Flutilicious.hspatch.json"
+    },
+    {
+      "name": "So Many Flutes!",
+      "bank": "Woodwind",
+      "fileName": "Woodwind- So Many Flutes!.hspatch.json"
+    },
+    {
+      "name": "Wind Harp",
+      "bank": "Woodwind",
+      "fileName": "Woodwind- Wind Harp.hspatch.json"
+    }
+  ]
+}
