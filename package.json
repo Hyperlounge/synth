@@ -2,7 +2,8 @@
   "dependencies": {
     "markdown-it": "^14.1.0",
     "rollup": "^4.53.3",
-    "uglify-js": "^3.19.3"
+    "uglify-js": "^3.19.3",
+    "unique-filename": "^5.0.0"
   },
   "scripts": {
     "build": "node ./dev-utils/build.node.js"
